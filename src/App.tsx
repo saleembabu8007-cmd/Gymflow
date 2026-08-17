@@ -190,6 +190,12 @@ const AppContent: React.FC = () => {
     );
   }
 
+  useEffect(() => {
+    if (isAuthenticated) {
+      refresh();
+    }
+  }, [pathname, isAuthenticated, refresh]);
+
   // 2. PLATFORM ADMIN ROUTE BRANCH (/admin, /admin/login, /admin/forgot-password, /admin/reset-password, /admin/gyms, /admin/users, /admin/subscriptions, /admin/audit, /admin/settings)
   if (pathname.startsWith('/admin')) {
     if (pathname === '/admin/login') {
