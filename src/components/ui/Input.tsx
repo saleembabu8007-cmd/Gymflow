@@ -9,12 +9,16 @@ export interface InputProps extends React.InputHTMLAttributes<HTMLInputElement> 
   rightIcon?: React.ReactNode;
   prefixText?: string;
   suffixText?: string;
+  labelClassName?: string;
+  variant?: 'light' | 'dark';
 }
 
 export const Input = React.forwardRef<HTMLInputElement, InputProps>(
   (
     {
       className,
+      labelClassName,
+      variant = 'light',
       label,
       helperText,
       error,
@@ -33,10 +37,16 @@ export const Input = React.forwardRef<HTMLInputElement, InputProps>(
     const helperId = helperText && inputId ? `${inputId}-helper` : undefined;
     const describedBy = errorId || helperId;
 
+    const isDark = variant === 'dark' || Boolean(className && (className.includes('bg-neutral-9') || className.includes('bg-black') || className.includes('bg-neutral-950')));
+
+    const baseInputStyles = isDark
+      ? 'w-full h-10 rounded-xl bg-neutral-950 border border-neutral-800 px-3.5 text-sm text-white placeholder:text-neutral-500 transition-colors shadow-2xs focus:outline-none focus:border-rose-500 focus:ring-1 focus:ring-rose-500 disabled:bg-neutral-900 disabled:text-neutral-500 disabled:cursor-not-allowed'
+      : 'w-full h-10 rounded-xl bg-white border border-neutral-200 px-3.5 text-sm text-neutral-900 placeholder:text-neutral-400 transition-colors shadow-2xs focus:outline-none focus:border-neutral-900 focus:ring-1 focus:ring-neutral-900 disabled:bg-neutral-50 disabled:text-neutral-400 disabled:cursor-not-allowed';
+
     return (
       <div className="w-full flex flex-col gap-1.5">
         {label && (
-          <label htmlFor={inputId} className="text-xs font-semibold text-neutral-700 select-none">
+          <label htmlFor={inputId} className={cn('text-xs font-semibold select-none', isDark ? 'text-neutral-300' : 'text-neutral-700', labelClassName)}>
             {label}
           </label>
         )}
@@ -58,12 +68,12 @@ export const Input = React.forwardRef<HTMLInputElement, InputProps>(
             aria-invalid={Boolean(error)}
             aria-describedby={describedBy}
             className={cn(
-              'w-full h-10 rounded-xl bg-white border border-neutral-200 px-3.5 text-sm text-neutral-900 placeholder:text-neutral-400 transition-colors shadow-2xs focus:outline-none focus:border-neutral-900 focus:ring-1 focus:ring-neutral-900 disabled:bg-neutral-50 disabled:text-neutral-400 disabled:cursor-not-allowed',
+              baseInputStyles,
               leftIcon && 'pl-10',
               prefixText && 'pl-8',
               rightIcon && 'pr-10',
               suffixText && 'pr-10',
-              error && 'border-rose-400 focus:border-rose-600 focus:ring-rose-600 text-rose-950',
+              error && (isDark ? 'border-rose-500 text-rose-300 focus:border-rose-500' : 'border-rose-400 focus:border-rose-600 text-rose-950'),
               className
             )}
             {...props}
@@ -80,11 +90,11 @@ export const Input = React.forwardRef<HTMLInputElement, InputProps>(
           )}
         </div>
         {error ? (
-          <p id={errorId} className="text-xs text-rose-600 font-medium flex items-center gap-1">
+          <p id={errorId} className="text-xs text-rose-500 font-medium flex items-center gap-1">
             <span>{error}</span>
           </p>
         ) : helperText ? (
-          <p id={helperId} className="text-xs text-neutral-500">
+          <p id={helperId} className={cn('text-xs', isDark ? 'text-neutral-400' : 'text-neutral-500')}>
             {helperText}
           </p>
         ) : null}

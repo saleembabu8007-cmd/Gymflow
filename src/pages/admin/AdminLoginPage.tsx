@@ -100,7 +100,7 @@ export const AdminLoginPage: React.FC<AdminLoginPageProps> = ({
               onChange={(e) => setEmail(e.target.value)}
               required
               disabled={loading}
-              className="bg-neutral-950 border-neutral-800 text-white placeholder:text-neutral-600 focus:border-rose-500"
+              variant="dark"
             />
 
             <div>
@@ -113,7 +113,7 @@ export const AdminLoginPage: React.FC<AdminLoginPageProps> = ({
                 onChange={(e) => setPassword(e.target.value)}
                 required
                 disabled={loading}
-                className="bg-neutral-950 border-neutral-800 text-white placeholder:text-neutral-600 focus:border-rose-500"
+                variant="dark"
               />
               {onNavigateToForgotPassword && (
                 <div className="text-right mt-1.5">
