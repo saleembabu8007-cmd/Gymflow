@@ -1,0 +1,2 @@
+# Supabase Edge Functions Directory
+# Keep privileged server-only operations here (e.g. payment webhooks, admin user creation)

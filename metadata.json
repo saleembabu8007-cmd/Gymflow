@@ -1,0 +1,6 @@
+{
+  "name": "GymFlow",
+  "description": "Simple membership payment and dues tracker for gym owners.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
