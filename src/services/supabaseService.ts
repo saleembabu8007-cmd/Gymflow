@@ -307,22 +307,25 @@ class SupabaseGymService implements IGymService {
   async createGym(ownerId: string, dto: { name: string; phone: string; currency?: string; timezone?: string; upiId?: string }): Promise<Gym> {
     if (!supabase) throw new Error('Supabase client not configured');
 
+    // Fetch live authenticated user ID to guarantee matching auth.uid() in Supabase RLS
+    const { data: authUserData } = await supabase.auth.getUser();
+    const currentAuthId = authUserData?.user?.id || ownerId;
+
     // 1. Enforce 1-Gym Per Owner Rule
-    const existing = await this.getGymByOwnerId(ownerId);
+    const existing = await this.getGymByOwnerId(currentAuthId);
     if (existing) {
       return existing;
     }
 
     // 2. Ensure Profile exists in public.profiles (satisfies foreign key fk_gyms_owner)
-    try {
-      const { data: authUserData } = await supabase.auth.getUser();
-      const authUser = authUserData?.user;
-      const email = authUser?.email || `${ownerId}@gymflow.app`;
-      const fullName = authUser?.user_metadata?.full_name || authUser?.email?.split('@')[0] || 'Gym Owner';
+    const authUser = authUserData?.user;
+    const email = authUser?.email || `${currentAuthId}@gymflow.app`;
+    const fullName = authUser?.user_metadata?.full_name || authUser?.email?.split('@')[0] || 'Gym Owner';
 
+    try {
       await (supabase as any).from('profiles').upsert(
         {
-          id: ownerId,
+          id: currentAuthId,
           role: 'GYM_OWNER',
           full_name: fullName,
           email: email,
@@ -334,15 +337,16 @@ class SupabaseGymService implements IGymService {
       console.warn('[SUPABASE] Profile pre-upsert warning:', profileErr);
     }
 
-    // 3. Resilient Direct Table Insertion Strategy
+    // 3. Resilient Direct Table Insertion Strategy matching currentAuthId
     let gymData: any = null;
     let insertError: any = null;
 
-    // Attempt A: Standard insert with explicit uppercase status
+    // Attempt A: Standard insert with explicit owner_id and owner_user_id
     const resA = await (supabase as any)
       .from('gyms')
       .insert({
-        owner_id: ownerId,
+        owner_id: currentAuthId,
+        owner_user_id: currentAuthId,
         name: dto.name,
         phone: dto.phone,
         upi_id: dto.upiId || null,
@@ -355,14 +359,13 @@ class SupabaseGymService implements IGymService {
       gymData = resA.data;
     } else {
       insertError = resA.error;
-      // Attempt B: Fallback without status column (allow DB DEFAULT)
+      // Attempt B: Fallback insert with minimal fields
       const resB = await (supabase as any)
         .from('gyms')
         .insert({
-          owner_id: ownerId,
+          owner_id: currentAuthId,
           name: dto.name,
           phone: dto.phone,
-          upi_id: dto.upiId || null,
         })
         .select()
         .single();
@@ -375,7 +378,8 @@ class SupabaseGymService implements IGymService {
 
     if (insertError && !gymData) {
       console.error('[SUPABASE] createGym error details:', insertError);
-      throw new Error(parseAuthError(insertError));
+      const rawMsg = insertError?.message || insertError?.details || parseAuthError(insertError);
+      throw new Error(rawMsg);
     }
 
     // 4. Update profile gym_id link
