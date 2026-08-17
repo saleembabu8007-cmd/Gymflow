@@ -11,12 +11,12 @@ CREATE POLICY "Users can insert their own profile"
   WITH CHECK (id = auth.uid());
 
 --------------------------------------------------------------------------------
--- 2. BACKFILL PROFILES FOR EXISTING AUTH USERS WHO HAVE NO PROFILE ROW
+-- 2. BACKFILL PROFILES FOR EXISTING AUTH USERS WHO HAVE NO PROFILE ROW (UPPERCASE 'GYM_OWNER')
 --------------------------------------------------------------------------------
 INSERT INTO public.profiles (id, role, full_name, email, created_at, updated_at)
 SELECT 
   u.id,
-  'gym_owner',
+  'GYM_OWNER',
   COALESCE(u.raw_user_meta_data->>'full_name', SPLIT_PART(u.email, '@', 1), 'Gym Owner'),
   u.email,
   u.created_at,
@@ -27,7 +27,7 @@ WHERE p.id IS NULL
 ON CONFLICT (id) DO NOTHING;
 
 --------------------------------------------------------------------------------
--- 3. RE-DEFINE ATOMIC OBOARDING RPC (Profile FIRST, Gym SECOND)
+-- 3. RE-DEFINE ATOMIC ONBOARDING RPC (Profile FIRST, Gym SECOND)
 --------------------------------------------------------------------------------
 CREATE OR REPLACE FUNCTION public.register_gym_owner(
   p_owner_name TEXT,
@@ -58,9 +58,9 @@ BEGIN
     v_user_email := 'owner@gymflow.app';
   END IF;
 
-  -- 1. Upsert Profile FIRST (Satisfies fk_gyms_owner foreign key)
+  -- 1. Upsert Profile FIRST (Satisfies fk_gyms_owner foreign key, role UPPERCASE 'GYM_OWNER')
   INSERT INTO public.profiles (id, gym_id, role, full_name, email, phone)
-  VALUES (v_user_id, NULL, 'gym_owner', p_owner_name, v_user_email, p_phone)
+  VALUES (v_user_id, NULL, 'GYM_OWNER', p_owner_name, v_user_email, p_phone)
   ON CONFLICT (id) DO UPDATE SET
     full_name = EXCLUDED.full_name,
     phone = EXCLUDED.phone

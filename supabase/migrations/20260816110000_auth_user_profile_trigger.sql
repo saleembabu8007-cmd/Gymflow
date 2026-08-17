@@ -13,7 +13,7 @@ BEGIN
     NEW.id,
     COALESCE(NEW.raw_user_meta_data->>'full_name', SPLIT_PART(NEW.email, '@', 1)),
     NEW.email,
-    'gym_owner',
+    'GYM_OWNER',
     NOW(),
     NOW()
   )
