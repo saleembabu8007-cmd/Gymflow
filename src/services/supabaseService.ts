@@ -125,6 +125,7 @@ class SupabaseAuthService implements IAuthService {
         data: {
           full_name: dto.fullName,
         },
+        emailRedirectTo: typeof window !== 'undefined' ? `${window.location.origin}/app/today` : undefined,
       },
     });
 
