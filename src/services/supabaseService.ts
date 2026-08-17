@@ -148,6 +148,10 @@ class SupabaseAuthService implements IAuthService {
       throw new Error('An account with this email address already exists. Please sign in instead.');
     }
 
+    if (!authData.session) {
+      throw new Error('SUCCESS_EMAIL_CONFIRMATION_REQUIRED');
+    }
+
     const user = await this.getCurrentUser();
     if (user) return user;
 

@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Dumbbell, ArrowRight, AlertCircle } from 'lucide-react';
+import { Dumbbell, ArrowRight, AlertCircle, CheckCircle2 } from 'lucide-react';
 import { SignUpDTO } from '../../services/interfaces';
 import { Button, Input, Card } from '../../components/ui';
 
@@ -21,10 +21,12 @@ export const RegisterPage: React.FC<RegisterPageProps> = ({
 
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const [infoMessage, setInfoMessage] = useState<string | null>(null);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setError(null);
+    setInfoMessage(null);
 
     if (!fullName.trim() || !email.trim() || !password.trim()) {
       setError('Please fill in all required fields.');
@@ -49,7 +51,14 @@ export const RegisterPage: React.FC<RegisterPageProps> = ({
         password: password.trim(),
       });
     } catch (err: any) {
-      setError(err?.message || 'Sign up failed. Please try again.');
+      const msg = err?.message || '';
+      if (msg.includes('SUCCESS_EMAIL_CONFIRMATION_REQUIRED')) {
+        setInfoMessage('Account created! Please check your email to confirm your registration, then click Sign In below.');
+        setError(null);
+      } else {
+        setError(msg || 'Sign up failed. Please try again.');
+        setInfoMessage(null);
+      }
     } finally {
       setLoading(false);
     }
@@ -80,6 +89,13 @@ export const RegisterPage: React.FC<RegisterPageProps> = ({
       {/* Form Container */}
       <div className="mt-6 sm:mx-auto sm:w-full sm:max-w-md">
         <Card className="p-6 sm:p-8 shadow-xs border border-neutral-200 bg-white">
+          {infoMessage && (
+            <div className="mb-6 p-3.5 bg-emerald-50 border border-emerald-200 text-emerald-800 text-xs font-semibold rounded-xl flex items-center gap-2.5">
+              <CheckCircle2 className="w-4 h-4 shrink-0 text-emerald-600" />
+              <span>{infoMessage}</span>
+            </div>
+          )}
+
           {error && (
             <div className="mb-6 p-3.5 bg-rose-50 border border-rose-200 text-rose-700 text-xs font-semibold rounded-xl flex items-center gap-2.5">
               <AlertCircle className="w-4 h-4 shrink-0 text-rose-600" />
