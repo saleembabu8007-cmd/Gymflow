@@ -176,10 +176,17 @@ const AppContent: React.FC = () => {
     ? members.find((m) => m.id === detailMember.id) || detailMember
     : null;
 
+  useEffect(() => {
+    if (isAuthenticated) {
+      refresh();
+    }
+  }, [pathname, isAuthenticated, refresh]);
+
   const isPlatformAdmin =
-    (user?.role as string) === 'PLATFORM_ADMIN' ||
-    (user?.role as string) === 'platform_admin' ||
-    (user?.role as string) === 'ADMIN';
+    user &&
+    ((user?.role as string) === 'PLATFORM_ADMIN' ||
+      (user?.role as string) === 'platform_admin' ||
+      (user?.role as string) === 'ADMIN');
 
   // 1. Initial Session Verification Loading
   if (authLoading || (isAuthenticated && user?.gymId && subLoading)) {
@@ -189,12 +196,6 @@ const AppContent: React.FC = () => {
       </div>
     );
   }
-
-  useEffect(() => {
-    if (isAuthenticated) {
-      refresh();
-    }
-  }, [pathname, isAuthenticated, refresh]);
 
   // 2. PLATFORM ADMIN ROUTE BRANCH (/admin, /admin/login, /admin/forgot-password, /admin/reset-password, /admin/gyms, /admin/users, /admin/subscriptions, /admin/audit, /admin/settings)
   if (pathname.startsWith('/admin')) {
