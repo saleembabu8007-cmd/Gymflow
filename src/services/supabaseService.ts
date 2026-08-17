@@ -1366,88 +1366,134 @@ class SupabaseSettingsService implements ISettingsService {
 
 class SupabaseAdminService implements IAdminService {
   async getStats(): Promise<PlatformStats> {
-    if (!supabase) throw new Error('Supabase client not configured');
+    if (!supabase) {
+      return {
+        totalGyms: 0,
+        activeGyms: 0,
+        pendingPayments: 0,
+        activeSubscriptions: 0,
+        pastDueSubscriptions: 0,
+        cancelledSubscriptions: 0,
+        mrr: 0,
+        suspendedGyms: 0,
+        totalMembers: 0,
+      };
+    }
 
-    const today = new Date().toISOString().split('T')[0];
+    try {
+      const today = new Date().toISOString().split('T')[0];
 
-    const [
-      { count: totalGyms },
-      { count: activeGyms },
-      { count: activeSubs },
-      { count: pastDueSubs },
-      { count: cancelledSubs },
-      { count: suspendedGyms },
-      { count: totalMembers },
-      { count: pendingPayments },
-    ] = await Promise.all([
-      (supabase as any).from('gyms').select('*', { count: 'exact', head: true }),
-      (supabase as any).from('gyms').select('*', { count: 'exact', head: true }).eq('status', 'ACTIVE'),
-      (supabase as any).from('subscriptions').select('*', { count: 'exact', head: true }).eq('status', 'ACTIVE'),
-      (supabase as any).from('subscriptions').select('*', { count: 'exact', head: true }).eq('status', 'PAST_DUE'),
-      (supabase as any).from('subscriptions').select('*', { count: 'exact', head: true }).eq('status', 'CANCELLED'),
-      (supabase as any).from('gyms').select('*', { count: 'exact', head: true }).eq('status', 'SUSPENDED'),
-      (supabase as any).from('gym_members').select('*', { count: 'exact', head: true }),
-      (supabase as any).from('gym_members').select('*', { count: 'exact', head: true }).eq('status', 'ACTIVE').lte('next_payment_date', today),
-    ]);
+      const [
+        { count: totalGyms },
+        { count: activeGyms },
+        { count: activeSubs },
+        { count: pastDueSubs },
+        { count: cancelledSubs },
+        { count: suspendedGyms },
+        { count: totalMembers },
+        { count: pendingPayments },
+      ] = await Promise.all([
+        (supabase as any).from('gyms').select('*', { count: 'exact', head: true }),
+        (supabase as any).from('gyms').select('*', { count: 'exact', head: true }).eq('status', 'ACTIVE'),
+        (supabase as any).from('subscriptions').select('*', { count: 'exact', head: true }).eq('status', 'ACTIVE'),
+        (supabase as any).from('subscriptions').select('*', { count: 'exact', head: true }).eq('status', 'PAST_DUE'),
+        (supabase as any).from('subscriptions').select('*', { count: 'exact', head: true }).eq('status', 'CANCELLED'),
+        (supabase as any).from('gyms').select('*', { count: 'exact', head: true }).eq('status', 'SUSPENDED'),
+        (supabase as any).from('gym_members').select('*', { count: 'exact', head: true }),
+        (supabase as any).from('gym_members').select('*', { count: 'exact', head: true }).eq('status', 'ACTIVE').lte('next_payment_date', today),
+      ]);
 
-    const activeCount = activeSubs || 0;
+      const activeCount = activeSubs || 0;
 
-    return {
-      totalGyms: totalGyms || 0,
-      activeGyms: activeGyms || 0,
-      pendingPayments: pendingPayments || 0,
-      activeSubscriptions: activeCount,
-      pastDueSubscriptions: pastDueSubs || 0,
-      cancelledSubscriptions: cancelledSubs || 0,
-      mrr: activeCount * 1999,
-      suspendedGyms: suspendedGyms || 0,
-      totalMembers: totalMembers || 0,
-    };
+      return {
+        totalGyms: totalGyms || 0,
+        activeGyms: activeGyms || 0,
+        pendingPayments: pendingPayments || 0,
+        activeSubscriptions: activeCount,
+        pastDueSubscriptions: pastDueSubs || 0,
+        cancelledSubscriptions: cancelledSubs || 0,
+        mrr: activeCount * 1999,
+        suspendedGyms: suspendedGyms || 0,
+        totalMembers: totalMembers || 0,
+      };
+    } catch (e) {
+      console.warn('[ADMIN] getStats warning:', e);
+      return {
+        totalGyms: 0,
+        activeGyms: 0,
+        pendingPayments: 0,
+        activeSubscriptions: 0,
+        pastDueSubscriptions: 0,
+        cancelledSubscriptions: 0,
+        mrr: 0,
+        suspendedGyms: 0,
+        totalMembers: 0,
+      };
+    }
   }
 
   async getGymTenants(): Promise<PlatformGymTenant[]> {
     if (!supabase) return [];
-    const { data: gyms } = await (supabase as any)
-      .from('gyms')
-      .select('*, profiles!fk_gyms_owner(full_name, email)');
+    try {
+      const { data: gyms, error: gymsErr } = await (supabase as any).from('gyms').select('*');
+      if (gymsErr || !gyms) {
+        console.warn('[ADMIN] getGymTenants query notice:', gymsErr);
+        return [];
+      }
 
-    // Fetch member count per gym
-    const { data: memberCounts } = await (supabase as any)
-      .from('gym_members')
-      .select('gym_id');
+      const { data: profiles } = await (supabase as any).from('profiles').select('id, full_name, email');
+      const profileMap: Record<string, { full_name: string; email: string }> = {};
+      (profiles || []).forEach((p: any) => {
+        profileMap[p.id] = { full_name: p.full_name, email: p.email };
+      });
 
-    const countsByGym: Record<string, number> = {};
-    (memberCounts || []).forEach((m: any) => {
-      countsByGym[m.gym_id] = (countsByGym[m.gym_id] || 0) + 1;
-    });
+      const { data: memberCounts } = await (supabase as any).from('gym_members').select('gym_id');
+      const countsByGym: Record<string, number> = {};
+      (memberCounts || []).forEach((m: any) => {
+        countsByGym[m.gym_id] = (countsByGym[m.gym_id] || 0) + 1;
+      });
 
-    return (gyms || []).map((g: any) => ({
-      id: g.id,
-      name: g.name,
-      ownerName: g.profiles?.full_name || 'Gym Owner',
-      ownerEmail: g.profiles?.email || 'owner@gym.com',
-      phone: g.phone,
-      address: g.address || undefined,
-      status: g.status as any,
-      memberCount: countsByGym[g.id] || 0,
-      subscriptionPlan: 'GymFlow Pro (Single Plan)',
-      renewalDate: new Date(new Date().setFullYear(new Date().getFullYear() + 1)).toISOString().split('T')[0],
-      createdAt: g.created_at,
-    }));
+      return gyms.map((g: any) => {
+        const ownerProf = profileMap[g.owner_id] || profileMap[g.owner_user_id] || { full_name: 'Gym Owner', email: '' };
+        return {
+          id: g.id,
+          name: g.name,
+          ownerName: ownerProf.full_name || 'Gym Owner',
+          ownerEmail: ownerProf.email || 'owner@gym.com',
+          phone: g.phone,
+          address: g.address || undefined,
+          status: g.status as any,
+          memberCount: countsByGym[g.id] || 0,
+          subscriptionPlan: 'GymFlow Pro (Single Plan)',
+          renewalDate: new Date(new Date().setFullYear(new Date().getFullYear() + 1)).toISOString().split('T')[0],
+          createdAt: g.created_at,
+        };
+      });
+    } catch (e) {
+      console.error('[ADMIN] getGymTenants error:', e);
+      return [];
+    }
   }
 
   async updateGymStatus(gymId: string, status: 'ACTIVE' | 'SUSPENDED' | 'CANCELLED'): Promise<PlatformGymTenant> {
     if (!supabase) throw new Error('Supabase not configured');
-    const { data, error } = await (supabase as any)
+
+    const { data: gymData, error } = await (supabase as any)
       .from('gyms')
       .update({ status, updated_at: new Date().toISOString() })
       .eq('id', gymId)
-      .select('*, profiles!fk_gyms_owner(full_name, email)')
+      .select()
       .single();
 
     if (error) throw error;
 
-    // Log admin action into audit_logs
+    const { data: profile } = await (supabase as any)
+      .from('profiles')
+      .select('full_name, email')
+      .eq('id', gymData.owner_id || gymData.owner_user_id)
+      .maybeSingle();
+
+    // Log admin action into audit_logs safely
     try {
       await (supabase as any).from('audit_logs').insert({
         gym_id: gymId,
@@ -1459,17 +1505,17 @@ class SupabaseAdminService implements IAdminService {
     } catch {}
 
     return {
-      id: data.id,
-      name: data.name,
-      ownerName: (data as any).profiles?.full_name || 'Gym Owner',
-      ownerEmail: (data as any).profiles?.email || 'owner@gym.com',
-      phone: data.phone,
-      address: data.address || undefined,
-      status: data.status as any,
+      id: gymData.id,
+      name: gymData.name,
+      ownerName: profile?.full_name || 'Gym Owner',
+      ownerEmail: profile?.email || 'owner@gym.com',
+      phone: gymData.phone,
+      address: gymData.address || undefined,
+      status: gymData.status as any,
       memberCount: 0,
       subscriptionPlan: 'GymFlow Pro (Single Plan)',
       renewalDate: new Date(new Date().setFullYear(new Date().getFullYear() + 1)).toISOString().split('T')[0],
-      createdAt: data.created_at,
+      createdAt: gymData.created_at,
     };
   }
 }
