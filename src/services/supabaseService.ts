@@ -313,7 +313,28 @@ class SupabaseGymService implements IGymService {
       return existing;
     }
 
-    // 2. Call RPC to register gym owner, profile, subscription, and gym settings atomically
+    // 2. Ensure Profile exists in public.profiles (satisfies foreign key fk_gyms_owner)
+    try {
+      const { data: authUserData } = await supabase.auth.getUser();
+      const authUser = authUserData?.user;
+      const email = authUser?.email || `${ownerId}@gymflow.app`;
+      const fullName = authUser?.user_metadata?.full_name || authUser?.email?.split('@')[0] || 'Gym Owner';
+
+      await (supabase as any).from('profiles').upsert(
+        {
+          id: ownerId,
+          role: 'GYM_OWNER',
+          full_name: fullName,
+          email: email,
+          phone: dto.phone,
+        },
+        { onConflict: 'id' }
+      );
+    } catch (profileErr) {
+      console.warn('[SUPABASE] Profile pre-upsert warning:', profileErr);
+    }
+
+    // 3. Call RPC to register gym owner, profile, subscription, and gym settings atomically
     const { data: rpcRes, error: rpcError } = await (supabase as any).rpc('register_gym_owner', {
       p_owner_name: dto.name,
       p_phone: dto.phone,
@@ -326,7 +347,7 @@ class SupabaseGymService implements IGymService {
       if (created) return created;
     }
 
-    // 3. Fallback to direct table insertion if RPC is not present
+    // 4. Fallback to direct table insertion if RPC is not present
     const { data, error } = await (supabase as any)
       .from('gyms')
       .insert({
