@@ -317,11 +317,24 @@ class SupabaseGymService implements IGymService {
       return existing;
     }
 
-    // 2. Ensure Profile exists in public.profiles (satisfies foreign key fk_gyms_owner)
     const authUser = authUserData?.user;
     const email = authUser?.email || `${currentAuthId}@gymflow.app`;
     const fullName = authUser?.user_metadata?.full_name || authUser?.email?.split('@')[0] || 'Gym Owner';
 
+    // 2. Call SECURITY DEFINER register_gym_owner RPC (Bypasses RLS and atomically creates Profile + Gym)
+    const { data: rpcRes, error: rpcError } = await (supabase as any).rpc('register_gym_owner', {
+      p_owner_name: fullName,
+      p_phone: dto.phone,
+      p_gym_name: dto.name,
+      p_upi_id: dto.upiId || null,
+    });
+
+    if (!rpcError && rpcRes && rpcRes.gym_id) {
+      const created = await this.getGym(rpcRes.gym_id);
+      if (created) return created;
+    }
+
+    // 3. Ensure Profile exists in public.profiles (satisfies foreign key fk_gyms_owner)
     try {
       await (supabase as any).from('profiles').upsert(
         {
@@ -337,7 +350,7 @@ class SupabaseGymService implements IGymService {
       console.warn('[SUPABASE] Profile pre-upsert warning:', profileErr);
     }
 
-    // 3. Resilient Direct Table Insertion Strategy matching currentAuthId
+    // 4. Resilient Direct Table Insertion Strategy matching currentAuthId
     let gymData: any = null;
     let insertError: any = null;
 
