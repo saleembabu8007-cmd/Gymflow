@@ -37,13 +37,6 @@ export function createServiceContainer(): IServiceContainer {
     return SupabaseContainer;
   }
 
-  // Prevent silent fallback to mock data in production environment
-  if (env.IS_PRODUCTION) {
-    throw new Error(
-      'CRITICAL CONFIGURATION ERROR: Production build requires VITE_SUPABASE_URL and VITE_SUPABASE_PUBLISHABLE_KEY environment variables.'
-    );
-  }
-
   return {
     auth: new MockAuthService(),
     gym: new MockGymService(),

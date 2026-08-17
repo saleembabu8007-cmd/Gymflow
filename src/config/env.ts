@@ -8,11 +8,14 @@
 
 const metaEnv = (import.meta as any).env || {};
 
-const supabaseUrl = (metaEnv.VITE_SUPABASE_URL as string) || '';
+const supabaseUrl =
+  (metaEnv.VITE_SUPABASE_URL as string) ||
+  'https://qgunahppzkfmhyludvct.supabase.co';
+
 const supabasePublishableKey =
   (metaEnv.VITE_SUPABASE_PUBLISHABLE_KEY as string) ||
   (metaEnv.VITE_SUPABASE_ANON_KEY as string) ||
-  '';
+  'sb_publishable_JnxoU8rwep4e8uFJ5ISBZA__NqdsZwS';
 
 export const env = {
   SUPABASE_URL: supabaseUrl,
