@@ -334,25 +334,15 @@ class SupabaseGymService implements IGymService {
       console.warn('[SUPABASE] Profile pre-upsert warning:', profileErr);
     }
 
-    // 3. Call RPC to register gym owner, profile, subscription, and gym settings atomically
-    const { data: rpcRes, error: rpcError } = await (supabase as any).rpc('register_gym_owner', {
-      p_owner_name: dto.name,
-      p_phone: dto.phone,
-      p_gym_name: dto.name,
-      p_upi_id: dto.upiId || null,
-    });
+    // 3. Resilient Direct Table Insertion Strategy
+    let gymData: any = null;
+    let insertError: any = null;
 
-    if (!rpcError && rpcRes && rpcRes.gym_id) {
-      const created = await this.getGym(rpcRes.gym_id);
-      if (created) return created;
-    }
-
-    // 4. Fallback to direct table insertion if RPC is not present
-    const { data, error } = await (supabase as any)
+    // Attempt A: Standard insert with explicit uppercase status
+    const resA = await (supabase as any)
       .from('gyms')
       .insert({
         owner_id: ownerId,
-        owner_user_id: ownerId,
         name: dto.name,
         phone: dto.phone,
         upi_id: dto.upiId || null,
@@ -361,30 +351,60 @@ class SupabaseGymService implements IGymService {
       .select()
       .single();
 
-    if (error) {
-      console.error('[SUPABASE] createGym error:', error);
-      throw new Error(parseAuthError(error));
+    if (!resA.error && resA.data) {
+      gymData = resA.data;
+    } else {
+      insertError = resA.error;
+      // Attempt B: Fallback without status column (allow DB DEFAULT)
+      const resB = await (supabase as any)
+        .from('gyms')
+        .insert({
+          owner_id: ownerId,
+          name: dto.name,
+          phone: dto.phone,
+          upi_id: dto.upiId || null,
+        })
+        .select()
+        .single();
+
+      if (!resB.error && resB.data) {
+        gymData = resB.data;
+        insertError = null;
+      }
     }
 
-    // 4. Update profile gym_id
-    await (supabase as any).from('profiles').update({ gym_id: data.id }).eq('id', ownerId);
+    if (insertError && !gymData) {
+      console.error('[SUPABASE] createGym error details:', insertError);
+      throw new Error(parseAuthError(insertError));
+    }
 
-    // 5. Create default gym settings
-    await (supabase as any).from('gym_settings').upsert({ gym_id: data.id });
+    // 4. Update profile gym_id link
+    try {
+      await (supabase as any).from('profiles').update({ gym_id: gymData.id }).eq('id', ownerId);
+    } catch (e) {
+      console.warn('[SUPABASE] Profile gym_id link warning:', e);
+    }
+
+    // 5. Upsert default gym settings
+    try {
+      await (supabase as any).from('gym_settings').upsert({ gym_id: gymData.id });
+    } catch (e) {
+      console.warn('[SUPABASE] Gym settings upsert warning:', e);
+    }
 
     return {
-      id: data.id,
-      name: data.name,
-      phone: data.phone,
-      address: data.address || undefined,
-      city: data.city || undefined,
-      state: data.state || undefined,
-      country: data.country || undefined,
-      upiId: data.upi_id || undefined,
-      logoUrl: data.logo_url || undefined,
+      id: gymData.id,
+      name: gymData.name,
+      phone: gymData.phone,
+      address: gymData.address || undefined,
+      city: gymData.city || undefined,
+      state: gymData.state || undefined,
+      country: gymData.country || undefined,
+      upiId: gymData.upi_id || undefined,
+      logoUrl: gymData.logo_url || undefined,
       ownerId: ownerId,
-      createdAt: data.created_at,
-      updatedAt: data.updated_at,
+      createdAt: gymData.created_at,
+      updatedAt: gymData.updated_at,
     };
   }
 
