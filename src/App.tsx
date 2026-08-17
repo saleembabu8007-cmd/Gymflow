@@ -291,6 +291,7 @@ const AppContent: React.FC = () => {
       <RegisterPage
         onSignUpSubmit={async (dto) => {
           await signUp(dto);
+          navigate('/app/today');
         }}
         onNavigateToLogin={() => navigate('/login')}
         onNavigateToHome={() => navigate('/')}
