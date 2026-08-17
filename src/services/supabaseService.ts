@@ -326,9 +326,11 @@ class SupabaseGymService implements IGymService {
       .from('gyms')
       .insert({
         owner_id: ownerId,
+        owner_user_id: ownerId,
         name: dto.name,
         phone: dto.phone,
         upi_id: dto.upiId || null,
+        status: 'ACTIVE',
       })
       .select()
       .single();
