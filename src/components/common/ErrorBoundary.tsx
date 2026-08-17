@@ -47,7 +47,7 @@ export class ErrorBoundary extends Component<Props, State> {
         <div className="min-h-[300px] flex items-center justify-center p-6">
           <ErrorState
             title="Something went wrong"
-            message="Couldn't load this screen properly. Please try reloading or check your connection."
+            message={this.state.error?.message || "Couldn't load this screen properly. Please try reloading or check your connection."}
             onRetry={this.handleReset}
             retryLabel="Reload Page"
           />

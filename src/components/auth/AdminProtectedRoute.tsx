@@ -10,6 +10,15 @@ interface AdminProtectedRouteProps {
 export const AdminProtectedRoute: React.FC<AdminProtectedRouteProps> = ({ children }) => {
   const { user, loading, logout } = useAuth();
 
+  React.useEffect(() => {
+    if (!loading && !user) {
+      if (typeof window !== 'undefined' && window.location.pathname !== '/admin/login') {
+        window.history.pushState({}, '', '/admin/login');
+        window.dispatchEvent(new PopStateEvent('popstate'));
+      }
+    }
+  }, [user, loading]);
+
   if (loading) {
     return (
       <div className="min-h-screen bg-neutral-950 flex items-center justify-center text-neutral-400 font-sans">
@@ -21,14 +30,7 @@ export const AdminProtectedRoute: React.FC<AdminProtectedRouteProps> = ({ childr
     );
   }
 
-  const isPlatformAdmin =
-    user && ((user.role as string) === 'platform_admin' || user.role === 'PLATFORM_ADMIN' || (user.role as string) === 'ADMIN');
-
   if (!user) {
-    if (typeof window !== 'undefined' && window.location.pathname !== '/admin/login') {
-      window.history.pushState({}, '', '/admin/login');
-      window.dispatchEvent(new PopStateEvent('popstate'));
-    }
     return (
       <div className="min-h-screen bg-neutral-950 flex items-center justify-center text-neutral-400 font-sans">
         <div className="flex items-center gap-3">
@@ -38,6 +40,9 @@ export const AdminProtectedRoute: React.FC<AdminProtectedRouteProps> = ({ childr
       </div>
     );
   }
+
+  const isPlatformAdmin =
+    user && ((user.role as string) === 'platform_admin' || user.role === 'PLATFORM_ADMIN' || (user.role as string) === 'ADMIN');
 
   if (!isPlatformAdmin) {
     return (
