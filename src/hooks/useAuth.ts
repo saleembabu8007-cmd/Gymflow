@@ -181,6 +181,17 @@ export function useAuth() {
     [auth]
   );
 
+  const silentRefresh = useCallback(async () => {
+    try {
+      const currentUser = await auth.getCurrentUser();
+      if (currentUser) {
+        setUser(currentUser);
+      }
+    } catch (e) {
+      console.warn('Silent refresh error:', e);
+    }
+  }, [auth]);
+
   return {
     user,
     isAuthenticated: !!user,
@@ -194,6 +205,6 @@ export function useAuth() {
     resetPassword,
     updatePassword,
     updateProfile,
-    refresh: checkAuth,
+    refresh: silentRefresh,
   };
 }
