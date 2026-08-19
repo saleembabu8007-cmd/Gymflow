@@ -183,8 +183,7 @@ const AppContent: React.FC = () => {
   const isPlatformAdmin =
     user &&
     ((user?.role as string) === 'PLATFORM_ADMIN' ||
-      (user?.role as string) === 'platform_admin' ||
-      (user?.role as string) === 'ADMIN');
+      (user?.role as string) === 'platform_admin');
 
   // 1. Initial Session Verification Loading
   if (authLoading || (isAuthenticated && user?.gymId && subLoading)) {
