@@ -7,6 +7,7 @@ import { Member } from '../../types';
 import { useMembers } from '../../hooks/useMembers';
 import { useGymSettings } from '../../hooks/useGymSettings';
 import { useToast } from '../ui/Toast';
+import { parseAppError } from '../../utils/errorUtils';
 import { Save } from 'lucide-react';
 
 interface EditMemberModalProps {
@@ -79,7 +80,8 @@ export const EditMemberModal: React.FC<EditMemberModalProps> = ({
       onSuccess?.();
       onClose();
     } catch (err: any) {
-      error('Failed to update member', err?.message || 'Please try again.');
+      const userFriendlyError = parseAppError(err, "Couldn't update member profile. Please try again.");
+      error("Couldn't update member", userFriendlyError);
     } finally {
       setLoading(false);
     }

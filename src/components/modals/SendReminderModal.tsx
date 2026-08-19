@@ -19,6 +19,7 @@ import {
   Clock,
   RotateCcw,
 } from 'lucide-react';
+import { parseAppError } from '../../utils/errorUtils';
 import { cn } from '../../utils/classNames';
 
 interface SendReminderModalProps {
@@ -115,9 +116,9 @@ export const SendReminderModal: React.FC<SendReminderModalProps> = ({
 
       onClose();
     } catch (err: any) {
-      const msg = err?.message || "Couldn't open reminder link. Please check recipient contact details.";
+      const msg = parseAppError(err, "Couldn't open reminder link. Please check recipient contact details.");
       setSendError(msg);
-      showErrorToast("Couldn't open reminder link.");
+      showErrorToast("Couldn't open reminder link", msg);
     } finally {
       setIsSending(false);
     }

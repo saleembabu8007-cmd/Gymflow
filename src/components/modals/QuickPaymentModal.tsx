@@ -10,6 +10,7 @@ import { useToast } from '../ui/Toast';
 import { formatCurrency } from '../../utils/currencyUtils';
 import { formatToISODate, formatDate } from '../../utils/dateUtils';
 import { computeNextPaymentRenewalDate } from '../../lib/domain/paymentDomain';
+import { parseAppError } from '../../utils/errorUtils';
 import {
   CreditCard,
   Banknote,
@@ -93,12 +94,12 @@ export const QuickPaymentModal: React.FC<QuickPaymentModalProps> = ({
 
     const numericAmount = Number(amount);
     if (!amount || isNaN(numericAmount) || numericAmount <= 0) {
-      showErrorToast("Couldn't save the payment. Please try again.", 'Please enter a valid payment amount.');
+      showErrorToast("Couldn't save the payment.", 'Please enter a valid payment amount greater than zero.');
       return;
     }
 
     if (!paymentDate) {
-      showErrorToast("Couldn't save the payment. Please try again.", 'Please select a valid payment date.');
+      showErrorToast("Couldn't save the payment.", 'Please select a valid payment date.');
       return;
     }
 
@@ -125,11 +126,7 @@ export const QuickPaymentModal: React.FC<QuickPaymentModalProps> = ({
       // Close modal and keep owner in context
       onClose();
     } catch (err: any) {
-      // Parse specific error message from Supabase RPC / network error
-      const rawMessage = typeof err === 'string' ? err : err?.message || err?.details || '';
-      const userFriendlyError = rawMessage && typeof rawMessage === 'string' && rawMessage.trim().length > 0 && !rawMessage.includes('[object')
-        ? rawMessage
-        : "Couldn't save the payment. Please check your connection and try again.";
+      const userFriendlyError = parseAppError(err, "Couldn't save the payment. Please try again.");
       setErrorMessage(userFriendlyError);
       showErrorToast("Couldn't save the payment.", userFriendlyError);
     } finally {

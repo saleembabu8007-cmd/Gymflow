@@ -9,6 +9,7 @@ import { useDashboard } from '../hooks/useDashboard';
 import { useGymSettings } from '../hooks/useGymSettings';
 import { formatCurrency } from '../utils/currencyUtils';
 import { formatDate, getDifferenceInDays } from '../utils/dateUtils';
+import { StaleDataNotification } from '../components/common/StaleDataNotification';
 import {
   Plus,
   CreditCard,
@@ -48,6 +49,8 @@ export const TodayPage: React.FC<TodayPageProps> = ({
     recentPayments,
     hasNoMembers,
     loading,
+    isRefreshing,
+    isStale,
     error,
     refetch,
   } = useDashboard(user?.gymId);
@@ -82,7 +85,7 @@ export const TodayPage: React.FC<TodayPageProps> = ({
         <ErrorState
           title="Couldn't load today's collection summary"
           message="We couldn't retrieve your gym data from Supabase. Please check your connection and try again."
-          onRetry={refetch}
+          onRetry={() => refetch(false)}
           retryLabel="Try again"
         />
       </div>
@@ -91,6 +94,12 @@ export const TodayPage: React.FC<TodayPageProps> = ({
 
   return (
     <div className="space-y-6 sm:space-y-8 max-w-5xl mx-auto">
+      <StaleDataNotification
+        isStale={isStale}
+        onRetry={() => refetch(true)}
+        isRefreshing={isRefreshing}
+      />
+
       {/* 1. Primary Header with First Question */}
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-neutral-200/70 pb-5">
         <div>
@@ -228,7 +237,7 @@ export const TodayPage: React.FC<TodayPageProps> = ({
           </div>
           <button
             type="button"
-            onClick={refetch}
+            onClick={() => refetch(false)}
             className="text-xs text-neutral-400 hover:text-neutral-700 inline-flex items-center gap-1 transition-colors cursor-pointer"
             title="Refresh dashboard"
           >

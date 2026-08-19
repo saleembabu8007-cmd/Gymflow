@@ -11,29 +11,49 @@ export function useMembers(overrideGymId?: string) {
 
   const [members, setMembers] = useState<Member[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
+  const [isRefreshing, setIsRefreshing] = useState<boolean>(false);
+  const [isStale, setIsStale] = useState<boolean>(false);
   const [error, setError] = useState<string | null>(null);
+  const [lastFetchedAt, setLastFetchedAt] = useState<number>(0);
   const [filter, setFilter] = useState<IMemberFilterOptions>({ status: 'ALL', search: '' });
 
   const filterStatus = filter.status;
   const filterSearch = filter.search;
 
-  const fetchMembers = useCallback(async () => {
+  const fetchMembers = useCallback(async (isBackground = false) => {
     if (!gymId) {
       setLoading(false);
+      setIsRefreshing(false);
       return;
     }
     try {
-      setLoading(true);
+      if (!isBackground) {
+        setLoading(true);
+      } else {
+        setIsRefreshing(true);
+      }
       const data = await memberService.getMembers(gymId, {
         status: filterStatus,
         search: filterSearch,
       });
       setMembers(data);
       setError(null);
+      setIsStale(false);
+      setLastFetchedAt(Date.now());
     } catch (err: any) {
-      setError(err.message || 'Failed to load members');
+      const msg = err.message || 'Failed to load members';
+      setError(msg);
+      // Retain previously loaded members if available and set stale indicator
+      setMembers((prev) => {
+        if (prev.length > 0) {
+          setIsStale(true);
+          return prev;
+        }
+        return [];
+      });
     } finally {
       setLoading(false);
+      setIsRefreshing(false);
     }
   }, [memberService, gymId, filterStatus, filterSearch]);
 
@@ -41,22 +61,36 @@ export function useMembers(overrideGymId?: string) {
     fetchMembers();
 
     const handleStorageUpdate = () => {
-      fetchMembers();
+      fetchMembers(true);
+    };
+
+    const handleVisibilityChange = () => {
+      if (document.visibilityState === 'visible' && gymId) {
+        setLastFetchedAt((prevLast) => {
+          if (prevLast > 0 && Date.now() - prevLast > 2 * 60 * 1000) {
+            fetchMembers(true);
+          }
+          return prevLast;
+        });
+      }
     };
 
     window.addEventListener('gymflow_storage_updated', handleStorageUpdate);
     window.addEventListener('storage', handleStorageUpdate);
+    document.addEventListener('visibilitychange', handleVisibilityChange);
 
     return () => {
       window.removeEventListener('gymflow_storage_updated', handleStorageUpdate);
       window.removeEventListener('storage', handleStorageUpdate);
+      document.removeEventListener('visibilitychange', handleVisibilityChange);
     };
-  }, [fetchMembers]);
+  }, [fetchMembers, gymId]);
 
   const addMember = useCallback(
     async (memberData: Omit<Member, 'id' | 'gymId' | 'createdAt' | 'updatedAt'>) => {
       const created = await memberService.createMember(gymId, memberData);
       setMembers((prev) => [created, ...prev]);
+      window.dispatchEvent(new Event('gymflow_storage_updated'));
       return created;
     },
     [memberService, gymId]
@@ -66,6 +100,7 @@ export function useMembers(overrideGymId?: string) {
     async (id: string, updates: Partial<Member>) => {
       const updated = await memberService.updateMember(id, updates);
       setMembers((prev) => prev.map((m) => (m.id === id ? updated : m)));
+      window.dispatchEvent(new Event('gymflow_storage_updated'));
       return updated;
     },
     [memberService]
@@ -75,6 +110,7 @@ export function useMembers(overrideGymId?: string) {
     async (id: string) => {
       await memberService.deleteMember(id);
       setMembers((prev) => prev.filter((m) => m.id !== id));
+      window.dispatchEvent(new Event('gymflow_storage_updated'));
     },
     [memberService]
   );
@@ -92,6 +128,7 @@ export function useMembers(overrideGymId?: string) {
     ) => {
       const result = await memberService.markAsPaid(memberId, paymentDetails);
       setMembers((prev) => prev.map((m) => (m.id === memberId ? result.member : m)));
+      window.dispatchEvent(new Event('gymflow_storage_updated'));
       return result;
     },
     [memberService]
@@ -128,6 +165,9 @@ export function useMembers(overrideGymId?: string) {
   return {
     members,
     loading,
+    isRefreshing,
+    isStale,
+    lastFetchedAt,
     error,
     filter,
     setFilter,

@@ -60,8 +60,15 @@ export const SearchModal: React.FC<SearchModalProps> = ({
 
         <div className="max-h-72 overflow-y-auto space-y-1.5 divide-y divide-neutral-100">
           {filteredMembers.length === 0 ? (
-            <div className="py-8 text-center text-xs text-neutral-500">
-              No members found matching "{query}"
+            <div className="py-8 text-center text-xs text-neutral-500 space-y-2.5">
+              <p>No members found matching "{query}"</p>
+              <button
+                type="button"
+                onClick={() => setQuery('')}
+                className="px-3 py-1 bg-neutral-100 hover:bg-neutral-200 text-neutral-800 rounded-lg text-xs font-semibold transition-colors cursor-pointer"
+              >
+                Clear Search
+              </button>
             </div>
           ) : (
             filteredMembers.map((member) => (

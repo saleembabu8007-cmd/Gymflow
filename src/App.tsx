@@ -38,6 +38,7 @@ import { useServices } from './services/provider';
 import { PlatformGymTenant, PlatformStats, Member } from './types';
 import { LoadingState } from './components/ui/LoadingState';
 import { ErrorBoundary } from './components/common/ErrorBoundary';
+import { NetworkStatusBanner } from './components/common/NetworkStatusBanner';
 
 const AdminAppContent: React.FC<{
   currentPath: string;
@@ -331,6 +332,12 @@ const AppContent: React.FC = () => {
 
   if (isGymOwnerRoute) {
     if (!isAuthenticated) {
+      try {
+        const targetPath = pathname.startsWith('/app') ? pathname : `/app${pathname}`;
+        sessionStorage.setItem('gymflow_redirect_path', targetPath);
+      } catch {
+        // Ignore sessionStorage write error
+      }
       navigate('/login');
       return null;
     }
@@ -524,6 +531,7 @@ const AppContent: React.FC = () => {
 export default function App() {
   return (
     <RootLayout>
+      <NetworkStatusBanner />
       <ErrorBoundary>
         <AppContent />
       </ErrorBoundary>

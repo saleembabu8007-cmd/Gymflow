@@ -5,6 +5,7 @@ import { StatusBadge } from '../components/ui/StatusBadge';
 import { Button } from '../components/ui/Button';
 import { LoadingState } from '../components/ui/LoadingState';
 import { ErrorState } from '../components/ui/ErrorState';
+import { StaleDataNotification } from '../components/common/StaleDataNotification';
 import { Member, PAYMENT_STATUS } from '../types';
 import { useMembers } from '../hooks/useMembers';
 import { useGymSettings } from '../hooks/useGymSettings';
@@ -44,7 +45,7 @@ export const MembersPage: React.FC<MembersPageProps> = ({
   onAddMember,
   onSelectMember,
 }) => {
-  const { members, loading, error, setFilter, fetchMembers } = useMembers();
+  const { members, loading, isRefreshing, isStale, error, setFilter, fetchMembers } = useMembers();
   const { currencySymbol } = useGymSettings();
 
   const [activeFilter, setActiveFilter] = useState<FilterStatus>('ALL');
@@ -172,6 +173,12 @@ export const MembersPage: React.FC<MembersPageProps> = ({
 
   return (
     <div className="space-y-6 max-w-6xl mx-auto">
+      <StaleDataNotification
+        isStale={isStale}
+        onRetry={() => fetchMembers(true)}
+        isRefreshing={isRefreshing}
+      />
+
       {/* 1. Page Header */}
       <PageHeader
         title="Members"

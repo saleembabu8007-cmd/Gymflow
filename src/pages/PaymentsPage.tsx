@@ -5,6 +5,7 @@ import { SearchInput } from '../components/ui/SearchInput';
 import { EmptyState } from '../components/ui/EmptyState';
 import { LoadingState } from '../components/ui/LoadingState';
 import { ErrorState } from '../components/ui/ErrorState';
+import { StaleDataNotification } from '../components/common/StaleDataNotification';
 import { Avatar } from '../components/ui/Avatar';
 import { Member, Payment, PaymentMethod } from '../types';
 import { useMembers } from '../hooks/useMembers';
@@ -49,7 +50,7 @@ export const PaymentsPage: React.FC<PaymentsPageProps> = ({
   onRecordPayment,
   onSelectMemberById,
 }) => {
-  const { members, loading: loadingMembers, error: membersError, fetchMembers } = useMembers();
+  const { members, loading: loadingMembers, isRefreshing, isStale, error: membersError, fetchMembers } = useMembers();
   const { payments, loading: loadingPayments, error: paymentsError, fetchPayments } = usePayments();
   const { currencySymbol } = useGymSettings();
 
@@ -231,6 +232,15 @@ export const PaymentsPage: React.FC<PaymentsPageProps> = ({
 
   return (
     <div className="space-y-5 max-w-6xl mx-auto">
+      <StaleDataNotification
+        isStale={isStale}
+        onRetry={() => {
+          fetchMembers(true);
+          fetchPayments();
+        }}
+        isRefreshing={isRefreshing}
+      />
+
       {/* Page Header */}
       <PageHeader
         title="Payments"
@@ -471,14 +481,26 @@ export const PaymentsPage: React.FC<PaymentsPageProps> = ({
           {loadingMembers ? (
             <LoadingState message="Loading pending dues..." />
           ) : filteredPending.length === 0 ? (
-            <div className="p-12 rounded-2xl bg-white border border-neutral-200/80 text-center shadow-2xs flex flex-col items-center justify-center">
-              <div className="w-12 h-12 rounded-full bg-emerald-50 text-emerald-600 flex items-center justify-center mb-3">
+            <div className="p-12 rounded-2xl bg-white border border-neutral-200/80 text-center shadow-2xs flex flex-col items-center justify-center space-y-2">
+              <div className="w-12 h-12 rounded-full bg-emerald-50 text-emerald-600 flex items-center justify-center mb-1">
                 <CheckCircle2 className="w-6 h-6" />
               </div>
               <h3 className="text-base font-bold text-neutral-950">No pending payments.</h3>
               <p className="text-xs sm:text-sm text-neutral-500 mt-1 max-w-sm">
-                {searchQuery ? 'No pending members match your search.' : 'All member dues are settled and up to date.'}
+                {searchQuery ? `No pending members match "${searchQuery}".` : 'All member dues are settled and up to date.'}
               </p>
+              {searchQuery && (
+                <div className="pt-2">
+                  <Button
+                    variant="outline"
+                    size="sm"
+                    onClick={() => setSearchQuery('')}
+                    className="text-xs"
+                  >
+                    Clear Search
+                  </Button>
+                </div>
+              )}
             </div>
           ) : (
             <div className="space-y-2.5">
@@ -709,14 +731,26 @@ export const PaymentsPage: React.FC<PaymentsPageProps> = ({
           {loadingPayments ? (
             <LoadingState message="Loading payment history..." />
           ) : filteredPaid.length === 0 ? (
-            <div className="p-12 rounded-2xl bg-white border border-neutral-200/80 text-center shadow-2xs flex flex-col items-center justify-center">
-              <div className="w-12 h-12 rounded-full bg-neutral-100 text-neutral-400 flex items-center justify-center mb-3">
+            <div className="p-12 rounded-2xl bg-white border border-neutral-200/80 text-center shadow-2xs flex flex-col items-center justify-center space-y-2">
+              <div className="w-12 h-12 rounded-full bg-neutral-100 text-neutral-400 flex items-center justify-center mb-1">
                 <CreditCard className="w-6 h-6" />
               </div>
-              <h3 className="text-base font-bold text-neutral-950">No payments recorded yet.</h3>
+              <h3 className="text-base font-bold text-neutral-950">No payments recorded.</h3>
               <p className="text-xs sm:text-sm text-neutral-500 mt-1 max-w-sm">
-                {searchQuery ? 'No payment records match your search.' : 'Transactions recorded using the "Mark Paid" button will appear here.'}
+                {searchQuery ? `No payment records match "${searchQuery}".` : 'Transactions recorded using the "Mark Paid" button will appear here.'}
               </p>
+              {searchQuery && (
+                <div className="pt-2">
+                  <Button
+                    variant="outline"
+                    size="sm"
+                    onClick={() => setSearchQuery('')}
+                    className="text-xs"
+                  >
+                    Clear Search
+                  </Button>
+                </div>
+              )}
             </div>
           ) : (
             <>

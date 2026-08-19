@@ -10,6 +10,7 @@ import { useGymSettings } from '../../hooks/useGymSettings';
 import { useToast } from '../ui/Toast';
 import { formatToISODate, calculateNextPaymentDate, formatDate } from '../../utils/dateUtils';
 import { formatCurrency } from '../../utils/currencyUtils';
+import { parseAppError } from '../../utils/errorUtils';
 import {
   CheckCircle2,
   Calendar,
@@ -200,7 +201,8 @@ export const AddMemberModal: React.FC<AddMemberModalProps> = ({
       // Transition to success screen inside modal
       setAddedMember(newMember);
     } catch (err: any) {
-      showErrorToast('Failed to add member', err.message || 'Please check the details and try again.');
+      const userFriendlyError = parseAppError(err, "Couldn't add member. Please check the details and try again.");
+      showErrorToast("Couldn't add member", userFriendlyError);
     } finally {
       setIsSubmitting(false);
     }

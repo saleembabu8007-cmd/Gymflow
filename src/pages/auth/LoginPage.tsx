@@ -10,18 +10,34 @@ interface LoginPageProps {
   onNavigateToForgotPassword: () => void;
   onLoginSuccess?: (path?: string) => void;
   onNavigateToRegister?: () => void;
+  sessionExpiredNotice?: boolean;
 }
 
 export const LoginPage: React.FC<LoginPageProps> = ({
   onNavigateToForgotPassword,
   onLoginSuccess,
   onNavigateToRegister,
+  sessionExpiredNotice = false,
 }) => {
   const { login } = useAuth();
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
   const [isSubmitting, setIsSubmitting] = useState(false);
+
+  const [sessionExpired, setSessionExpired] = useState(() => {
+    if (sessionExpiredNotice) return true;
+    try {
+      const stored = sessionStorage.getItem('gymflow_session_expired');
+      if (stored === 'true') {
+        sessionStorage.removeItem('gymflow_session_expired');
+        return true;
+      }
+    } catch {
+      // Ignore sessionStorage access error
+    }
+    return false;
+  });
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -36,13 +52,25 @@ export const LoginPage: React.FC<LoginPageProps> = ({
       setIsSubmitting(true);
       setErrorMessage(null);
       const user = await login(email.trim(), password);
+      
+      let redirectPath: string | undefined;
+      try {
+        const storedPath = sessionStorage.getItem('gymflow_redirect_path');
+        if (storedPath && storedPath.startsWith('/app')) {
+          redirectPath = storedPath;
+          sessionStorage.removeItem('gymflow_redirect_path');
+        }
+      } catch {
+        // Ignore sessionStorage read error
+      }
+
       if (
         (user?.role as string) === 'PLATFORM_ADMIN' ||
         (user?.role as string) === 'platform_admin'
       ) {
         onLoginSuccess?.('/admin');
       } else {
-        onLoginSuccess?.('/');
+        onLoginSuccess?.(redirectPath || '/app/today');
       }
     } catch (err: any) {
       setErrorMessage(parseAuthError(err));
@@ -57,6 +85,16 @@ export const LoginPage: React.FC<LoginPageProps> = ({
       subtitle="Sign in to your GymFlow owner dashboard"
     >
       <form onSubmit={handleSubmit} className="space-y-4" noValidate>
+        {sessionExpired && !errorMessage && (
+          <div
+            role="status"
+            className="p-3.5 bg-amber-50 border border-amber-200 text-amber-800 text-xs font-semibold rounded-xl flex items-center gap-2.5"
+          >
+            <AlertCircle className="w-4 h-4 shrink-0 text-amber-600" />
+            <span>Your session has expired. Please sign in again to continue.</span>
+          </div>
+        )}
+
         {errorMessage && (
           <div
             role="alert"
