@@ -278,16 +278,39 @@ export const TodayPage: React.FC<TodayPageProps> = ({
           </div>
         ) : attentionList.length === 0 ? (
           /* Positive, Calm Empty State: All settled */
-          <div className="p-8 sm:p-10 rounded-2xl bg-white border border-neutral-200/80 text-center shadow-2xs flex flex-col items-center justify-center">
-            <div className="w-12 h-12 rounded-2xl bg-emerald-50 text-emerald-600 flex items-center justify-center mb-3">
+          <div className="p-8 sm:p-10 rounded-2xl bg-white border border-neutral-200/80 text-center shadow-2xs flex flex-col items-center justify-center space-y-4">
+            <div className="w-12 h-12 rounded-2xl bg-emerald-50 text-emerald-600 border border-emerald-200/60 flex items-center justify-center">
               <CheckCircle2 className="w-6 h-6" />
             </div>
-            <h3 className="text-sm font-bold text-neutral-900">
-              You're all caught up.
-            </h3>
-            <p className="text-xs text-neutral-500 mt-1 max-w-sm">
-              No payments need your attention today. All memberships are currently in good standing.
-            </p>
+            <div>
+              <h3 className="text-base font-bold text-neutral-950">
+                You're all caught up.
+              </h3>
+              <p className="text-xs text-neutral-500 mt-1 max-w-sm leading-relaxed">
+                No pending collections require your attention today. All active gym members are paid up to date.
+              </p>
+            </div>
+            <div className="flex items-center gap-2.5 pt-1">
+              <Button
+                id="btn-today-caught-up-add-member"
+                size="sm"
+                onClick={onAddMember}
+                leftIcon={<Plus className="w-3.5 h-3.5" />}
+              >
+                Add Member
+              </Button>
+              {onViewAllPayments && (
+                <Button
+                  id="btn-today-caught-up-view-payments"
+                  variant="outline"
+                  size="sm"
+                  onClick={onViewAllPayments}
+                  leftIcon={<CreditCard className="w-3.5 h-3.5 text-neutral-600" />}
+                >
+                  View Payments
+                </Button>
+              )}
+            </div>
           </div>
         ) : (
           /* Prioritized Attention Member Rows (Overdue -> Due Today -> Due Soon) */

@@ -14,8 +14,6 @@ import { cn } from '../../utils/classNames';
 import { Avatar } from '../ui/Avatar';
 import { User as UserType } from '../../types';
 
-import { BILLING_CONFIG } from '../../lib/domain/subscriptionDomain';
-
 export interface NavItem {
   id: string;
   label: string;
@@ -54,9 +52,6 @@ export const Sidebar: React.FC<SidebarProps> = ({
     { id: '/app/members', label: 'Members', icon: Users },
     { id: '/app/payments', label: 'Payments', icon: CreditCard },
     { id: '/app/reminders', label: 'Reminders', icon: Bell },
-    ...(BILLING_CONFIG.isBillingEnabled
-      ? [{ id: '/app/subscription', label: 'Subscription', icon: ShieldCheck }]
-      : []),
     { id: '/app/settings', label: 'Settings', icon: Settings },
   ];
 
@@ -76,7 +71,7 @@ export const Sidebar: React.FC<SidebarProps> = ({
               GymFlow
             </span>
             <span className="text-[10px] text-neutral-400 font-medium truncate">
-              Single Plan SaaS
+              Gym Workspace
             </span>
           </div>
         </div>

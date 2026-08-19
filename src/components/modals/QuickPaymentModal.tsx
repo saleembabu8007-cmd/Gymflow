@@ -125,10 +125,13 @@ export const QuickPaymentModal: React.FC<QuickPaymentModalProps> = ({
       // Close modal and keep owner in context
       onClose();
     } catch (err: any) {
-      // Clean, user-friendly error message without exposing technical stack traces
-      const userFriendlyError = "Couldn't save the payment. Please try again.";
+      // Parse specific error message from Supabase RPC / network error
+      const rawMessage = typeof err === 'string' ? err : err?.message || err?.details || '';
+      const userFriendlyError = rawMessage && typeof rawMessage === 'string' && rawMessage.trim().length > 0 && !rawMessage.includes('[object')
+        ? rawMessage
+        : "Couldn't save the payment. Please check your connection and try again.";
       setErrorMessage(userFriendlyError);
-      showErrorToast(userFriendlyError);
+      showErrorToast("Couldn't save the payment.", userFriendlyError);
     } finally {
       setIsSubmitting(false);
     }

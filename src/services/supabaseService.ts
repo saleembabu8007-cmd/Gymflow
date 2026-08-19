@@ -32,6 +32,7 @@ import {
 } from '../types';
 
 import { parseAuthError } from '../utils/errorUtils';
+import { parseLocalDate } from '../utils/dateUtils';
 import { env } from '../config/env';
 
 class SupabaseAuthService implements IAuthService {
@@ -864,6 +865,10 @@ class SupabaseMemberService implements IMemberService {
   }
 }
 
+/**
+ * @deprecated Legacy service for memberships table.
+ * All member plans are canonicalized on public.gym_members table.
+ */
 class SupabaseMembershipService implements IMembershipService {
   async getPlans(gymId: string): Promise<MembershipPlan[]> {
     return new SupabaseGymService().getPlans(gymId);
@@ -1019,10 +1024,25 @@ class SupabasePaymentService implements IPaymentService {
     if (filter?.search) {
       query = query.or(`member_name.ilike.%${filter.search}%,member_phone.ilike.%${filter.search}%`);
     }
-    if (filter?.memberId) {
-      query = query.eq('member_id', filter.memberId);
+    if (filter?.startDate) {
+      query = query.gte('payment_date', filter.startDate);
     }
-    query = query.order('payment_date', { ascending: false });
+    if (filter?.endDate) {
+      query = query.lte('payment_date', filter.endDate);
+    }
+    if (filter?.paymentMethod && filter.paymentMethod !== 'ALL') {
+      query = query.eq('payment_method', filter.paymentMethod);
+    }
+    query = query.order('payment_date', { ascending: false }).order('created_at', { ascending: false });
+
+    if (filter?.page && filter?.pageSize) {
+      const start = (filter.page - 1) * filter.pageSize;
+      const end = start + filter.pageSize - 1;
+      query = query.range(start, end);
+    } else if (filter?.limit) {
+      const offset = filter?.offset || 0;
+      query = query.range(offset, offset + filter.limit - 1);
+    }
 
     const { data, error } = await query;
     if (error) throw error;
@@ -1114,7 +1134,7 @@ class SupabasePaymentService implements IPaymentService {
     const y = year || new Date().getFullYear();
     const m = month !== undefined ? month : new Date().getMonth();
     const filtered = list.filter((p) => {
-      const d = new Date(p.paymentDate);
+      const d = parseLocalDate(p.paymentDate);
       return d.getFullYear() === y && d.getMonth() === m;
     });
 

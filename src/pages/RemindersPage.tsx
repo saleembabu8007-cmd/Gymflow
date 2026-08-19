@@ -127,7 +127,7 @@ export const RemindersPage: React.FC<RemindersPageProps> = ({
         return (
           <span className="px-2 py-0.5 text-[10px] font-bold bg-emerald-100 text-emerald-800 rounded-full flex items-center gap-1">
             <CheckCircle2 className="w-3 h-3 text-emerald-600" />
-            Sent
+            Confirmed Sent
           </span>
         );
       case 'FAILED':
@@ -138,14 +138,13 @@ export const RemindersPage: React.FC<RemindersPageProps> = ({
           </span>
         );
       case 'PENDING':
+      default:
         return (
-          <span className="px-2 py-0.5 text-[10px] font-bold bg-amber-100 text-amber-800 rounded-full flex items-center gap-1">
+          <span className="px-2 py-0.5 text-[10px] font-bold bg-amber-100 text-amber-900 rounded-full flex items-center gap-1">
             <Clock className="w-3 h-3 text-amber-600" />
-            Pending
+            WhatsApp Opened
           </span>
         );
-      default:
-        return null;
     }
   };
 

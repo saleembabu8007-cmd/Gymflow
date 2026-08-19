@@ -126,17 +126,17 @@ export const GymSetupPage: React.FC<GymSetupPageProps> = ({ onComplete }) => {
               </div>
             </div>
 
-            {/* Subscription Summary */}
-            <div className="p-4 rounded-lg bg-neutral-50 border border-neutral-200 space-y-2">
+            {/* Workspace Setup Summary */}
+            <div className="p-4 rounded-xl bg-neutral-50 border border-neutral-200 space-y-1.5">
               <div className="flex items-center justify-between text-xs font-semibold text-neutral-900">
                 <span className="flex items-center gap-1.5">
                   <ShieldCheck className="w-4 h-4 text-emerald-600" />
-                  GymFlow Pro Plan
+                  GymFlow Workspace Setup
                 </span>
-                <span className="text-emerald-700 font-bold">₹1,999 / month</span>
+                <span className="text-emerald-700 font-bold text-[11px] bg-emerald-100 px-2 py-0.5 rounded">Ready</span>
               </div>
               <p className="text-xs text-neutral-500 leading-relaxed">
-                Includes unlimited member records, WhatsApp payment reminders, and payment collection ledgers.
+                Includes member management, WhatsApp payment reminders, and payment collection ledgers.
               </p>
             </div>
 

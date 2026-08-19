@@ -42,7 +42,7 @@ export const AdminProtectedRoute: React.FC<AdminProtectedRouteProps> = ({ childr
   }
 
   const isPlatformAdmin =
-    user && ((user.role as string) === 'platform_admin' || user.role === 'PLATFORM_ADMIN' || (user.role as string) === 'ADMIN');
+    user && ((user.role as string) === 'platform_admin' || user.role === 'PLATFORM_ADMIN');
 
   if (!isPlatformAdmin) {
     return (

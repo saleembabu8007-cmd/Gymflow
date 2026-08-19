@@ -74,6 +74,17 @@ export const SendReminderModal: React.FC<SendReminderModalProps> = ({
   const isToday = diffDays === 0;
 
   const handleSend = async () => {
+    const targetContact = channel === 'EMAIL' ? member.email : member.phone;
+    const cleanContact = (targetContact || '').trim();
+
+    if (!cleanContact) {
+      const err = channel === 'EMAIL' 
+        ? 'Member email address is missing. Please add an email address in member profile.'
+        : 'Member phone number is missing. Please add a phone number in member profile.';
+      setSendError(err);
+      return;
+    }
+
     try {
       setIsSending(true);
       setSendError(null);
@@ -91,10 +102,11 @@ export const SendReminderModal: React.FC<SendReminderModalProps> = ({
         window.open(result.deepLink, '_blank');
       }
 
-      // Display truth-confirmed success toast
+      // Display truth-confirmed status feedback
+      const channelLabel = channel === 'WHATSAPP' ? 'WhatsApp' : channel === 'SMS' ? 'Messages' : 'Email';
       success(
-        'Reminder logged.',
-        `Payment reminder dispatched to ${member.name} via ${channel === 'WHATSAPP' ? 'WhatsApp' : channel}`
+        `${channelLabel} Opened`,
+        `Opened ${channelLabel} draft for ${member.name}. Return to GymFlow once sent.`
       );
 
       if (onReminderSent) {
@@ -103,9 +115,9 @@ export const SendReminderModal: React.FC<SendReminderModalProps> = ({
 
       onClose();
     } catch (err: any) {
-      const msg = err?.message || "Couldn't send the reminder. Please check provider connection and try again.";
+      const msg = err?.message || "Couldn't open reminder link. Please check recipient contact details.";
       setSendError(msg);
-      showErrorToast("Couldn't send the reminder. Please try again.");
+      showErrorToast("Couldn't open reminder link.");
     } finally {
       setIsSending(false);
     }
@@ -275,7 +287,13 @@ export const SendReminderModal: React.FC<SendReminderModalProps> = ({
             className="bg-neutral-900 text-white hover:bg-neutral-800 font-semibold px-5 shadow-2xs"
             leftIcon={<Send className="w-4 h-4" />}
           >
-            {isSending ? 'Sending...' : 'Send Reminder'}
+            {isSending
+              ? 'Opening...'
+              : channel === 'WHATSAPP'
+              ? 'Open WhatsApp'
+              : channel === 'SMS'
+              ? 'Open Messages'
+              : 'Compose Email'}
           </Button>
         </div>
       </div>

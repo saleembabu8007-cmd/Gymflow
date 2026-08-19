@@ -147,6 +147,10 @@ export interface IPaymentFilterOptions {
   startDate?: string;
   endDate?: string;
   paymentMethod?: string;
+  limit?: number;
+  offset?: number;
+  page?: number;
+  pageSize?: number;
 }
 
 export interface IPaymentService {

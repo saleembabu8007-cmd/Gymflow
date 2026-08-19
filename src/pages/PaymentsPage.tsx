@@ -26,6 +26,7 @@ import {
   ChevronRight,
   User,
   ChevronLeft,
+  Download,
 } from 'lucide-react';
 import { cn } from '../utils/classNames';
 
@@ -190,6 +191,44 @@ export const PaymentsPage: React.FC<PaymentsPageProps> = ({
     );
   }
 
+  const handleExportCSV = () => {
+    if (!payments || payments.length === 0) return;
+
+    const headers = [
+      'Payment ID',
+      'Date',
+      'Member Name',
+      'Phone',
+      'Amount',
+      'Method',
+      'Period Covered',
+      'Notes',
+      'Recorded By',
+    ];
+
+    const rows = payments.map((p) => [
+      `"${p.id}"`,
+      `"${p.paymentDate}"`,
+      `"${(p.memberName || '').replace(/"/g, '""')}"`,
+      `"${(p.memberPhone || '').replace(/"/g, '""')}"`,
+      p.amount,
+      `"${p.paymentMethod}"`,
+      `"${(p.periodCovered || '').replace(/"/g, '""')}"`,
+      `"${(p.notes || '').replace(/"/g, '""')}"`,
+      `"${(p.recordedBy || 'Gym Owner').replace(/"/g, '""')}"`,
+    ]);
+
+    const csvContent = [headers.join(','), ...rows.map((r) => r.join(','))].join('\n');
+    const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
+    const url = URL.createObjectURL(blob);
+    const link = document.createElement('a');
+    link.setAttribute('href', url);
+    link.setAttribute('download', `gymflow_payments_${new Date().toISOString().split('T')[0]}.csv`);
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+  };
+
   return (
     <div className="space-y-5 max-w-6xl mx-auto">
       {/* Page Header */}
@@ -197,17 +236,30 @@ export const PaymentsPage: React.FC<PaymentsPageProps> = ({
         title="Payments"
         subtitle="Track pending dues, upcoming renewals, and recorded payments"
         actions={
-          onRecordPayment ? (
-            <Button
-              id="btn-payments-record-payment"
-              size="md"
-              onClick={onRecordPayment}
-              className="bg-neutral-900 text-white hover:bg-neutral-800 font-semibold shadow-2xs"
-              leftIcon={<CreditCard className="w-4 h-4" />}
-            >
-              Record Payment
-            </Button>
-          ) : undefined
+          <div className="flex items-center gap-2">
+            {payments.length > 0 && (
+              <Button
+                id="btn-payments-export-csv"
+                variant="outline"
+                size="md"
+                onClick={handleExportCSV}
+                leftIcon={<Download className="w-4 h-4 text-neutral-600" />}
+              >
+                Export CSV
+              </Button>
+            )}
+            {onRecordPayment && (
+              <Button
+                id="btn-payments-record-payment"
+                size="md"
+                onClick={onRecordPayment}
+                className="bg-neutral-900 text-white hover:bg-neutral-800 font-semibold shadow-2xs"
+                leftIcon={<CreditCard className="w-4 h-4" />}
+              >
+                Record Payment
+              </Button>
+            )}
+          </div>
         }
       />
 

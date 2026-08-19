@@ -17,8 +17,6 @@ import { AdminAuditPage } from './pages/admin/AdminAuditPage';
 import { AdminSettingsPage } from './pages/admin/AdminSettingsPage';
 import { AdminLoginPage } from './pages/admin/AdminLoginPage';
 import { NotFoundPage } from './pages/NotFoundPage';
-import { SubscriptionPage } from './pages/SubscriptionPage';
-import { ExpiredSubscriptionPage } from './pages/ExpiredSubscriptionPage';
 import { TodayPage } from './pages/TodayPage';
 import { MembersPage } from './pages/MembersPage';
 import { PaymentsPage } from './pages/PaymentsPage';
@@ -355,11 +353,6 @@ const AppContent: React.FC = () => {
       );
     }
 
-    // Entitlement Guard: Suspended Account
-    if (!canAccess) {
-      return <ExpiredSubscriptionPage />;
-    }
-
     const normalizedPath = pathname.startsWith('/app') ? pathname : `/app${pathname}`;
     const currentSubPath = (normalizedPath === '/app' || normalizedPath === '/app/') ? '/app/today' : normalizedPath;
 
@@ -373,8 +366,6 @@ const AppContent: React.FC = () => {
           return 'Payment Ledger';
         case '/app/reminders':
           return 'WhatsApp Reminders';
-        case '/app/subscription':
-          return 'SaaS Subscription';
         case '/app/settings':
           return 'Gym Settings';
         case '/app/design-system':
@@ -385,11 +376,7 @@ const AppContent: React.FC = () => {
     };
 
     return (
-      <SubscriptionEntitlementGuard
-        gymId={user.gymId}
-        isPlatformAdmin={isPlatformAdmin}
-        onNavigateToSubscription={() => navigate('/app/subscription')}
-      >
+      <SubscriptionEntitlementGuard gymId={user.gymId} isPlatformAdmin={isPlatformAdmin}>
         <DashboardLayout
           currentPath={currentSubPath}
           onNavigate={(path) => navigate(path)}
@@ -439,8 +426,6 @@ const AppContent: React.FC = () => {
               onSelectMember={(m) => setDetailMember(m)}
             />
           )}
-
-          {currentSubPath === '/app/subscription' && <SubscriptionPage />}
 
           {currentSubPath === '/app/settings' && <SettingsPage />}
 

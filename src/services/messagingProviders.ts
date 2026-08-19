@@ -32,11 +32,11 @@ export class WhatsAppProvider implements IMessagingProvider {
 
   async dispatch(phone: string, message: string): Promise<ProviderDispatchResult> {
     const cleanPhone = (phone || '').replace(/[^\d]/g, '');
-    if (!cleanPhone) {
+    if (!cleanPhone || cleanPhone.length < 7) {
       return {
         success: false,
         status: 'FAILED',
-        error: 'Recipient phone number missing or invalid',
+        error: 'Member phone number is missing or invalid. Please check member profile.',
       };
     }
     const formattedPhone = cleanPhone.length === 10 ? `91${cleanPhone}` : cleanPhone;
@@ -44,7 +44,7 @@ export class WhatsAppProvider implements IMessagingProvider {
 
     return {
       success: true,
-      status: 'SENT',
+      status: 'PENDING',
       deepLink,
       providerRef: `wa_${Date.now()}`,
     };
@@ -60,18 +60,18 @@ export class SMSProvider implements IMessagingProvider {
 
   async dispatch(phone: string, message: string): Promise<ProviderDispatchResult> {
     const cleanPhone = (phone || '').replace(/[^\d]/g, '');
-    if (!cleanPhone) {
+    if (!cleanPhone || cleanPhone.length < 7) {
       return {
         success: false,
         status: 'FAILED',
-        error: 'Recipient phone number missing or invalid',
+        error: 'Member phone number is missing or invalid. Please check member profile.',
       };
     }
     const deepLink = `sms:${cleanPhone}?body=${encodeURIComponent(message)}`;
 
     return {
       success: true,
-      status: 'SENT',
+      status: 'PENDING',
       deepLink,
       providerRef: `sms_${Date.now()}`,
     };
