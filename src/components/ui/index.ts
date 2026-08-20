@@ -15,6 +15,7 @@ export * from './SearchInput';
 export * from './StatusBadge';
 export * from './Avatar';
 export * from './Card';
+export * from './Table';
 export * from './Modal';
 export * from './BottomSheet';
 export * from './Toast';
