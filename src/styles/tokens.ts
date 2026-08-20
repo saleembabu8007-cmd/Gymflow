@@ -1,163 +1,120 @@
 /**
- * GymFlow Design Tokens
- * Centralized design tokens for colors, spacing, typography, borders, shadows, transitions, z-index, and breakpoints.
+ * GymFlow V2.0 — Foundational Design Tokens Catalog
+ * Programmatic TypeScript Token Mappings for Design System Components
  */
 
 export const colors = {
-  // Brand / Primary
+  bg: {
+    app: '#fafafa',
+    surface: '#ffffff',
+    subtle: '#f4f4f5',
+    elevated: '#ffffff',
+  },
+  foreground: {
+    main: '#09090b',
+    muted: '#52525b',
+    subtle: '#71717a',
+    disabled: '#a1a1aa',
+  },
+  border: {
+    subtle: '#f4f4f5',
+    default: '#e4e4e7',
+    strong: '#d4d4d8',
+  },
   primary: {
-    50: '#F5F7FA',
-    100: '#E4E7EB',
-    200: '#CBD2D9',
-    300: '#9AA5B1',
-    400: '#52606D',
-    500: '#3E4C59',
-    600: '#323F4B',
-    700: '#1F2933',
-    800: '#121824',
-    900: '#0B0F17',
-    DEFAULT: '#121824',
+    main: '#09090b',
+    hover: '#18181b',
+    active: '#27272a',
+    subtle: '#f4f4f5',
+    foreground: '#ffffff',
   },
-  
-  // Neutrals (Warm/Cool balanced)
-  neutral: {
-    50: '#F8FAFC',
-    100: '#F1F5F9',
-    200: '#E2E8F0',
-    300: '#CBD5E1',
-    400: '#94A3B8',
-    500: '#64748B',
-    600: '#475569',
-    700: '#334155',
-    800: '#1E293B',
-    900: '#0F172A',
-    950: '#020617',
+  status: {
+    success: {
+      main: '#059669',
+      subtle: '#ecfdf5',
+      border: '#a7f3d0',
+      foreground: '#047857',
+    },
+    warning: {
+      main: '#d97706',
+      subtle: '#fffbe6',
+      border: '#fde68a',
+      foreground: '#b45309',
+    },
+    danger: {
+      main: '#e11d48',
+      subtle: '#fff1f2',
+      border: '#fecdd3',
+      foreground: '#be123c',
+    },
+    info: {
+      main: '#0284c7',
+      subtle: '#f0f9ff',
+      border: '#bae6fd',
+      foreground: '#0369a1',
+    },
   },
-
-  // Semantic Status Colors
-  success: {
-    50: '#ECFDF5',
-    100: '#D1FAE5',
-    200: '#A7F3D0',
-    500: '#10B981',
-    600: '#059669',
-    700: '#047857',
-    DEFAULT: '#059669',
-  },
-
-  warning: {
-    50: '#FFFBEB',
-    100: '#FEF3C7',
-    200: '#FDE68A',
-    500: '#F59E0B',
-    600: '#D97706',
-    700: '#B45309',
-    DEFAULT: '#D97706',
-  },
-
-  danger: {
-    50: '#FEF2F2',
-    100: '#FEE2E2',
-    200: '#FECACA',
-    500: '#EF4444',
-    600: '#DC2626',
-    700: '#B91C1C',
-    DEFAULT: '#DC2626',
-  },
-
-  info: {
-    50: '#EFF6FF',
-    100: '#DBEAFE',
-    200: '#BFDBFE',
-    500: '#3B82F6',
-    600: '#2563EB',
-    700: '#1D4ED8',
-    DEFAULT: '#2563EB',
-  },
-} as const;
+};
 
 export const spacing = {
-  0: '0px',
-  0.5: '0.125rem', // 2px
-  1: '0.25rem',    // 4px
-  1.5: '0.375rem', // 6px
-  2: '0.5rem',     // 8px
-  2.5: '0.625rem', // 10px
-  3: '0.75rem',    // 12px
-  3.5: '0.875rem', // 14px
-  4: '1rem',       // 16px
-  5: '1.25rem',    // 20px
-  6: '1.5rem',     // 24px
-  8: '2rem',       // 32px
-  10: '2.5rem',    // 40px
-  12: '3rem',      // 48px
-  16: '4rem',      // 64px
-  20: '5rem',      // 80px
-  24: '6rem',      // 96px
-} as const;
+  '0': '0px',
+  '1': '4px',
+  '2': '8px',
+  '3': '12px',
+  '4': '16px',
+  '5': '20px',
+  '6': '24px',
+  '8': '32px',
+  '10': '40px',
+  '12': '48px',
+  '16': '64px',
+};
 
 export const borderRadius = {
   none: '0px',
-  sm: '0.25rem',   // 4px
-  md: '0.375rem',  // 6px
-  lg: '0.5rem',    // 8px
-  xl: '0.75rem',   // 12px
-  '2xl': '1rem',   // 16px
-  '3xl': '1.5rem', // 24px
+  xs: '4px',
+  sm: '6px',
+  md: '8px',
+  lg: '12px',
+  xl: '16px',
   full: '9999px',
-} as const;
+};
 
 export const typography = {
   fontFamily: {
-    sans: 'system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif',
-    mono: 'ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace',
+    sans: "'Inter', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif",
+    mono: "'JetBrains Mono', ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace",
   },
   fontSize: {
-    xs: ['0.75rem', { lineHeight: '1rem' }],       // 12px
-    sm: ['0.875rem', { lineHeight: '1.25rem' }],   // 14px
-    base: ['1rem', { lineHeight: '1.5rem' }],       // 16px
-    lg: ['1.125rem', { lineHeight: '1.75rem' }],   // 18px
-    xl: ['1.25rem', { lineHeight: '1.75rem' }],    // 20px
-    '2xl': ['1.5rem', { lineHeight: '2rem' }],     // 24px
-    '3xl': ['1.875rem', { lineHeight: '2.25rem' }],// 30px
-    '4xl': ['2.25rem', { lineHeight: '2.5rem' }],  // 36px
+    xs: '0.75rem',
+    sm: '0.875rem',
+    base: '1rem',
+    lg: '1.125rem',
+    xl: '1.25rem',
+    '2xl': '1.5rem',
   },
-  fontWeight: {
-    normal: '400',
-    medium: '500',
-    semibold: '600',
-    bold: '700',
-    extrabold: '800',
-  },
-} as const;
+};
+
+export const sizing = {
+  h8: '32px',
+  h9: '36px',
+  h10: '40px',
+  h11: '44px',
+  h12: '48px',
+};
 
 export const shadows = {
-  none: 'none',
-  '2xs': '0 1px 2px 0 rgba(0, 0, 0, 0.03)',
-  xs: '0 1px 2px 0 rgba(0, 0, 0, 0.05)',
-  sm: '0 1px 3px 0 rgba(0, 0, 0, 0.08), 0 1px 2px -1px rgba(0, 0, 0, 0.08)',
-  md: '0 4px 6px -1px rgba(0, 0, 0, 0.08), 0 2px 4px -2px rgba(0, 0, 0, 0.06)',
-  lg: '0 10px 15px -3px rgba(0, 0, 0, 0.08), 0 4px 6px -4px rgba(0, 0, 0, 0.04)',
-  xl: '0 20px 25px -5px rgba(0, 0, 0, 0.08), 0 8px 10px -6px rgba(0, 0, 0, 0.04)',
-} as const;
+  xs: '0 1px 2px 0 rgba(0, 0, 0, 0.04)',
+  sm: '0 1px 3px 0 rgba(0, 0, 0, 0.06), 0 1px 2px -1px rgba(0, 0, 0, 0.06)',
+  md: '0 4px 6px -1px rgba(0, 0, 0, 0.07), 0 2px 4px -2px rgba(0, 0, 0, 0.05)',
+  lg: '0 10px 25px -5px rgba(0, 0, 0, 0.08), 0 8px 10px -6px rgba(0, 0, 0, 0.04)',
+};
 
-export const transitions = {
-  fast: '150ms cubic-bezier(0.4, 0, 0.2, 1)',
-  normal: '200ms cubic-bezier(0.4, 0, 0.2, 1)',
-  slow: '300ms cubic-bezier(0.4, 0, 0.2, 1)',
-} as const;
-
-export const zIndex = {
-  base: 0,
-  dropdown: 10,
-  sticky: 20,
-  header: 30,
-  bottomNav: 40,
-  modalBackdrop: 50,
-  modal: 60,
-  toast: 70,
-  popover: 80,
-} as const;
+export const motion = {
+  fast: '100ms cubic-bezier(0.4, 0, 0.2, 1)',
+  normal: '150ms cubic-bezier(0.4, 0, 0.2, 1)',
+  slow: '200ms cubic-bezier(0, 0, 0.2, 1)',
+};
 
 export const breakpoints = {
   sm: '640px',
@@ -165,4 +122,28 @@ export const breakpoints = {
   lg: '1024px',
   xl: '1280px',
   '2xl': '1536px',
+};
+
+export const zIndex = {
+  base: 0,
+  dropdown: 10,
+  sticky: 20,
+  header: 30,
+  backdrop: 40,
+  modal: 50,
+  toast: 60,
+};
+
+export const TOKENS = {
+  colors,
+  spacing,
+  borderRadius,
+  typography,
+  sizing,
+  shadows,
+  motion,
+  breakpoints,
+  zIndex,
 } as const;
+
+export type DesignTokens = typeof TOKENS;
