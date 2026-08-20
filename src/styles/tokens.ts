@@ -29,6 +29,48 @@ export const colors = {
     foreground: '#ffffff',
   },
   status: {
+    paid: {
+      main: '#059669',
+      subtle: '#ecfdf5',
+      border: '#a7f3d0',
+      foreground: '#047857',
+    },
+    dueToday: {
+      main: '#d97706',
+      subtle: '#fffbe6',
+      border: '#fde68a',
+      foreground: '#b45309',
+    },
+    dueSoon: {
+      main: '#d97706',
+      subtle: '#fffbe6',
+      border: '#fde68a',
+      foreground: '#b45309',
+    },
+    overdue: {
+      main: '#e11d48',
+      subtle: '#fff1f2',
+      border: '#fecdd3',
+      foreground: '#be123c',
+    },
+    expired: {
+      main: '#71717a',
+      subtle: '#f4f4f5',
+      border: '#e4e4e7',
+      foreground: '#52525b',
+    },
+    pending: {
+      main: '#4f46e5',
+      subtle: '#eef2ff',
+      border: '#c7d2fe',
+      foreground: '#3730a3',
+    },
+    info: {
+      main: '#0284c7',
+      subtle: '#f0f9ff',
+      border: '#bae6fd',
+      foreground: '#0369a1',
+    },
     success: {
       main: '#059669',
       subtle: '#ecfdf5',
@@ -46,12 +88,6 @@ export const colors = {
       subtle: '#fff1f2',
       border: '#fecdd3',
       foreground: '#be123c',
-    },
-    info: {
-      main: '#0284c7',
-      subtle: '#f0f9ff',
-      border: '#bae6fd',
-      foreground: '#0369a1',
     },
   },
 };
