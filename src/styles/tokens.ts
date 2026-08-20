@@ -106,6 +106,33 @@ export const spacing = {
   '16': '64px',
 };
 
+export const containerWidths = {
+  compact: 'max-w-md',   // 448px (Auth / Password Reset)
+  step: 'max-w-xl',      // 576px (Step 2 Gym Setup)
+  focus: 'max-w-5xl',    // 1024px (Today Dashboard & Detail Modals)
+  ledger: 'max-w-7xl',   // 1280px (Members Directory & Payments Ledger)
+};
+
+export const responsivePadding = {
+  desktop: 'px-8 py-6',   // ≥ 1024px
+  tablet: 'px-6 py-5',    // 768px - 1023px
+  mobile: 'px-4 py-4 pb-20', // < 768px
+};
+
+export const controlHeights = {
+  h8: '32px',  // Dense row actions
+  h9: '36px',  // Small inputs & buttons
+  h10: '40px', // Standard form inputs & primary buttons
+  h11: '44px', // Touch-friendly controls
+  h12: '48px', // Mobile hero actions
+};
+
+export const densityTiers = {
+  high: 'py-2.5 px-4',   // Tables & ledgers
+  medium: 'p-5 gap-4',   // Dashboard cards
+  low: 'p-6 space-y-5',  // Forms & onboarding
+};
+
 export const borderRadius = {
   none: '0px',
   xs: '4px',
@@ -173,6 +200,10 @@ export const zIndex = {
 export const TOKENS = {
   colors,
   spacing,
+  containerWidths,
+  responsivePadding,
+  controlHeights,
+  densityTiers,
   borderRadius,
   typography,
   sizing,
