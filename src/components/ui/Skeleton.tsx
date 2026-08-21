@@ -8,7 +8,7 @@ export interface SkeletonProps extends React.HTMLAttributes<HTMLDivElement> {
 export const Skeleton: React.FC<SkeletonProps> = ({ className, ...props }) => {
   return (
     <div
-      className={cn('animate-pulse rounded-xl bg-neutral-200/80', className)}
+      className={cn('animate-pulse rounded bg-zinc-100', className)}
       {...props}
     />
   );
@@ -31,7 +31,7 @@ export const SkeletonAvatar: React.FC<{ size?: 'sm' | 'md' | 'lg'; className?: s
 };
 
 export const SkeletonRow: React.FC<{ className?: string }> = ({ className }) => (
-  <div className={cn('flex items-center gap-3.5 p-3 rounded-xl border border-neutral-100 bg-white', className)}>
+  <div className={cn('flex items-center gap-3.5 py-4 border-b border-zinc-100', className)}>
     <SkeletonAvatar size="sm" />
     <div className="space-y-1.5 flex-1 min-w-0">
       <SkeletonText className="w-1/3 h-3.5" />
@@ -42,7 +42,7 @@ export const SkeletonRow: React.FC<{ className?: string }> = ({ className }) => 
 );
 
 export const SkeletonCard: React.FC<{ className?: string }> = ({ className }) => (
-  <div className={cn('p-5 rounded-2xl border border-neutral-200/80 bg-white space-y-3', className)}>
+  <div className={cn('p-5 space-y-3', className)}>
     <SkeletonText className="w-1/4 h-3" />
     <Skeleton className="h-7 w-1/2 rounded-lg" />
     <SkeletonText className="w-1/3 h-2.5" />

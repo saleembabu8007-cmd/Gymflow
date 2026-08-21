@@ -286,7 +286,6 @@ export const SendReminderModal: React.FC<SendReminderModalProps> = ({
             onClick={handleSend}
             isLoading={isSending}
             className="bg-neutral-900 text-white hover:bg-neutral-800 font-semibold px-5 shadow-2xs"
-            leftIcon={<Send className="w-4 h-4" />}
           >
             {isSending
               ? 'Opening...'

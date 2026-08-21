@@ -56,23 +56,23 @@ export const AdminSettingsPage: React.FC = () => {
   };
 
   return (
-    <div className="space-y-6 font-sans max-w-4xl text-neutral-100">
+    <div className="space-y-6 font-sans max-w-4xl text-zinc-100">
       <div>
         <h1 className="text-xl font-bold text-white tracking-tight">Platform Operational Settings</h1>
-        <p className="text-xs text-neutral-400 mt-0.5">
+        <p className="text-xs text-zinc-400 mt-0.5">
           SaaS product owner configuration, password security, and backend services
         </p>
       </div>
 
-      <div className="space-y-6">
+      <div className="space-y-2">
         {/* Admin Password Management Form */}
-        <div className="p-6 rounded-2xl bg-neutral-900 border border-neutral-800 space-y-5">
+        <div className="py-6 border-b border-zinc-800 space-y-5">
           <div className="flex items-center gap-2 font-bold text-sm text-white">
             <Lock className="w-4 h-4 text-rose-500" />
             <span>Platform Admin Security & Password Change</span>
           </div>
 
-          <p className="text-xs text-neutral-400 leading-relaxed">
+          <p className="text-xs text-zinc-400 leading-relaxed">
             Update your credentials via Supabase Auth. Passwords are cryptographically hashed and never stored in application database tables.
           </p>
 
@@ -99,7 +99,7 @@ export const AdminSettingsPage: React.FC = () => {
               value={currentPassword}
               onChange={(e) => setCurrentPassword(e.target.value)}
               disabled={loading}
-              className="bg-neutral-950 border-neutral-800 text-white placeholder:text-neutral-600 focus:border-rose-500"
+              className="bg-zinc-950 border-zinc-800 text-white placeholder:text-zinc-600 focus:border-rose-500"
             />
 
             <Input
@@ -111,7 +111,7 @@ export const AdminSettingsPage: React.FC = () => {
               onChange={(e) => setNewPassword(e.target.value)}
               required
               disabled={loading}
-              className="bg-neutral-950 border-neutral-800 text-white placeholder:text-neutral-600 focus:border-rose-500"
+              className="bg-zinc-950 border-zinc-800 text-white placeholder:text-zinc-600 focus:border-rose-500"
             />
 
             <Input
@@ -123,7 +123,7 @@ export const AdminSettingsPage: React.FC = () => {
               onChange={(e) => setConfirmPassword(e.target.value)}
               required
               disabled={loading}
-              className="bg-neutral-950 border-neutral-800 text-white placeholder:text-neutral-600 focus:border-rose-500"
+              className="bg-zinc-950 border-zinc-800 text-white placeholder:text-zinc-600 focus:border-rose-500"
             />
 
             <Button
@@ -138,16 +138,16 @@ export const AdminSettingsPage: React.FC = () => {
         </div>
 
         {/* Security & Role Access Policy */}
-        <div className="p-6 rounded-2xl bg-neutral-900 border border-neutral-800 space-y-4">
+        <div className="py-6 border-b border-zinc-800 space-y-4">
           <div className="flex items-center gap-2 font-bold text-sm text-white">
             <Shield className="w-4 h-4 text-rose-500" />
             <span>Security & Role Access Policy</span>
           </div>
-          <p className="text-xs text-neutral-400 leading-relaxed">
-            Platform Admin access is governed by PostgreSQL RLS procedure <code className="text-rose-400 font-mono bg-neutral-950 px-1.5 py-0.5 rounded">public.is_platform_admin()</code> and authenticated JWT role claims.
+          <p className="text-xs text-zinc-400 leading-relaxed">
+            Platform Admin access is governed by PostgreSQL RLS procedure <code className="text-rose-400 font-mono bg-zinc-950 px-1.5 py-0.5 rounded">public.is_platform_admin()</code> and authenticated JWT role claims.
           </p>
-          <div className="p-3 rounded-xl bg-neutral-950 border border-neutral-800 flex items-center justify-between text-xs">
-            <span className="text-neutral-400">Strict Client-Side Impersonation Shield</span>
+          <div className="py-3 flex items-center justify-between text-xs">
+            <span className="text-zinc-400">Strict Client-Side Impersonation Shield</span>
             <span className="px-2 py-0.5 rounded bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 font-bold text-[10px]">
               ENABLED
             </span>
@@ -155,24 +155,24 @@ export const AdminSettingsPage: React.FC = () => {
         </div>
 
         {/* Backend Edge Functions */}
-        <div className="p-6 rounded-2xl bg-neutral-900 border border-neutral-800 space-y-4">
+        <div className="py-6 space-y-4">
           <div className="flex items-center gap-2 font-bold text-sm text-white">
             <Server className="w-4 h-4 text-rose-500" />
             <span>Server-Side Edge Functions</span>
           </div>
-          <div className="space-y-2 text-xs font-mono">
-            <div className="p-3 rounded-xl bg-neutral-950 border border-neutral-800 flex items-center justify-between">
+          <div className="text-xs font-mono">
+            <div className="py-3 border-b border-zinc-800/60 flex items-center justify-between">
               <div>
                 <span className="text-white block font-bold">send-reminder</span>
-                <span className="text-neutral-500 text-[10px]">WhatsApp / SMS / Email Dispatcher</span>
+                <span className="text-zinc-500 text-[10px]">WhatsApp / SMS / Email Dispatcher</span>
               </div>
               <span className="text-emerald-400 text-[10px] font-bold">ACTIVE</span>
             </div>
 
-            <div className="p-3 rounded-xl bg-neutral-950 border border-neutral-800 flex items-center justify-between">
+            <div className="py-3 flex items-center justify-between">
               <div>
                 <span className="text-white block font-bold">payment-webhook</span>
-                <span className="text-neutral-500 text-[10px]">SaaS Subscription Billing Webhook</span>
+                <span className="text-zinc-500 text-[10px]">SaaS Subscription Billing Webhook</span>
               </div>
               <span className="text-emerald-400 text-[10px] font-bold">ACTIVE</span>
             </div>

@@ -10,7 +10,7 @@ export const Table: React.FC<TableProps> = ({ children, className, containerClas
   return (
     <div
       className={cn(
-        'w-full bg-white rounded-xl border border-zinc-200/60 overflow-hidden',
+        'w-full overflow-x-auto',
         containerClassName
       )}
     >
@@ -29,7 +29,7 @@ export const TableHeader: React.FC<TableHeaderProps> = ({ children, className, .
   return (
     <thead
       className={cn(
-        'border-b border-zinc-150 bg-zinc-50/70 text-[11px] font-bold uppercase tracking-wider text-zinc-500 select-none',
+        'border-b border-zinc-200 bg-transparent text-[11px] font-bold uppercase tracking-wider text-zinc-500 select-none',
         className
       )}
       {...props}

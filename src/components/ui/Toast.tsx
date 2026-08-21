@@ -69,10 +69,10 @@ export const ToastProvider: React.FC<{ children: React.ReactNode }> = ({ childre
             };
 
             const bgBorders = {
-              success: 'bg-white border-emerald-100 shadow-lg text-neutral-900',
-              error: 'bg-white border-rose-100 shadow-lg text-neutral-900',
-              warning: 'bg-white border-amber-100 shadow-lg text-neutral-900',
-              info: 'bg-white border-sky-100 shadow-lg text-neutral-900',
+              success: 'bg-white border-emerald-200 text-zinc-950',
+              error: 'bg-white border-rose-200 text-zinc-950',
+              warning: 'bg-white border-amber-200 text-zinc-950',
+              info: 'bg-white border-sky-200 text-zinc-950',
             };
 
             return (
@@ -84,22 +84,22 @@ export const ToastProvider: React.FC<{ children: React.ReactNode }> = ({ childre
                 transition={{ duration: 0.2 }}
                 id={`toast-${toast.id}`}
                 className={cn(
-                  'pointer-events-auto p-4 rounded-xl border flex items-start gap-3 shadow-md transition-all',
+                  'pointer-events-auto p-4 rounded-xl border flex items-start gap-3 transition-all',
                   bgBorders[toast.type]
                 )}
               >
                 {icons[toast.type]}
                 <div className="flex-1 min-w-0">
-                  <h4 className="text-sm font-semibold text-neutral-900 leading-tight">{toast.title}</h4>
+                  <h4 className="text-sm font-bold text-zinc-950 leading-tight">{toast.title}</h4>
                   {toast.message && (
-                    <p className="text-xs text-neutral-600 mt-0.5 leading-relaxed">{toast.message}</p>
+                    <p className="text-xs font-medium text-zinc-600 mt-0.5 leading-relaxed">{toast.message}</p>
                   )}
                 </div>
                 <button
                   type="button"
                   id={`toast-close-${toast.id}`}
                   onClick={() => dismissToast(toast.id)}
-                  className="text-neutral-400 hover:text-neutral-600 p-1 rounded-md transition-colors"
+                  className="text-zinc-400 hover:text-zinc-600 p-1 rounded-md transition-colors"
                 >
                   <X className="w-4 h-4" />
                 </button>

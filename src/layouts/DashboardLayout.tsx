@@ -38,7 +38,7 @@ export const DashboardLayout: React.FC<DashboardLayoutProps> = ({
   const gymName = gym?.name || 'GymFlow Tenant';
 
   return (
-    <div className="min-h-screen bg-neutral-50/60 flex overflow-x-hidden">
+    <div className="min-h-screen bg-zinc-50 flex overflow-x-hidden">
       {/* Desktop Sidebar */}
       <Sidebar
         currentPath={currentPath}

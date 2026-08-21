@@ -77,16 +77,16 @@ export const AdminDashboardPage: React.FC<AdminDashboardPageProps> = ({
 
   if (loading) {
     return (
-      <div className="min-h-screen bg-neutral-950 flex items-center justify-center text-white">
+      <div className="min-h-screen bg-zinc-950 flex items-center justify-center text-white">
         <LoadingState message="Loading Platform Admin Control Panel..." />
       </div>
     );
   }
 
   return (
-    <div className="min-h-screen bg-neutral-950 text-neutral-100 flex flex-col font-sans selection:bg-rose-500 selection:text-white">
+    <div className="min-h-screen bg-zinc-950 text-zinc-100 flex flex-col font-sans selection:bg-rose-500 selection:text-white">
       {/* Platform Admin Navbar */}
-      <header className="border-b border-neutral-800/80 bg-neutral-900/60 sticky top-0 z-40 backdrop-blur-md">
+      <header className="border-b border-zinc-800/80 bg-zinc-950/60 sticky top-0 z-40 backdrop-blur-md">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
           <div className="flex items-center gap-3">
             <div className="w-8 h-8 rounded-lg bg-rose-500 text-white flex items-center justify-center font-bold shadow-sm">
@@ -105,7 +105,7 @@ export const AdminDashboardPage: React.FC<AdminDashboardPageProps> = ({
               <button
                 type="button"
                 onClick={onSwitchToOwnerView}
-                className="text-xs font-semibold px-3 py-1.5 rounded-lg bg-neutral-800 hover:bg-neutral-700 text-neutral-300 transition-colors cursor-pointer"
+                className="text-xs font-semibold px-3 py-1.5 rounded-lg bg-zinc-900 hover:bg-zinc-800 text-zinc-300 transition-colors cursor-pointer"
               >
                 Switch to Gym Owner Portal
               </button>
@@ -113,7 +113,7 @@ export const AdminDashboardPage: React.FC<AdminDashboardPageProps> = ({
             <button
               type="button"
               onClick={onLogout}
-              className="p-2 rounded-lg text-neutral-400 hover:text-rose-400 hover:bg-neutral-800 transition-colors cursor-pointer"
+              className="p-2 rounded-lg text-zinc-400 hover:text-rose-400 hover:bg-zinc-900 transition-colors cursor-pointer"
               title="Logout Platform Admin"
             >
               <LogOut className="w-4 h-4" />
@@ -125,77 +125,57 @@ export const AdminDashboardPage: React.FC<AdminDashboardPageProps> = ({
       {/* Main Admin Dashboard */}
       <main className="flex-1 max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-8">
         {/* Top Metric Cards */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-          <div className="p-5 rounded-2xl bg-neutral-900 border border-neutral-800 flex items-center justify-between">
-            <div>
-              <div className="text-xs text-neutral-400 font-medium mb-1">Total Customer Gyms</div>
-              <div className="text-2xl font-extrabold text-white">{stats?.totalGyms || 0}</div>
-            </div>
-            <div className="w-10 h-10 rounded-xl bg-neutral-800 text-emerald-400 flex items-center justify-center">
-              <Building2 className="w-5 h-5" />
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 border-y border-zinc-800 sm:border-y-0 sm:border-x">
+          <div className="py-6 sm:px-6 border-b sm:border-b-0 sm:border-r border-zinc-800 flex flex-col justify-center">
+            <div className="text-xs text-zinc-400 font-medium mb-1">Total Customer Gyms</div>
+            <div className="text-2xl font-mono font-extrabold text-white">{stats?.totalGyms || 0}</div>
+          </div>
+
+          <div className="py-6 sm:px-6 border-b sm:border-b-0 lg:border-r border-zinc-800 flex flex-col justify-center">
+            <div className="text-xs text-zinc-400 font-medium mb-1">Active Subscriptions</div>
+            <div className="text-2xl font-mono font-extrabold text-emerald-400">
+              {stats?.activeSubscriptions || 0}
             </div>
           </div>
 
-          <div className="p-5 rounded-2xl bg-neutral-900 border border-neutral-800 flex items-center justify-between">
-            <div>
-              <div className="text-xs text-neutral-400 font-medium mb-1">Active Subscriptions</div>
-              <div className="text-2xl font-extrabold text-emerald-400">
-                {stats?.activeSubscriptions || 0}
-              </div>
-            </div>
-            <div className="w-10 h-10 rounded-xl bg-neutral-800 text-emerald-400 flex items-center justify-center">
-              <CheckCircle className="w-5 h-5" />
+          <div className="py-6 sm:px-6 border-b sm:border-b-0 sm:border-r border-zinc-800 flex flex-col justify-center">
+            <div className="text-xs text-zinc-400 font-medium mb-1">Estimated MRR</div>
+            <div className="text-2xl font-mono font-extrabold text-white">
+              ₹{(stats?.mrr || 0).toLocaleString('en-IN')}
             </div>
           </div>
 
-          <div className="p-5 rounded-2xl bg-neutral-900 border border-neutral-800 flex items-center justify-between">
-            <div>
-              <div className="text-xs text-neutral-400 font-medium mb-1">Estimated MRR</div>
-              <div className="text-2xl font-extrabold text-white">
-                ₹{(stats?.mrr || 0).toLocaleString('en-IN')}
-              </div>
-            </div>
-            <div className="w-10 h-10 rounded-xl bg-neutral-800 text-rose-400 flex items-center justify-center">
-              <CreditCard className="w-5 h-5" />
-            </div>
-          </div>
-
-          <div className="p-5 rounded-2xl bg-neutral-900 border border-neutral-800 flex items-center justify-between">
-            <div>
-              <div className="text-xs text-neutral-400 font-medium mb-1">Suspended Accounts</div>
-              <div className="text-2xl font-extrabold text-rose-400">{stats?.suspendedGyms || 0}</div>
-            </div>
-            <div className="w-10 h-10 rounded-xl bg-neutral-800 text-rose-400 flex items-center justify-center">
-              <ShieldAlert className="w-5 h-5" />
-            </div>
+          <div className="py-6 sm:px-6 flex flex-col justify-center">
+            <div className="text-xs text-zinc-400 font-medium mb-1">Suspended Accounts</div>
+            <div className="text-2xl font-mono font-extrabold text-rose-400">{stats?.suspendedGyms || 0}</div>
           </div>
         </div>
 
         {/* Customer Gyms Table Section */}
-        <div className="bg-neutral-900 border border-neutral-800 rounded-2xl p-6 space-y-6">
-          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+        <div className="pt-4 space-y-4">
+          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-zinc-800 pb-4">
             <div>
               <h2 className="text-lg font-bold text-white tracking-tight">Customer Gym Accounts</h2>
-              <p className="text-xs text-neutral-400">Manage tenant subscription statuses and accounts</p>
+              <p className="text-xs text-zinc-400">Manage tenant subscription statuses and accounts</p>
             </div>
 
             {/* Filter & Search Bar */}
             <div className="flex items-center gap-3">
               <div className="relative flex-1 sm:w-64">
-                <Search className="w-4 h-4 text-neutral-500 absolute left-3 top-1/2 -translate-y-1/2" />
+                <Search className="w-4 h-4 text-zinc-500 absolute left-3 top-1/2 -translate-y-1/2" />
                 <input
                   type="text"
                   placeholder="Search gym, owner, email..."
                   value={search}
                   onChange={(e) => setSearch(e.target.value)}
-                  className="w-full pl-9 pr-3 py-2 bg-neutral-950 border border-neutral-800 rounded-xl text-xs text-white placeholder-neutral-500 focus:outline-none focus:border-rose-500"
+                  className="w-full pl-9 pr-3 py-2 bg-zinc-900 border border-zinc-800 rounded-xl text-xs text-white placeholder-zinc-500 focus:outline-none focus:border-rose-500"
                 />
               </div>
 
               <select
                 value={filterStatus}
                 onChange={(e) => setFilterStatus(e.target.value as any)}
-                className="px-3 py-2 bg-neutral-950 border border-neutral-800 rounded-xl text-xs text-neutral-300 focus:outline-none focus:border-rose-500 cursor-pointer"
+                className="px-3 py-2 bg-zinc-900 border border-zinc-800 rounded-xl text-xs text-zinc-300 focus:outline-none focus:border-rose-500 cursor-pointer"
               >
                 <option value="ALL">All Statuses</option>
                 <option value="ACTIVE">Active</option>
@@ -206,8 +186,8 @@ export const AdminDashboardPage: React.FC<AdminDashboardPageProps> = ({
 
           {/* Table */}
           <div className="overflow-x-auto">
-            <table className="w-full text-left text-xs text-neutral-300">
-              <thead className="bg-neutral-950 text-neutral-400 uppercase font-semibold border-b border-neutral-800">
+            <table className="w-full text-left text-xs text-zinc-300">
+              <thead className="text-zinc-500 font-semibold border-b border-zinc-800">
                 <tr>
                   <th className="px-4 py-3">Gym Tenant</th>
                   <th className="px-4 py-3">Owner Contact</th>
@@ -216,17 +196,14 @@ export const AdminDashboardPage: React.FC<AdminDashboardPageProps> = ({
                   <th className="px-4 py-3 text-right">Actions</th>
                 </tr>
               </thead>
-              <tbody className="divide-y divide-neutral-800/60">
+              <tbody className="divide-y divide-zinc-800/60">
                 {filteredGyms.map((gym) => (
-                  <tr key={gym.id} className="hover:bg-neutral-800/40 transition-colors">
+                  <tr key={gym.id} className="hover:bg-zinc-900/40 transition-colors">
                     <td className="px-4 py-3.5 font-bold text-white">
                       <div className="flex items-center gap-2.5">
-                        <div className="w-7 h-7 rounded-lg bg-neutral-800 text-neutral-300 flex items-center justify-center shrink-0">
-                          <Building2 className="w-3.5 h-3.5" />
-                        </div>
                         <div>
                           <div>{gym.name}</div>
-                          <div className="text-[10px] text-neutral-500 font-normal">
+                          <div className="text-[10px] text-zinc-500 font-mono font-normal">
                             ID: {gym.id.slice(0, 8)}...
                           </div>
                         </div>
@@ -234,12 +211,12 @@ export const AdminDashboardPage: React.FC<AdminDashboardPageProps> = ({
                     </td>
 
                     <td className="px-4 py-3.5">
-                      <div className="font-semibold text-neutral-200">{gym.ownerName}</div>
-                      <div className="text-[10px] text-neutral-400">{gym.ownerEmail}</div>
+                      <div className="font-semibold text-zinc-200">{gym.ownerName}</div>
+                      <div className="text-[10px] text-zinc-400 font-mono">{gym.ownerEmail}</div>
                     </td>
 
                     <td className="px-4 py-3.5">
-                      <span className="px-2 py-0.5 rounded-full bg-neutral-800 border border-neutral-700 text-neutral-300 text-[10px] font-semibold">
+                      <span className="text-zinc-300 text-[10px] font-mono font-semibold">
                         {gym.subscriptionPlan}
                       </span>
                     </td>

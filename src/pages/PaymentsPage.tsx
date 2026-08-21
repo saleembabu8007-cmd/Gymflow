@@ -253,7 +253,6 @@ export const PaymentsPage: React.FC<PaymentsPageProps> = ({
                 variant="outline"
                 size="md"
                 onClick={handleExportCSV}
-                leftIcon={<Download className="w-4 h-4 text-neutral-600" />}
               >
                 Export CSV
               </Button>
@@ -263,8 +262,7 @@ export const PaymentsPage: React.FC<PaymentsPageProps> = ({
                 id="btn-payments-record-payment"
                 size="md"
                 onClick={onRecordPayment}
-                className="bg-neutral-900 text-white hover:bg-neutral-800 font-semibold shadow-2xs"
-                leftIcon={<CreditCard className="w-4 h-4" />}
+                className="bg-zinc-900 text-white hover:bg-zinc-800 font-semibold"
               >
                 Record Payment
               </Button>
@@ -276,7 +274,7 @@ export const PaymentsPage: React.FC<PaymentsPageProps> = ({
       {/* Primary Tab Navigation & Controls */}
       <div className="flex flex-col md:flex-row md:items-center justify-between gap-3 pt-1">
         {/* Primary Tabs: Pending, Upcoming, Paid */}
-        <div className="flex items-center p-1 bg-neutral-100/90 rounded-2xl w-full sm:w-auto border border-neutral-200/70">
+        <div className="flex items-center p-1 bg-zinc-100/90 rounded-2xl w-full sm:w-auto border border-zinc-200/70">
           <button
             type="button"
             id="tab-payments-pending"
@@ -284,8 +282,8 @@ export const PaymentsPage: React.FC<PaymentsPageProps> = ({
             className={cn(
               'flex-1 sm:flex-initial px-4 py-2 rounded-xl text-xs sm:text-sm font-semibold transition-all flex items-center justify-center gap-2 cursor-pointer',
               activeTab === 'pending'
-                ? 'bg-white text-neutral-950 shadow-2xs'
-                : 'text-neutral-600 hover:text-neutral-950 hover:bg-white/50'
+                ? 'bg-white text-zinc-950'
+                : 'text-zinc-600 hover:text-zinc-950 hover:bg-white/50'
             )}
           >
             <span>Pending</span>
@@ -295,8 +293,8 @@ export const PaymentsPage: React.FC<PaymentsPageProps> = ({
                 activeTab === 'pending'
                   ? pendingMembers.length > 0
                     ? 'bg-rose-100 text-rose-800'
-                    : 'bg-neutral-200 text-neutral-800'
-                  : 'bg-neutral-200/80 text-neutral-600'
+                    : 'bg-zinc-200 text-zinc-800'
+                  : 'bg-zinc-200/80 text-zinc-600'
               )}
             >
               {pendingMembers.length}
@@ -310,8 +308,8 @@ export const PaymentsPage: React.FC<PaymentsPageProps> = ({
             className={cn(
               'flex-1 sm:flex-initial px-4 py-2 rounded-xl text-xs sm:text-sm font-semibold transition-all flex items-center justify-center gap-2 cursor-pointer',
               activeTab === 'upcoming'
-                ? 'bg-white text-neutral-950 shadow-2xs'
-                : 'text-neutral-600 hover:text-neutral-950 hover:bg-white/50'
+                ? 'bg-white text-zinc-950'
+                : 'text-zinc-600 hover:text-zinc-950 hover:bg-white/50'
             )}
           >
             <span>Upcoming</span>
@@ -320,7 +318,7 @@ export const PaymentsPage: React.FC<PaymentsPageProps> = ({
                 'px-1.5 py-0.5 rounded-full text-[11px] font-bold font-mono',
                 activeTab === 'upcoming'
                   ? 'bg-amber-100 text-amber-800'
-                  : 'bg-neutral-200/80 text-neutral-600'
+                  : 'bg-zinc-200/80 text-zinc-600'
               )}
             >
               {upcomingMembers.length}
@@ -334,8 +332,8 @@ export const PaymentsPage: React.FC<PaymentsPageProps> = ({
             className={cn(
               'flex-1 sm:flex-initial px-4 py-2 rounded-xl text-xs sm:text-sm font-semibold transition-all flex items-center justify-center gap-2 cursor-pointer',
               activeTab === 'paid'
-                ? 'bg-white text-neutral-950 shadow-2xs'
-                : 'text-neutral-600 hover:text-neutral-950 hover:bg-white/50'
+                ? 'bg-white text-zinc-950'
+                : 'text-zinc-600 hover:text-zinc-950 hover:bg-white/50'
             )}
           >
             <span>Paid</span>
@@ -344,7 +342,7 @@ export const PaymentsPage: React.FC<PaymentsPageProps> = ({
                 'px-1.5 py-0.5 rounded-full text-[11px] font-bold font-mono',
                 activeTab === 'paid'
                   ? 'bg-emerald-100 text-emerald-800'
-                  : 'bg-neutral-200/80 text-neutral-600'
+                  : 'bg-zinc-200/80 text-zinc-600'
               )}
             >
               {payments.length}
@@ -372,8 +370,8 @@ export const PaymentsPage: React.FC<PaymentsPageProps> = ({
               className={cn(
                 'px-3 py-1.5 rounded-xl font-medium transition-colors whitespace-nowrap cursor-pointer',
                 pendingFilter === 'ALL'
-                  ? 'bg-neutral-900 text-white font-semibold shadow-2xs'
-                  : 'bg-white border border-neutral-200 text-neutral-600 hover:bg-neutral-50'
+                  ? 'bg-zinc-900 text-white font-semibold'
+                  : 'bg-white border border-zinc-200 text-zinc-600 hover:bg-zinc-50'
               )}
             >
               All Pending ({pendingMembers.length})
@@ -385,8 +383,8 @@ export const PaymentsPage: React.FC<PaymentsPageProps> = ({
               className={cn(
                 'px-3 py-1.5 rounded-xl font-medium transition-colors whitespace-nowrap cursor-pointer',
                 pendingFilter === 'OVERDUE'
-                  ? 'bg-rose-600 text-white font-semibold shadow-2xs'
-                  : 'bg-white border border-neutral-200 text-rose-700 hover:bg-rose-50'
+                  ? 'bg-rose-600 text-white font-semibold'
+                  : 'bg-white border border-zinc-200 text-rose-700 hover:bg-rose-50'
               )}
             >
               Overdue Only ({pendingMembers.filter((m) => getDifferenceInDays(m.nextPaymentDate) < 0).length})
@@ -398,8 +396,8 @@ export const PaymentsPage: React.FC<PaymentsPageProps> = ({
               className={cn(
                 'px-3 py-1.5 rounded-xl font-medium transition-colors whitespace-nowrap cursor-pointer',
                 pendingFilter === 'TODAY'
-                  ? 'bg-amber-500 text-neutral-950 font-semibold shadow-2xs'
-                  : 'bg-white border border-neutral-200 text-amber-800 hover:bg-amber-50'
+                  ? 'bg-amber-500 text-zinc-950 font-semibold'
+                  : 'bg-white border border-zinc-200 text-amber-800 hover:bg-amber-50'
               )}
             >
               Due Today ({pendingMembers.filter((m) => getDifferenceInDays(m.nextPaymentDate) === 0).length})
@@ -432,8 +430,8 @@ export const PaymentsPage: React.FC<PaymentsPageProps> = ({
                 className={cn(
                   'px-3 py-1.5 rounded-xl font-medium transition-colors whitespace-nowrap cursor-pointer',
                   upcomingFilter === f.id
-                    ? 'bg-neutral-900 text-white font-semibold shadow-2xs'
-                    : 'bg-white border border-neutral-200 text-neutral-600 hover:bg-neutral-50'
+                    ? 'bg-zinc-900 text-white font-semibold'
+                    : 'bg-white border border-zinc-200 text-zinc-600 hover:bg-zinc-50'
                 )}
               >
                 {f.label}
@@ -462,8 +460,8 @@ export const PaymentsPage: React.FC<PaymentsPageProps> = ({
                 className={cn(
                   'px-3 py-1.5 rounded-xl font-medium transition-colors whitespace-nowrap cursor-pointer',
                   paidMethodFilter === method.id
-                    ? 'bg-neutral-900 text-white font-semibold shadow-2xs'
-                    : 'bg-white border border-neutral-200 text-neutral-600 hover:bg-neutral-50'
+                    ? 'bg-zinc-900 text-white font-semibold'
+                    : 'bg-white border border-zinc-200 text-zinc-600 hover:bg-zinc-50'
                 )}
               >
                 {method.label}
@@ -481,12 +479,12 @@ export const PaymentsPage: React.FC<PaymentsPageProps> = ({
           {loadingMembers ? (
             <LoadingState message="Loading pending dues..." />
           ) : filteredPending.length === 0 ? (
-            <div className="p-12 rounded-2xl bg-white border border-neutral-200/80 text-center shadow-2xs flex flex-col items-center justify-center space-y-2">
+            <div className="py-16 text-center flex flex-col items-center justify-center space-y-2">
               <div className="w-12 h-12 rounded-full bg-emerald-50 text-emerald-600 flex items-center justify-center mb-1">
                 <CheckCircle2 className="w-6 h-6" />
               </div>
-              <h3 className="text-base font-bold text-neutral-950">No pending payments.</h3>
-              <p className="text-xs sm:text-sm text-neutral-500 mt-1 max-w-sm">
+              <h3 className="text-base font-bold text-zinc-950">No pending payments.</h3>
+              <p className="text-xs sm:text-sm text-zinc-500 mt-1 max-w-sm">
                 {searchQuery ? `No pending members match "${searchQuery}".` : 'All member dues are settled and up to date.'}
               </p>
               {searchQuery && (
@@ -517,10 +515,10 @@ export const PaymentsPage: React.FC<PaymentsPageProps> = ({
                     key={member.id}
                     id={`payment-pending-card-${member.id}`}
                     className={cn(
-                      'p-4 sm:p-5 rounded-2xl border transition-all shadow-2xs flex flex-col sm:flex-row sm:items-center justify-between gap-4',
+                      'py-5 border-b border-zinc-100 transition-colors flex flex-col sm:flex-row sm:items-center justify-between gap-4 -mx-4 px-4 group',
                       isOverdue
-                        ? 'bg-rose-50/40 border-rose-200/90 hover:border-rose-300'
-                        : 'bg-amber-50/40 border-amber-200/90 hover:border-amber-300'
+                        ? 'hover:bg-rose-50/40'
+                        : 'hover:bg-amber-50/40'
                     )}
                   >
                     {/* Left: Member Identity & Urgency Badge */}
@@ -531,7 +529,7 @@ export const PaymentsPage: React.FC<PaymentsPageProps> = ({
                           <button
                             type="button"
                             onClick={() => handleMemberClick(member)}
-                            className="font-bold text-sm sm:text-base text-neutral-950 hover:underline text-left truncate cursor-pointer max-w-[200px] sm:max-w-xs"
+                            className="font-bold text-sm sm:text-base text-zinc-950 hover:underline text-left truncate cursor-pointer max-w-[200px] sm:max-w-xs group-hover:text-zinc-700 transition-colors"
                           >
                             {displayName}
                           </button>
@@ -567,12 +565,12 @@ export const PaymentsPage: React.FC<PaymentsPageProps> = ({
                     </div>
 
                     {/* Right: Amount & Actions (Remind + Mark Paid) */}
-                    <div className="flex items-center justify-between sm:justify-end gap-3 pt-2 sm:pt-0 border-t sm:border-t-0 border-neutral-200/60 shrink-0">
-                      <div className="text-left sm:text-right">
-                        <span className="text-base sm:text-lg font-bold text-neutral-950 block">
+                    <div className="flex items-center justify-between sm:justify-end gap-3 pt-2 sm:pt-0 border-t sm:border-t-0 border-zinc-100 shrink-0">
+                      <div className="text-left sm:text-right pr-2">
+                        <span className="text-base sm:text-lg font-mono font-bold text-zinc-950 block">
                           {formatCurrency(displayFee, currencySymbol)}
                         </span>
-                        <span className="text-[10px] text-neutral-400 font-medium block truncate max-w-[120px]">
+                        <span className="text-[10px] text-zinc-400 font-medium block truncate max-w-[120px]">
                           {member.planName || 'Monthly'}
                         </span>
                       </div>
@@ -585,7 +583,7 @@ export const PaymentsPage: React.FC<PaymentsPageProps> = ({
                             size="sm"
                             onClick={() => onSendReminder(member)}
                             className="text-xs px-3 font-semibold"
-                            leftIcon={<MessageSquare className="w-3.5 h-3.5 text-neutral-600" />}
+                            leftIcon={<MessageSquare className="w-3.5 h-3.5 text-zinc-600" />}
                           >
                             Remind
                           </Button>
@@ -596,8 +594,7 @@ export const PaymentsPage: React.FC<PaymentsPageProps> = ({
                             id={`btn-markpaid-pending-${member.id}`}
                             size="sm"
                             onClick={() => onQuickPay(member)}
-                            className="bg-neutral-900 hover:bg-neutral-800 text-white text-xs px-3.5 font-semibold shadow-2xs"
-                            leftIcon={<CreditCard className="w-3.5 h-3.5" />}
+                            className="bg-zinc-900 hover:bg-zinc-800 text-white text-xs px-3.5 font-semibold"
                           >
                             Mark Paid
                           </Button>
@@ -618,12 +615,12 @@ export const PaymentsPage: React.FC<PaymentsPageProps> = ({
           {loadingMembers ? (
             <LoadingState message="Loading upcoming renewals..." />
           ) : filteredUpcoming.length === 0 ? (
-            <div className="p-12 rounded-2xl bg-white border border-neutral-200/80 text-center shadow-2xs flex flex-col items-center justify-center">
-              <div className="w-12 h-12 rounded-full bg-neutral-100 text-neutral-400 flex items-center justify-center mb-3">
+            <div className="py-16 text-center flex flex-col items-center justify-center">
+              <div className="w-12 h-12 rounded-full bg-zinc-100 text-zinc-400 flex items-center justify-center mb-3">
                 <Calendar className="w-6 h-6" />
               </div>
-              <h3 className="text-base font-bold text-neutral-950">No payments due soon.</h3>
-              <p className="text-xs sm:text-sm text-neutral-500 mt-1 max-w-sm">
+              <h3 className="text-base font-bold text-zinc-950">No payments due soon.</h3>
+              <p className="text-xs sm:text-sm text-zinc-500 mt-1 max-w-sm">
                 {searchQuery ? 'No upcoming renewals match your search.' : 'No member renewals scheduled within the selected period.'}
               </p>
             </div>
@@ -639,7 +636,7 @@ export const PaymentsPage: React.FC<PaymentsPageProps> = ({
                   <div
                     key={member.id}
                     id={`payment-upcoming-card-${member.id}`}
-                    className="p-4 sm:p-5 rounded-2xl bg-white border border-neutral-200/80 hover:border-neutral-300 transition-all shadow-2xs flex flex-col sm:flex-row sm:items-center justify-between gap-4"
+                    className="py-5 border-b border-zinc-100 hover:bg-zinc-50/50 transition-colors flex flex-col sm:flex-row sm:items-center justify-between gap-4 -mx-4 px-4 group"
                   >
                     {/* Left: Member Info & Calmer Days Remaining Badge */}
                     <div className="flex items-start sm:items-center gap-3.5 min-w-0 flex-1">
@@ -649,13 +646,13 @@ export const PaymentsPage: React.FC<PaymentsPageProps> = ({
                           <button
                             type="button"
                             onClick={() => handleMemberClick(member)}
-                            className="font-bold text-sm sm:text-base text-neutral-900 hover:underline text-left truncate cursor-pointer max-w-[200px] sm:max-w-xs"
+                            className="font-bold text-sm sm:text-base text-zinc-900 hover:underline text-left truncate cursor-pointer max-w-[200px] sm:max-w-xs group-hover:text-zinc-700 transition-colors"
                           >
                             {displayName}
                           </button>
 
-                          <span className="px-2.5 py-0.5 rounded-full text-[11px] font-medium bg-neutral-100 text-neutral-700 border border-neutral-200/80 flex items-center gap-1 shrink-0">
-                            <Calendar className="w-3 h-3 text-neutral-400" />
+                          <span className="px-2.5 py-0.5 rounded-full text-[11px] font-medium bg-zinc-100 text-zinc-700 border border-zinc-200/80 flex items-center gap-1 shrink-0">
+                            <Calendar className="w-3 h-3 text-zinc-400" />
                             <span>
                               {diffDays === 1 ? 'Due tomorrow' : `Due in ${diffDays} days`}
                             </span>
@@ -679,12 +676,12 @@ export const PaymentsPage: React.FC<PaymentsPageProps> = ({
                     </div>
 
                     {/* Right: Expected Amount & Remind Action */}
-                    <div className="flex items-center justify-between sm:justify-end gap-3 pt-2 sm:pt-0 border-t sm:border-t-0 border-neutral-100 shrink-0">
-                      <div className="text-left sm:text-right">
-                        <span className="text-base sm:text-lg font-bold text-neutral-900 block">
+                    <div className="flex items-center justify-between sm:justify-end gap-3 pt-2 sm:pt-0 border-t sm:border-t-0 border-zinc-100 shrink-0">
+                      <div className="text-left sm:text-right pr-2">
+                        <span className="text-base sm:text-lg font-mono font-bold text-zinc-900 block">
                           {formatCurrency(displayFee, currencySymbol)}
                         </span>
-                        <span className="text-[10px] text-neutral-400 font-medium block truncate max-w-[120px]">
+                        <span className="text-[10px] text-zinc-400 font-medium block truncate max-w-[120px]">
                           {member.planName || 'Monthly'}
                         </span>
                       </div>
@@ -696,8 +693,8 @@ export const PaymentsPage: React.FC<PaymentsPageProps> = ({
                             variant="secondary"
                             size="sm"
                             onClick={() => onSendReminder(member)}
-                            className="text-xs px-3 font-medium text-neutral-700"
-                            leftIcon={<MessageSquare className="w-3.5 h-3.5 text-neutral-500" />}
+                            className="text-xs px-3 font-medium text-zinc-700"
+                            leftIcon={<MessageSquare className="w-3.5 h-3.5 text-zinc-500" />}
                           >
                             Remind
                           </Button>
@@ -709,8 +706,7 @@ export const PaymentsPage: React.FC<PaymentsPageProps> = ({
                             variant="outline"
                             size="sm"
                             onClick={() => onQuickPay(member)}
-                            className="text-xs px-3 font-medium text-neutral-700"
-                            leftIcon={<CreditCard className="w-3.5 h-3.5 text-neutral-500" />}
+                            className="text-xs px-3 font-medium text-zinc-700"
                           >
                             Mark Paid
                           </Button>
@@ -731,12 +727,12 @@ export const PaymentsPage: React.FC<PaymentsPageProps> = ({
           {loadingPayments ? (
             <LoadingState message="Loading payment history..." />
           ) : filteredPaid.length === 0 ? (
-            <div className="p-12 rounded-2xl bg-white border border-neutral-200/80 text-center shadow-2xs flex flex-col items-center justify-center space-y-2">
-              <div className="w-12 h-12 rounded-full bg-neutral-100 text-neutral-400 flex items-center justify-center mb-1">
+            <div className="py-16 text-center flex flex-col items-center justify-center space-y-2">
+              <div className="w-12 h-12 rounded-full bg-zinc-100 text-zinc-400 flex items-center justify-center mb-1">
                 <CreditCard className="w-6 h-6" />
               </div>
-              <h3 className="text-base font-bold text-neutral-950">No payments recorded.</h3>
-              <p className="text-xs sm:text-sm text-neutral-500 mt-1 max-w-sm">
+              <h3 className="text-base font-bold text-zinc-950">No payments recorded.</h3>
+              <p className="text-xs sm:text-sm text-zinc-500 mt-1 max-w-sm">
                 {searchQuery ? `No payment records match "${searchQuery}".` : 'Transactions recorded using the "Mark Paid" button will appear here.'}
               </p>
               {searchQuery && (
@@ -754,7 +750,7 @@ export const PaymentsPage: React.FC<PaymentsPageProps> = ({
             </div>
           ) : (
             <>
-              <div className="rounded-2xl bg-white border border-neutral-200/80 shadow-2xs divide-y divide-neutral-100 overflow-hidden">
+              <div className="divide-y divide-zinc-100">
                 {paginatedPaid.map((item) => {
                   const itemMemberName = item.memberName || 'Member';
                   const itemAmount = Number(item.amount) || 0;
@@ -764,7 +760,7 @@ export const PaymentsPage: React.FC<PaymentsPageProps> = ({
                       key={item.id}
                       id={`payment-paid-row-${item.id}`}
                       onClick={() => handlePaidRecordClick(item)}
-                      className="p-4 sm:px-5 flex items-center justify-between gap-3 hover:bg-neutral-50/70 transition-colors cursor-pointer"
+                      className="py-4 flex items-center justify-between gap-3 hover:bg-zinc-50/70 transition-colors cursor-pointer -mx-4 px-4"
                     >
                       {/* Left: Member info, paid date, method */}
                       <div className="flex items-center gap-3.5 min-w-0 flex-1">
@@ -774,26 +770,26 @@ export const PaymentsPage: React.FC<PaymentsPageProps> = ({
 
                         <div className="min-w-0 flex-1">
                           <div className="flex items-center gap-2 flex-wrap">
-                            <span className="font-semibold text-xs sm:text-sm text-neutral-900 truncate max-w-[200px] sm:max-w-xs">
+                            <span className="font-semibold text-xs sm:text-sm text-zinc-900 truncate max-w-[200px] sm:max-w-xs">
                               {itemMemberName}
                             </span>
-                            <span className="px-2 py-0.5 text-[10px] font-semibold rounded-md bg-neutral-100 text-neutral-600 shrink-0">
+                            <span className="px-2 py-0.5 text-[10px] font-semibold rounded-md bg-zinc-100 text-zinc-600 shrink-0">
                               {item.paymentMethod === 'BANK_TRANSFER'
                                 ? 'Bank Transfer'
                                 : item.paymentMethod || 'Cash'}
                             </span>
                           </div>
 
-                          <div className="flex items-center gap-2 text-xs text-neutral-500 mt-0.5 flex-wrap font-mono">
+                          <div className="flex items-center gap-2 text-xs text-zinc-500 mt-0.5 flex-wrap font-mono">
                             {item.memberPhone && <span>{item.memberPhone}</span>}
-                            {item.memberPhone && <span className="font-sans text-neutral-300">•</span>}
-                            <span className="font-sans text-neutral-600">
+                            {item.memberPhone && <span className="font-sans text-zinc-300">•</span>}
+                            <span className="font-sans text-zinc-600">
                               Paid on {formatDate(item.paymentDate, { format: 'medium' })}
                             </span>
                             {item.notes && (
                               <>
-                                <span className="font-sans text-neutral-300">•</span>
-                                <span className="font-sans text-neutral-400 truncate max-w-[160px] sm:max-w-[240px]">
+                                <span className="font-sans text-zinc-300">•</span>
+                                <span className="font-sans text-zinc-400 truncate max-w-[160px] sm:max-w-[240px]">
                                   {item.notes}
                                 </span>
                               </>
@@ -803,14 +799,14 @@ export const PaymentsPage: React.FC<PaymentsPageProps> = ({
                       </div>
 
                       {/* Right: Received Amount */}
-                      <div className="flex items-center gap-2.5 text-right shrink-0">
+                      <div className="flex items-center gap-2.5 text-right shrink-0 pr-2">
                         <div>
-                          <span className="text-xs sm:text-sm font-bold text-emerald-700 block">
+                          <span className="text-xs sm:text-sm font-mono font-bold text-emerald-700 block">
                             +{formatCurrency(itemAmount, currencySymbol)}
                           </span>
-                          <span className="text-[10px] text-neutral-400 font-medium">Received</span>
+                          <span className="text-[10px] text-zinc-400 font-medium">Received</span>
                         </div>
-                        <ChevronRight className="w-4 h-4 text-neutral-300 hidden sm:block" />
+                        <ChevronRight className="w-4 h-4 text-zinc-300 hidden sm:block" />
                       </div>
                     </div>
                   );
@@ -819,8 +815,8 @@ export const PaymentsPage: React.FC<PaymentsPageProps> = ({
 
               {/* Pagination for Paid Records */}
               {totalPaidPages > 1 && (
-                <div className="flex items-center justify-between p-3 rounded-2xl bg-white border border-neutral-200/80 shadow-2xs text-xs">
-                  <span className="text-neutral-500">
+                <div className="flex items-center justify-between py-4 border-t border-zinc-100 text-xs mt-2">
+                  <span className="text-zinc-500">
                     Showing {((paidPage - 1) * PAID_PAGE_SIZE) + 1}–{Math.min(paidPage * PAID_PAGE_SIZE, totalPaidCount)} of {totalPaidCount} payments
                   </span>
                   <div className="flex items-center gap-2">
@@ -833,7 +829,7 @@ export const PaymentsPage: React.FC<PaymentsPageProps> = ({
                     >
                       Previous
                     </Button>
-                    <span className="px-2 font-semibold text-neutral-700">
+                    <span className="px-2 font-semibold text-zinc-700">
                       Page {paidPage} of {totalPaidPages}
                     </span>
                     <Button

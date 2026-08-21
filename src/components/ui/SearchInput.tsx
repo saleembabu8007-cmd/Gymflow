@@ -54,7 +54,7 @@ export const SearchInput: React.FC<SearchInputProps> = ({
 
   return (
     <div className={cn('relative flex items-center w-full', className)}>
-      <div className="absolute left-3.5 text-neutral-400 pointer-events-none flex items-center justify-center">
+      <div className="absolute left-3.5 text-zinc-400 pointer-events-none flex items-center justify-center">
         {isLoading ? <Loader2 className="w-4 h-4 animate-spin" /> : <Search className="w-4 h-4" />}
       </div>
       <input
@@ -62,14 +62,14 @@ export const SearchInput: React.FC<SearchInputProps> = ({
         value={internalValue}
         onChange={(e) => setInternalValue(e.target.value)}
         placeholder={placeholder}
-        className="w-full h-10 pl-10 pr-9 rounded-xl bg-white border border-neutral-200 text-sm text-neutral-900 placeholder:text-neutral-400 transition-colors shadow-2xs focus:outline-none focus:border-neutral-900 focus:ring-1 focus:ring-neutral-900"
+        className="w-full h-10 pl-10 pr-9 rounded-xl bg-white border border-zinc-200 text-sm font-semibold text-zinc-900 placeholder:text-zinc-400 transition-colors focus:outline-none focus:border-zinc-900 focus:ring-1 focus:ring-zinc-900"
         {...props}
       />
       {internalValue && (
         <button
           type="button"
           onClick={handleClear}
-          className="absolute right-3 p-1 rounded-md text-neutral-400 hover:text-neutral-600 focus:outline-none transition-colors cursor-pointer"
+          className="absolute right-3 p-1 rounded-md text-zinc-400 hover:text-zinc-600 focus:outline-none transition-colors cursor-pointer"
           title="Clear search"
         >
           <X className="w-3.5 h-3.5" />

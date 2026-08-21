@@ -45,7 +45,7 @@ export const AdminGymsPage: React.FC<AdminGymsPageProps> = ({ gyms, onToggleStat
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <div>
           <h1 className="text-xl font-bold text-white tracking-tight">Customer Gym Accounts</h1>
-          <p className="text-xs text-neutral-400 mt-0.5">
+          <p className="text-xs text-zinc-400 mt-0.5">
             Manage all tenant gym accounts, subscription statuses, and operational access
           </p>
         </div>
@@ -53,14 +53,14 @@ export const AdminGymsPage: React.FC<AdminGymsPageProps> = ({ gyms, onToggleStat
         {/* Search & Filter bar */}
         <div className="flex items-center gap-3">
           <div className="relative flex-1 sm:w-64">
-            <Search className="w-4 h-4 text-neutral-500 absolute left-3 top-1/2 -translate-y-1/2" />
+            <Search className="w-4 h-4 text-zinc-500 absolute left-3 top-1/2 -translate-y-1/2" />
             <input
               type="text"
               id="input-search-admin-gyms"
               placeholder="Search gym, owner, email..."
               value={search}
               onChange={(e) => setSearch(e.target.value)}
-              className="w-full pl-9 pr-3 py-2 bg-neutral-900 border border-neutral-800 rounded-xl text-xs text-white placeholder-neutral-500 focus:outline-none focus:border-rose-500"
+              className="w-full pl-9 pr-3 py-2 bg-zinc-900 border border-zinc-800 rounded-xl text-xs text-white placeholder-zinc-500 focus:outline-none focus:border-rose-500"
             />
           </div>
 
@@ -68,7 +68,7 @@ export const AdminGymsPage: React.FC<AdminGymsPageProps> = ({ gyms, onToggleStat
             id="select-filter-admin-gyms"
             value={filterStatus}
             onChange={(e) => setFilterStatus(e.target.value as any)}
-            className="px-3 py-2 bg-neutral-900 border border-neutral-800 rounded-xl text-xs text-neutral-300 focus:outline-none focus:border-rose-500 cursor-pointer"
+            className="px-3 py-2 bg-zinc-900 border border-zinc-800 rounded-xl text-xs text-zinc-300 focus:outline-none focus:border-rose-500 cursor-pointer"
           >
             <option value="ALL">All Statuses ({gyms.length})</option>
             <option value="ACTIVE">Active ({gyms.filter((g) => g.status === 'ACTIVE').length})</option>
@@ -78,10 +78,10 @@ export const AdminGymsPage: React.FC<AdminGymsPageProps> = ({ gyms, onToggleStat
       </div>
 
       {/* Gym Tenants Table */}
-      <div className="bg-neutral-900 border border-neutral-800 rounded-2xl overflow-hidden shadow-2xs">
+      <div className="pt-2">
         <div className="overflow-x-auto">
-          <table className="w-full text-left text-xs text-neutral-300">
-            <thead className="bg-neutral-950 text-neutral-400 uppercase font-semibold border-b border-neutral-800">
+          <table className="w-full text-left text-xs text-zinc-300">
+            <thead className="text-zinc-500 font-semibold border-b border-zinc-800">
               <tr>
                 <th className="px-5 py-3.5">Gym Tenant</th>
                 <th className="px-5 py-3.5">Owner Details</th>
@@ -91,24 +91,21 @@ export const AdminGymsPage: React.FC<AdminGymsPageProps> = ({ gyms, onToggleStat
                 <th className="px-5 py-3.5 text-right">Actions</th>
               </tr>
             </thead>
-            <tbody className="divide-y divide-neutral-800/60">
+            <tbody className="divide-y divide-zinc-800/60">
               {filteredGyms.length === 0 ? (
                 <tr>
-                  <td colSpan={6} className="px-5 py-12 text-center text-neutral-500">
+                  <td colSpan={6} className="px-5 py-12 text-center text-zinc-500">
                     No customer gym accounts match your search query.
                   </td>
                 </tr>
               ) : (
                 filteredGyms.map((gym) => (
-                  <tr key={gym.id} className="hover:bg-neutral-800/40 transition-colors">
+                  <tr key={gym.id} className="hover:bg-zinc-900/40 transition-colors">
                     <td className="px-5 py-4 font-bold text-white">
                       <div className="flex items-center gap-3">
-                        <div className="w-9 h-9 rounded-xl bg-neutral-800 text-rose-500 flex items-center justify-center shrink-0 border border-neutral-700 font-extrabold text-sm">
-                          <Building2 className="w-4 h-4" />
-                        </div>
                         <div className="min-w-0">
                           <div className="text-sm truncate">{gym.name}</div>
-                          <div className="text-[10px] text-neutral-500 font-mono font-normal">
+                          <div className="text-[10px] text-zinc-500 font-mono font-normal">
                             ID: {gym.id.slice(0, 8)}...
                           </div>
                         </div>
@@ -116,17 +113,17 @@ export const AdminGymsPage: React.FC<AdminGymsPageProps> = ({ gyms, onToggleStat
                     </td>
 
                     <td className="px-5 py-4">
-                      <div className="font-semibold text-neutral-200">{gym.ownerName}</div>
-                      <div className="text-[10px] text-neutral-400 font-mono">{gym.ownerEmail}</div>
+                      <div className="font-semibold text-zinc-200">{gym.ownerName}</div>
+                      <div className="text-[10px] text-zinc-400 font-mono">{gym.ownerEmail}</div>
                     </td>
 
                     <td className="px-5 py-4">
-                      <span className="px-2.5 py-1 rounded-full bg-neutral-800 text-neutral-200 font-bold font-mono text-[11px] border border-neutral-700">
+                      <span className="px-2.5 py-1 rounded-full bg-zinc-800 text-zinc-200 font-bold font-mono text-[11px] border border-zinc-700">
                         {gym.memberCount} members
                       </span>
                     </td>
 
-                    <td className="px-5 py-4 font-mono text-neutral-400">
+                    <td className="px-5 py-4 font-mono text-zinc-400">
                       {formatDate(gym.createdAt, { format: 'medium' })}
                     </td>
 
@@ -148,7 +145,7 @@ export const AdminGymsPage: React.FC<AdminGymsPageProps> = ({ gyms, onToggleStat
                           type="button"
                           id={`btn-view-gym-${gym.id}`}
                           onClick={() => setSelectedGym(gym)}
-                          className="p-1.5 rounded-lg bg-neutral-800 hover:bg-neutral-700 text-neutral-300 transition-colors cursor-pointer"
+                          className="p-1.5 rounded-lg bg-zinc-800 hover:bg-zinc-700 text-zinc-300 transition-colors cursor-pointer"
                           title="View Gym Details"
                         >
                           <Eye className="w-4 h-4" />

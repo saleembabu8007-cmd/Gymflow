@@ -163,7 +163,6 @@ export const MemberDetailModal: React.FC<MemberDetailModalProps> = ({
               variant="secondary"
               size="sm"
               onClick={() => onSendReminder(member)}
-              leftIcon={<MessageSquare className="w-3.5 h-3.5 text-neutral-600" />}
             >
               Remind
             </Button>
@@ -173,7 +172,6 @@ export const MemberDetailModal: React.FC<MemberDetailModalProps> = ({
               id="member-detail-btn-markpaid"
               size="sm"
               onClick={() => onQuickPay(member)}
-              leftIcon={<CreditCard className="w-3.5 h-3.5" />}
               className="bg-neutral-900 hover:bg-neutral-800 text-white font-semibold shadow-2xs"
             >
               Mark Paid
@@ -186,7 +184,6 @@ export const MemberDetailModal: React.FC<MemberDetailModalProps> = ({
                 variant="outline"
                 size="sm"
                 onClick={() => onEditMember(member)}
-                leftIcon={<Edit2 className="w-3.5 h-3.5 text-neutral-500" />}
               >
                 Edit
               </Button>

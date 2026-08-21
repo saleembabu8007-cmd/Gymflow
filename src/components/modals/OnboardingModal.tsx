@@ -217,7 +217,6 @@ export const OnboardingModal: React.FC<OnboardingModalProps> = ({
                 isLoading={isSavingGym}
                 disabled={!gymName.trim() || isSavingGym}
                 className="w-full bg-neutral-900 hover:bg-neutral-800 text-white font-semibold shadow-2xs cursor-pointer"
-                rightIcon={<ArrowRight className="w-4 h-4" />}
               >
                 Continue
               </Button>
@@ -250,7 +249,6 @@ export const OnboardingModal: React.FC<OnboardingModalProps> = ({
                 value={memberName}
                 onChange={(e) => setMemberName(e.target.value)}
                 autoFocus
-                leftIcon={<User className="w-4 h-4 text-neutral-400" />}
               />
 
               <Input
@@ -259,7 +257,6 @@ export const OnboardingModal: React.FC<OnboardingModalProps> = ({
                 placeholder="e.g. +91 98765 43210"
                 value={memberPhone}
                 onChange={(e) => setMemberPhone(e.target.value)}
-                leftIcon={<Phone className="w-4 h-4 text-neutral-400" />}
               />
 
               <Input
@@ -269,7 +266,6 @@ export const OnboardingModal: React.FC<OnboardingModalProps> = ({
                 placeholder="1500"
                 value={memberFee}
                 onChange={(e) => setMemberFee(e.target.value)}
-                leftIcon={<CreditCard className="w-4 h-4 text-neutral-400" />}
               />
             </div>
 
@@ -289,7 +285,6 @@ export const OnboardingModal: React.FC<OnboardingModalProps> = ({
                 size="md"
                 isLoading={isAddingMember}
                 className="bg-neutral-900 hover:bg-neutral-800 text-white font-semibold px-5 shadow-2xs cursor-pointer"
-                leftIcon={<UserPlus className="w-4 h-4" />}
               >
                 Add Member
               </Button>
@@ -322,7 +317,6 @@ export const OnboardingModal: React.FC<OnboardingModalProps> = ({
                 size="lg"
                 onClick={handleFinish}
                 className="w-full bg-neutral-900 hover:bg-neutral-800 text-white font-semibold shadow-2xs cursor-pointer"
-                rightIcon={<ArrowRight className="w-4 h-4" />}
               >
                 Go to Today
               </Button>

@@ -13,12 +13,12 @@ export const Heading: React.FC<HeadingProps> = ({
   ...props
 }) => {
   const sizeClasses = {
-    h1: 'text-2xl font-extrabold tracking-tight text-neutral-950',
-    h2: 'text-lg font-bold tracking-tight text-neutral-950',
-    h3: 'text-base font-bold text-neutral-950',
-    h4: 'text-sm font-bold text-neutral-950',
-    h5: 'text-xs font-bold text-neutral-950',
-    h6: 'text-[11px] font-bold text-neutral-950 uppercase tracking-wider',
+    h1: 'text-xl sm:text-2xl font-extrabold tracking-tight text-zinc-950', // Tier 1: Display Heading
+    h2: 'text-sm sm:text-base font-bold tracking-tight text-zinc-950',    // Tier 2: Section Heading
+    h3: 'text-sm font-bold text-zinc-950',
+    h4: 'text-xs font-bold text-zinc-950',
+    h5: 'text-xs font-semibold text-zinc-950',
+    h6: 'text-[11px] font-bold text-zinc-500 uppercase tracking-wider',
   };
 
   return (
@@ -30,7 +30,7 @@ export const Heading: React.FC<HeadingProps> = ({
 
 export interface TextProps extends React.HTMLAttributes<HTMLParagraphElement> {
   size?: 'xs' | 'sm' | 'base' | 'lg';
-  variant?: 'primary' | 'secondary' | 'tertiary' | 'muted' | 'danger';
+  variant?: 'primary' | 'secondary' | 'tertiary' | 'muted' | 'danger' | 'mono';
   children: React.ReactNode;
 }
 
@@ -42,18 +42,19 @@ export const Text: React.FC<TextProps> = ({
   ...props
 }) => {
   const sizeClasses = {
-    xs: 'text-xs',
-    sm: 'text-sm',
-    base: 'text-base',
-    lg: 'text-lg',
+    xs: 'text-[11px] sm:text-xs',
+    sm: 'text-xs sm:text-sm',
+    base: 'text-sm sm:text-base',
+    lg: 'text-base sm:text-lg',
   };
 
   const variantClasses = {
-    primary: 'text-neutral-950 font-normal',
-    secondary: 'text-neutral-700 font-medium',
-    tertiary: 'text-neutral-500 font-medium',
-    muted: 'text-neutral-400 font-normal',
+    primary: 'text-zinc-900 font-semibold',       // Tier 3: Body & Item
+    secondary: 'text-zinc-600 font-medium',       // Tier 4: Secondary Context
+    tertiary: 'text-zinc-500 font-normal',
+    muted: 'text-zinc-400 font-normal',
     danger: 'text-rose-600 font-semibold',
+    mono: 'font-mono text-zinc-400 font-normal',  // Tier 6: Micro Metadata
   };
 
   return (
@@ -75,9 +76,44 @@ export const Label: React.FC<LabelProps> = ({
   ...props
 }) => {
   return (
-    <label className={cn('block text-xs font-bold text-neutral-900 select-none', className)} {...props}>
+    <label className={cn('block text-xs font-bold text-zinc-800 select-none', className)} {...props}>
       {children}
       {required && <span className="text-rose-600 ml-1" title="Required">*</span>}
     </label>
+  );
+};
+
+export interface MoneyTextProps extends React.HTMLAttributes<HTMLSpanElement> {
+  amount: number;
+  currency?: string;
+}
+
+export const MoneyText: React.FC<MoneyTextProps> = ({
+  amount,
+  currency = '₹',
+  className,
+  ...props
+}) => {
+  return (
+    <span className={cn('font-mono font-bold text-zinc-950 tracking-tight', className)} {...props}>
+      <span className="text-zinc-500 font-medium mr-0.5">{currency}</span>
+      {amount.toLocaleString('en-IN')}
+    </span>
+  );
+};
+
+export interface MonoTextProps extends React.HTMLAttributes<HTMLSpanElement> {
+  children: React.ReactNode;
+}
+
+export const MonoText: React.FC<MonoTextProps> = ({
+  children,
+  className,
+  ...props
+}) => {
+  return (
+    <span className={cn('font-mono font-bold text-zinc-950', className)} {...props}>
+      {children}
+    </span>
   );
 };

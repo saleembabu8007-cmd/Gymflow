@@ -117,7 +117,7 @@ export const Modal: React.FC<ModalProps> = ({
             exit={{ opacity: 0 }}
             transition={{ duration: 0.15 }}
             onClick={onClose}
-            className="fixed inset-0 bg-neutral-950/40 backdrop-blur-xs"
+            className="fixed inset-0 bg-zinc-950/40 backdrop-blur-xs"
             aria-hidden="true"
           />
 
@@ -125,12 +125,12 @@ export const Modal: React.FC<ModalProps> = ({
           <motion.div
             ref={modalRef}
             tabIndex={-1}
-            initial={{ opacity: 0, scale: 0.96, y: 8 }}
+            initial={{ opacity: 0, scale: 0.98, y: 4 }}
             animate={{ opacity: 1, scale: 1, y: 0 }}
-            exit={{ opacity: 0, scale: 0.96, y: 8 }}
-            transition={{ duration: 0.2, ease: [0.16, 1, 0.3, 1] }}
+            exit={{ opacity: 0, scale: 0.98, y: 4 }}
+            transition={{ duration: 0.15, ease: [0.16, 1, 0.3, 1] }}
             className={cn(
-              'relative w-full bg-white rounded-2xl shadow-xl border border-neutral-200/80 z-10 overflow-hidden flex flex-col max-h-[90vh] focus:outline-none',
+              'relative w-full bg-white rounded-2xl border border-zinc-200 z-10 overflow-hidden flex flex-col max-h-[90vh] focus:outline-none',
               maxWidthClasses[maxWidth]
             )}
             role="dialog"
@@ -139,15 +139,15 @@ export const Modal: React.FC<ModalProps> = ({
             aria-describedby={descriptionId}
           >
             {(title || showCloseButton) && (
-              <div className="flex items-center justify-between px-6 py-4 border-b border-neutral-100 shrink-0">
+              <div className="flex items-center justify-between px-6 py-4 border-b border-zinc-100 shrink-0">
                 <div>
                   {title && (
-                    <h3 id={titleId} className="text-base font-semibold text-neutral-900">
+                    <h3 id={titleId} className="text-sm sm:text-base font-bold text-zinc-950 tracking-tight">
                       {title}
                     </h3>
                   )}
                   {description && (
-                    <p id={descriptionId} className="text-xs text-neutral-500 mt-0.5">
+                    <p id={descriptionId} className="text-xs font-medium text-zinc-600 mt-0.5">
                       {description}
                     </p>
                   )}
@@ -157,7 +157,7 @@ export const Modal: React.FC<ModalProps> = ({
                     type="button"
                     onClick={onClose}
                     aria-label="Close modal"
-                    className="text-neutral-400 hover:text-neutral-600 p-1.5 rounded-lg hover:bg-neutral-100 transition-colors focus-visible:ring-2 focus-visible:ring-neutral-900"
+                    className="text-zinc-400 hover:text-zinc-600 p-1.5 rounded-lg hover:bg-zinc-100 transition-colors focus-visible:ring-2 focus-visible:ring-zinc-900"
                   >
                     <X className="w-4 h-4" />
                   </button>

@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from 'react';
 import { PageHeader } from '../components/ui/PageHeader';
-import { Card, CardHeader, CardTitle, CardContent } from '../components/ui/Card';
 import { Input } from '../components/ui/Input';
 import { Select } from '../components/ui/Select';
 import { Button } from '../components/ui/Button';
@@ -169,17 +168,17 @@ export const SettingsPage: React.FC = () => {
       {/* ========================================================================= */}
       {/* SECTION 1: GYM PROFILE                                                    */}
       {/* ========================================================================= */}
-      <Card id="card-gym-profile">
-        <CardHeader>
-          <CardTitle className="text-base font-bold flex items-center gap-2 text-neutral-950">
-            <Building2 className="w-4 h-4 text-neutral-700" />
+      <div id="section-gym-profile" className="py-6 border-b border-zinc-100">
+        <div className="mb-6">
+          <h3 className="text-base font-bold flex items-center gap-2 text-zinc-950">
+            <Building2 className="w-4 h-4 text-zinc-700" />
             Gym Profile
-          </CardTitle>
-          <p className="text-xs text-neutral-500 mt-0.5">
+          </h3>
+          <p className="text-xs text-zinc-500 mt-0.5">
             Basic information about your fitness center
           </p>
-        </CardHeader>
-        <CardContent>
+        </div>
+        <div>
           <form onSubmit={handleSaveGymProfile} className="space-y-4">
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
               <Input
@@ -215,30 +214,29 @@ export const SettingsPage: React.FC = () => {
                 type="submit"
                 size="md"
                 isLoading={isSavingGym}
-                className="bg-neutral-900 hover:bg-neutral-800 text-white text-xs font-semibold px-4 shadow-2xs"
-                leftIcon={<Check className="w-3.5 h-3.5" />}
+                className="bg-zinc-900 hover:bg-zinc-800 text-white text-xs font-semibold px-4"
               >
                 Save Profile
               </Button>
             </div>
           </form>
-        </CardContent>
-      </Card>
+        </div>
+      </div>
 
       {/* ========================================================================= */}
       {/* SECTION 2: PAYMENT SETTINGS                                               */}
       {/* ========================================================================= */}
-      <Card id="card-payment-settings">
-        <CardHeader>
-          <CardTitle className="text-base font-bold flex items-center gap-2 text-neutral-950">
-            <CreditCard className="w-4 h-4 text-neutral-700" />
+      <div id="section-payment-settings" className="py-6 border-b border-zinc-100">
+        <div className="mb-6">
+          <h3 className="text-base font-bold flex items-center gap-2 text-zinc-950">
+            <CreditCard className="w-4 h-4 text-zinc-700" />
             Payment Settings
-          </CardTitle>
-          <p className="text-xs text-neutral-500 mt-0.5">
+          </h3>
+          <p className="text-xs text-zinc-500 mt-0.5">
             Default billing rules and automated reminder timing
           </p>
-        </CardHeader>
-        <CardContent>
+        </div>
+        <div>
           <form onSubmit={handleSavePaymentSettings} className="space-y-4">
             <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
               {/* Currency */}
@@ -293,30 +291,29 @@ export const SettingsPage: React.FC = () => {
                 type="submit"
                 size="md"
                 isLoading={isSavingPaymentSettings}
-                className="bg-neutral-900 hover:bg-neutral-800 text-white text-xs font-semibold px-4 shadow-2xs"
-                leftIcon={<Check className="w-3.5 h-3.5" />}
+                className="bg-zinc-900 hover:bg-zinc-800 text-white text-xs font-semibold px-4"
               >
                 Save Payment Settings
               </Button>
             </div>
           </form>
-        </CardContent>
-      </Card>
+        </div>
+      </div>
 
       {/* ========================================================================= */}
       {/* SECTION 3: ACCOUNT                                                        */}
       {/* ========================================================================= */}
-      <Card id="card-account-settings">
-        <CardHeader>
-          <CardTitle className="text-base font-bold flex items-center gap-2 text-neutral-950">
-            <User className="w-4 h-4 text-neutral-700" />
+      <div id="section-account-settings" className="py-6 border-b border-zinc-100">
+        <div className="mb-6">
+          <h3 className="text-base font-bold flex items-center gap-2 text-zinc-950">
+            <User className="w-4 h-4 text-zinc-700" />
             Account
-          </CardTitle>
-          <p className="text-xs text-neutral-500 mt-0.5">
+          </h3>
+          <p className="text-xs text-zinc-500 mt-0.5">
             Owner credentials and login security
           </p>
-        </CardHeader>
-        <CardContent>
+        </div>
+        <div>
           <form onSubmit={handleSaveAccount} className="space-y-4">
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
               <Input
@@ -348,12 +345,11 @@ export const SettingsPage: React.FC = () => {
                 value={newPassword}
                 onChange={(e) => setNewPassword(e.target.value)}
                 helperText="Enter a new password (min. 6 characters) only if you wish to change it"
-                leftIcon={<Lock className="w-3.5 h-3.5 text-neutral-400" />}
                 rightIcon={
                   <button
                     type="button"
                     onClick={() => setShowPassword(!showPassword)}
-                    className="text-neutral-400 hover:text-neutral-700 focus:outline-none cursor-pointer"
+                    className="text-zinc-400 hover:text-zinc-700 focus:outline-none cursor-pointer"
                     tabIndex={-1}
                   >
                     {showPassword ? (
@@ -372,23 +368,22 @@ export const SettingsPage: React.FC = () => {
                 type="submit"
                 size="md"
                 isLoading={isSavingAccount}
-                className="bg-neutral-900 hover:bg-neutral-800 text-white text-xs font-semibold px-4 shadow-2xs"
-                leftIcon={<Check className="w-3.5 h-3.5" />}
+                className="bg-zinc-900 hover:bg-zinc-800 text-white text-xs font-semibold px-4"
               >
                 Save Account
               </Button>
             </div>
           </form>
-        </CardContent>
-      </Card>
+        </div>
+      </div>
 
       {/* ========================================================================= */}
       {/* LOGOUT (Clearly placed at bottom, simple and understated)                */}
       {/* ========================================================================= */}
-      <div className="pt-4 border-t border-neutral-200/80 flex flex-col sm:flex-row sm:items-center justify-between gap-3">
-        <div className="text-xs text-neutral-500 flex items-center gap-2 flex-wrap">
-          <span>Logged in as <span className="font-semibold text-neutral-800">{user?.email || 'Owner'}</span></span>
-          <span className="text-neutral-300">•</span>
+      <div className="py-6 flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+        <div className="text-xs text-zinc-500 flex items-center gap-2 flex-wrap">
+          <span>Logged in as <span className="font-semibold text-zinc-800">{user?.email || 'Owner'}</span></span>
+          <span className="text-zinc-300">•</span>
           <button
             type="button"
             id="btn-restart-onboarding"
@@ -396,7 +391,7 @@ export const SettingsPage: React.FC = () => {
               localStorage.removeItem('gymflow_onboarding_completed');
               window.location.reload();
             }}
-            className="text-neutral-500 hover:text-neutral-950 underline transition-colors cursor-pointer text-xs"
+            className="text-zinc-500 hover:text-zinc-950 underline transition-colors cursor-pointer text-xs"
           >
             Restart First-Time Setup
           </button>
@@ -406,7 +401,7 @@ export const SettingsPage: React.FC = () => {
           id="btn-settings-logout"
           type="button"
           onClick={handleLogout}
-          className="inline-flex items-center gap-1.5 px-3.5 py-2 rounded-xl text-xs font-medium text-neutral-600 hover:text-rose-700 hover:bg-rose-50 border border-neutral-200 hover:border-rose-200 transition-colors cursor-pointer"
+          className="inline-flex items-center gap-1.5 px-3.5 py-2 rounded-xl text-xs font-medium text-zinc-600 hover:text-rose-700 hover:bg-rose-50 border border-zinc-200 hover:border-rose-200 transition-colors cursor-pointer"
         >
           <LogOut className="w-3.5 h-3.5" />
           <span>Log out</span>

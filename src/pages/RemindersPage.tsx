@@ -137,7 +137,6 @@ export const RemindersPage: React.FC<RemindersPageProps> = ({
             Failed
           </span>
         );
-      case 'PENDING':
       default:
         return (
           <span className="px-2 py-0.5 text-[10px] font-bold bg-amber-100 text-amber-900 rounded-full flex items-center gap-1">
@@ -168,14 +167,14 @@ export const RemindersPage: React.FC<RemindersPageProps> = ({
       <div className="space-y-3.5">
         <div className="flex items-center justify-between">
           <div className="flex items-center gap-2">
-            <h2 className="text-base sm:text-lg font-bold text-neutral-950">
+            <h2 className="text-base sm:text-lg font-bold text-zinc-950">
               Needs Reminder
             </h2>
             <span className="px-2 py-0.5 rounded-full text-xs font-bold font-mono bg-rose-100 text-rose-800">
               {needsReminderList.length}
             </span>
           </div>
-          <span className="text-xs text-neutral-500 hidden sm:inline-block">
+          <span className="text-xs text-zinc-500 hidden sm:inline-block">
             Overdue and approaching dues
           </span>
         </div>
@@ -183,17 +182,17 @@ export const RemindersPage: React.FC<RemindersPageProps> = ({
         {loadingMembers ? (
           <LoadingState message="Checking members needing reminders..." />
         ) : needsReminderList.length === 0 ? (
-          <div className="p-8 rounded-2xl bg-white border border-neutral-200/80 text-center shadow-2xs flex flex-col items-center justify-center">
+          <div className="py-16 text-center flex flex-col items-center justify-center">
             <div className="w-10 h-10 rounded-full bg-emerald-50 text-emerald-600 flex items-center justify-center mb-2">
               <CheckCircle2 className="w-5 h-5" />
             </div>
-            <h3 className="text-sm font-bold text-neutral-950">No pending reminders.</h3>
-            <p className="text-xs text-neutral-500 mt-0.5">
+            <h3 className="text-sm font-bold text-zinc-950">No pending reminders.</h3>
+            <p className="text-xs text-zinc-500 mt-0.5">
               All member dues are settled or scheduled beyond the reminder window.
             </p>
           </div>
         ) : (
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+          <div className="flex flex-col gap-0 border-y border-zinc-100">
             {needsReminderList.map((member) => {
               const diffDays = getDifferenceInDays(member.nextPaymentDate);
               const isOverdue = diffDays < 0;
@@ -206,12 +205,13 @@ export const RemindersPage: React.FC<RemindersPageProps> = ({
                   key={member.id}
                   id={`reminder-needed-card-${member.id}`}
                   className={cn(
-                    'p-4 rounded-2xl border transition-all shadow-2xs flex flex-col justify-between gap-3.5',
+                    'py-5 border-b border-zinc-100 transition-colors flex flex-col justify-between gap-3.5 -mx-4 px-4 group',
                     isOverdue
-                      ? 'bg-rose-50/30 border-rose-200 hover:border-rose-300'
+                      ? 'hover:bg-rose-50/30'
                       : isToday
-                      ? 'bg-amber-50/30 border-amber-200 hover:border-amber-300'
-                      : 'bg-white border-neutral-200/80 hover:border-neutral-300'
+                      ? 'hover:bg-amber-50/30'
+                      : 'hover:bg-zinc-50/50',
+                    'last:border-b-0'
                   )}
                 >
                   {/* Top: Member Info & Due Badge */}
@@ -222,29 +222,29 @@ export const RemindersPage: React.FC<RemindersPageProps> = ({
                         <button
                           type="button"
                           onClick={() => handleMemberClick(member)}
-                          className="font-bold text-sm text-neutral-950 hover:underline text-left truncate block cursor-pointer"
+                          className="font-bold text-sm text-zinc-950 hover:underline text-left truncate block cursor-pointer group-hover:text-zinc-700 transition-colors"
                         >
                           {member.name}
                         </button>
-                        <div className="flex items-center gap-2 text-xs text-neutral-500 font-mono mt-0.5">
-                          <Phone className="w-3 h-3 text-neutral-400" />
+                        <div className="flex items-center gap-2 text-xs text-zinc-500 font-mono mt-0.5">
+                          <Phone className="w-3 h-3 text-zinc-400" />
                           <span>{member.phone}</span>
                         </div>
                       </div>
                     </div>
 
                     <div className="text-right shrink-0">
-                      <span className="text-sm font-bold text-neutral-950 block">
+                      <span className="text-sm font-mono font-bold text-zinc-950 block">
                         {formatCurrency(member.monthlyFee, currencySymbol)}
                       </span>
-                      <span className="text-[10px] text-neutral-400 block font-medium">
+                      <span className="text-[10px] text-zinc-400 block font-medium">
                         {member.planName}
                       </span>
                     </div>
                   </div>
 
                   {/* Middle: Urgency & Last Reminded Status */}
-                  <div className="flex items-center justify-between gap-2 text-xs pt-1 border-t border-neutral-100/80">
+                  <div className="flex items-center justify-between gap-2 text-xs pt-1 border-t border-zinc-100">
                     <div>
                       {isOverdue ? (
                         <span className="px-2 py-0.5 rounded-full text-[10px] font-bold bg-rose-100 text-rose-800 inline-flex items-center gap-1">
@@ -257,20 +257,20 @@ export const RemindersPage: React.FC<RemindersPageProps> = ({
                           Due today
                         </span>
                       ) : (
-                        <span className="px-2 py-0.5 rounded-full text-[10px] font-medium bg-neutral-100 text-neutral-700 inline-flex items-center gap-1">
-                          <Calendar className="w-3 h-3 text-neutral-400" />
+                        <span className="px-2 py-0.5 rounded-full text-[10px] font-medium bg-zinc-100 text-zinc-700 inline-flex items-center gap-1">
+                          <Calendar className="w-3 h-3 text-zinc-400" />
                           Due in {diffDays} {diffDays === 1 ? 'day' : 'days'}
                         </span>
                       )}
                     </div>
 
-                    <div className="text-[11px] text-neutral-400 font-medium">
+                    <div className="text-[11px] text-zinc-400 font-medium">
                       {lastReminder ? (
-                        <span className="text-neutral-500">
+                        <span className="text-zinc-500">
                           Reminded {formatDate(lastReminder.sentAt, { format: 'relative' })}
                         </span>
                       ) : (
-                        <span className="text-neutral-400">Not reminded yet</span>
+                        <span className="text-zinc-400">Not reminded yet</span>
                       )}
                     </div>
                   </div>
@@ -283,8 +283,7 @@ export const RemindersPage: React.FC<RemindersPageProps> = ({
                         variant="outline"
                         size="sm"
                         onClick={() => onQuickPay(member)}
-                        className="text-xs px-3 font-medium text-neutral-700"
-                        leftIcon={<CreditCard className="w-3.5 h-3.5 text-neutral-500" />}
+                        className="text-xs px-3 font-medium text-zinc-700"
                       >
                         Mark Paid
                       </Button>
@@ -295,8 +294,7 @@ export const RemindersPage: React.FC<RemindersPageProps> = ({
                         id={`btn-reminders-remind-${member.id}`}
                         size="sm"
                         onClick={() => onSendReminder(member)}
-                        className="bg-neutral-900 hover:bg-neutral-800 text-white text-xs px-3.5 font-semibold shadow-2xs"
-                        leftIcon={<Send className="w-3.5 h-3.5" />}
+                        className="bg-zinc-900 hover:bg-zinc-800 text-white text-xs px-3.5 font-semibold"
                       >
                         Remind
                       </Button>
@@ -315,10 +313,10 @@ export const RemindersPage: React.FC<RemindersPageProps> = ({
       <div className="space-y-3.5">
         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
           <div className="flex items-center gap-2">
-            <h2 className="text-base sm:text-lg font-bold text-neutral-950">
+            <h2 className="text-base sm:text-lg font-bold text-zinc-950">
               Recently Sent
             </h2>
-            <span className="px-2 py-0.5 rounded-full text-xs font-bold font-mono bg-neutral-100 text-neutral-700 border border-neutral-200">
+            <span className="px-2 py-0.5 rounded-full text-xs font-bold font-mono bg-zinc-100 text-zinc-700 border border-zinc-200">
               {reminders.length}
             </span>
           </div>
@@ -348,8 +346,8 @@ export const RemindersPage: React.FC<RemindersPageProps> = ({
               className={cn(
                 'px-3 py-1.5 rounded-xl font-medium transition-colors whitespace-nowrap cursor-pointer',
                 channelFilter === item.id
-                  ? 'bg-neutral-900 text-white font-semibold shadow-2xs'
-                  : 'bg-white border border-neutral-200 text-neutral-600 hover:bg-neutral-50'
+                  ? 'bg-zinc-900 text-white font-semibold'
+                  : 'bg-white border border-zinc-200 text-zinc-600 hover:bg-zinc-50'
               )}
             >
               {item.label}
@@ -360,26 +358,26 @@ export const RemindersPage: React.FC<RemindersPageProps> = ({
         {loadingReminders ? (
           <LoadingState message="Loading reminder dispatches..." />
         ) : filteredSentReminders.length === 0 ? (
-          <div className="p-10 rounded-2xl bg-white border border-neutral-200/80 text-center shadow-2xs flex flex-col items-center justify-center">
-            <div className="w-10 h-10 rounded-full bg-neutral-100 text-neutral-400 flex items-center justify-center mb-2">
+          <div className="py-16 text-center flex flex-col items-center justify-center">
+            <div className="w-10 h-10 rounded-full bg-zinc-100 text-zinc-400 flex items-center justify-center mb-2">
               <MessageSquare className="w-5 h-5" />
             </div>
-            <h3 className="text-sm font-bold text-neutral-950">No reminders recorded yet.</h3>
-            <p className="text-xs text-neutral-500 mt-0.5 max-w-sm">
+            <h3 className="text-sm font-bold text-zinc-950">No reminders recorded yet.</h3>
+            <p className="text-xs text-zinc-500 mt-0.5 max-w-sm">
               When you remind members about upcoming or overdue payments, delivery history will appear here.
             </p>
           </div>
         ) : (
-          <div className="rounded-2xl bg-white border border-neutral-200/80 shadow-2xs divide-y divide-neutral-100 overflow-hidden">
+          <div className="divide-y divide-zinc-100">
             {filteredSentReminders.map((r) => (
               <div
                 key={r.id}
                 id={`reminder-history-row-${r.id}`}
-                className="p-4 sm:px-5 hover:bg-neutral-50/70 transition-colors flex flex-col sm:flex-row sm:items-start justify-between gap-3"
+                className="py-4 hover:bg-zinc-50/70 transition-colors flex flex-col sm:flex-row sm:items-start justify-between gap-3 -mx-4 px-4 group"
               >
                 {/* Left: Member info, channel badge, status badge, message */}
                 <div className="flex items-start gap-3.5 flex-1 min-w-0">
-                  <div className="w-9 h-9 rounded-xl bg-neutral-100 text-neutral-600 flex items-center justify-center shrink-0 border border-neutral-200/60 mt-0.5">
+                  <div className="w-9 h-9 rounded-xl bg-zinc-100 text-zinc-600 flex items-center justify-center shrink-0 border border-zinc-200/60 mt-0.5">
                     {r.channel === 'WHATSAPP' ? (
                       <MessageSquare className="w-4 h-4 text-emerald-600" />
                     ) : r.channel === 'SMS' ? (
@@ -391,7 +389,7 @@ export const RemindersPage: React.FC<RemindersPageProps> = ({
 
                   <div className="min-w-0 flex-1">
                     <div className="flex items-center gap-2 flex-wrap">
-                      <span className="font-semibold text-xs sm:text-sm text-neutral-950">
+                      <span className="font-semibold text-xs sm:text-sm text-zinc-950">
                         {r.memberName}
                       </span>
                       {getChannelBadge(r.channel)}
@@ -399,18 +397,18 @@ export const RemindersPage: React.FC<RemindersPageProps> = ({
                     </div>
 
                     {/* Message Preview */}
-                    <div className="mt-1.5 p-2.5 rounded-xl bg-neutral-50 border border-neutral-200/60 text-xs text-neutral-700 leading-relaxed font-sans">
+                    <div className="mt-1.5 p-2.5 rounded-xl bg-zinc-50 border border-zinc-200/60 text-xs text-zinc-700 leading-relaxed font-sans">
                       "{r.message}"
                     </div>
 
-                    <div className="flex items-center gap-3 text-xs text-neutral-500 mt-2 flex-wrap font-mono">
+                    <div className="flex items-center gap-3 text-xs text-zinc-500 mt-2 flex-wrap font-mono">
                       <span>{r.memberPhone}</span>
-                      <span className="font-sans text-neutral-300">•</span>
-                      <span className="font-sans text-neutral-600">
+                      <span className="font-sans text-zinc-300">•</span>
+                      <span className="font-sans text-zinc-600">
                         Amount: {formatCurrency(r.amount, currencySymbol)}
                       </span>
-                      <span className="font-sans text-neutral-300">•</span>
-                      <span className="font-sans text-neutral-600">
+                      <span className="font-sans text-zinc-300">•</span>
+                      <span className="font-sans text-zinc-600">
                         Due: {formatDate(r.dueDate, { format: 'medium' })}
                       </span>
                     </div>
@@ -418,8 +416,8 @@ export const RemindersPage: React.FC<RemindersPageProps> = ({
                 </div>
 
                 {/* Right: Timestamp & Quick Action */}
-                <div className="flex items-center sm:flex-col sm:items-end justify-between sm:justify-start gap-2 pt-2 sm:pt-0 border-t sm:border-t-0 border-neutral-100 shrink-0">
-                  <span className="text-[11px] font-medium text-neutral-400">
+                <div className="flex items-center sm:flex-col sm:items-end justify-between sm:justify-start gap-2 pt-2 sm:pt-0 border-t sm:border-t-0 border-zinc-100 shrink-0">
+                  <span className="text-[11px] font-medium text-zinc-400">
                     {formatDate(r.sentAt, { format: 'relative' })}
                   </span>
 
@@ -441,9 +439,9 @@ export const RemindersPage: React.FC<RemindersPageProps> = ({
                           });
                         }
                       }}
-                      className="text-xs font-semibold text-neutral-600 hover:text-neutral-950 inline-flex items-center gap-1 transition-colors cursor-pointer"
+                      className="text-xs font-semibold text-zinc-600 hover:text-zinc-950 inline-flex items-center gap-1 transition-colors cursor-pointer"
                     >
-                      <RotateCcw className="w-3 h-3 text-neutral-400" />
+                      <RotateCcw className="w-3 h-3 text-zinc-400" />
                       <span>Resend</span>
                     </button>
                   )}

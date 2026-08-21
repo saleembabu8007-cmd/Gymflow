@@ -68,36 +68,36 @@ export function getStatusConfig(status: PaymentStatus) {
       return {
         label: 'Overdue',
         variant: 'danger' as const,
-        bgClass: 'bg-rose-50 border-rose-200 text-rose-700',
+        bgClass: 'text-rose-600',
         dotClass: 'bg-rose-500',
       };
     case PAYMENT_STATUS.DUE_TODAY:
       return {
         label: 'Due Today',
         variant: 'warning' as const,
-        bgClass: 'bg-amber-50 border-amber-300 text-amber-900',
+        bgClass: 'text-amber-600',
         dotClass: 'bg-amber-500',
       };
     case PAYMENT_STATUS.DUE_SOON:
       return {
         label: 'Due Soon',
-        variant: 'warning' as const,
-        bgClass: 'bg-amber-50/80 border-amber-200 text-amber-800',
-        dotClass: 'bg-amber-400',
+        variant: 'info' as const,
+        bgClass: 'text-sky-600',
+        dotClass: 'bg-sky-400',
       };
     case PAYMENT_STATUS.EXPIRED:
       return {
         label: 'Expired',
         variant: 'neutral' as const,
-        bgClass: 'bg-neutral-100 border-neutral-200 text-neutral-600',
-        dotClass: 'bg-neutral-400',
+        bgClass: 'text-zinc-500',
+        dotClass: 'bg-zinc-400',
       };
     case PAYMENT_STATUS.PAID:
     default:
       return {
         label: 'Paid',
         variant: 'success' as const,
-        bgClass: 'bg-emerald-50 border-emerald-200 text-emerald-700',
+        bgClass: 'text-emerald-600',
         dotClass: 'bg-emerald-500',
       };
   }

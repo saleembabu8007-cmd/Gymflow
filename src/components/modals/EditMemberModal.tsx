@@ -165,7 +165,7 @@ export const EditMemberModal: React.FC<EditMemberModalProps> = ({
           <Button type="button" variant="outline" onClick={onClose} disabled={loading}>
             Cancel
           </Button>
-          <Button type="submit" isLoading={loading} leftIcon={<Save className="w-4 h-4" />}>
+          <Button type="submit" isLoading={loading}>
             Save Changes
           </Button>
         </div>

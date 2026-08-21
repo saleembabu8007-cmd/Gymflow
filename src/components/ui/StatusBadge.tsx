@@ -31,12 +31,13 @@ export const StatusBadge: React.FC<StatusBadgeProps> = ({
       case 'OVERDUE':
         return <AlertCircle className="w-3 h-3 text-rose-600 shrink-0" />;
       case 'DUE_TODAY':
-      case 'DUE_SOON':
         return <Clock className="w-3 h-3 text-amber-600 shrink-0" />;
+      case 'DUE_SOON':
+        return <Clock className="w-3 h-3 text-sky-600 shrink-0" />;
       case 'PAID':
         return <CheckCircle2 className="w-3 h-3 text-emerald-600 shrink-0" />;
       case 'EXPIRED':
-        return <XCircle className="w-3 h-3 text-neutral-500 shrink-0" />;
+        return <XCircle className="w-3 h-3 text-zinc-500 shrink-0" />;
       default:
         return <span className={cn('w-1.5 h-1.5 rounded-full shrink-0', config.dotClass)} />;
     }
@@ -48,7 +49,7 @@ export const StatusBadge: React.FC<StatusBadgeProps> = ({
     <span
       aria-label={`Status: ${textLabel}`}
       className={cn(
-        'inline-flex items-center rounded-full border whitespace-nowrap select-none transition-colors',
+        'inline-flex items-center whitespace-nowrap select-none transition-colors font-mono tracking-tight uppercase',
         config.bgClass,
         sizeClasses[size],
         className

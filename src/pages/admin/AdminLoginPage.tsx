@@ -53,7 +53,7 @@ export const AdminLoginPage: React.FC<AdminLoginPageProps> = ({
   };
 
   return (
-    <div className="min-h-screen bg-neutral-950 flex flex-col justify-between p-4 sm:p-6 lg:p-8 font-sans text-neutral-100">
+    <div className="min-h-screen bg-zinc-950 flex flex-col justify-between p-4 sm:p-6 lg:p-8 font-sans text-zinc-100">
       {/* Header Bar */}
       <div className="flex items-center justify-between max-w-md w-full mx-auto">
         <div className="flex items-center gap-2.5">
@@ -69,20 +69,20 @@ export const AdminLoginPage: React.FC<AdminLoginPageProps> = ({
       </div>
 
       {/* Main Login Card */}
-      <div className="max-w-md w-full mx-auto my-auto space-y-6">
+      <div className="max-w-sm w-full mx-auto my-auto space-y-8">
         <div className="text-center space-y-2">
-          <div className="w-12 h-12 rounded-2xl bg-neutral-900 border border-neutral-800 text-rose-500 flex items-center justify-center mx-auto shadow-xl">
+          <div className="w-12 h-12 rounded-xl bg-zinc-900 border border-zinc-800 text-rose-500 flex items-center justify-center mx-auto">
             <Lock className="w-5 h-5" />
           </div>
-          <h1 className="text-2xl font-bold tracking-tight text-white">
+          <h1 className="text-2xl font-bold tracking-tight text-white mt-4">
             Platform Admin Console
           </h1>
-          <p className="text-xs text-neutral-400 leading-relaxed">
+          <p className="text-xs text-zinc-400 leading-relaxed">
             Authorized GymFlow operational management access only.
           </p>
         </div>
 
-        <form onSubmit={handleSubmit} className="p-6 sm:p-8 rounded-3xl bg-neutral-900 border border-neutral-800 space-y-5 shadow-2xl">
+        <form onSubmit={handleSubmit} className="space-y-6">
           {error && (
             <div className="p-3.5 rounded-xl bg-rose-500/10 border border-rose-500/20 text-rose-300 text-xs font-medium flex items-center gap-2.5">
               <AlertCircle className="w-4 h-4 shrink-0 text-rose-400" />
@@ -120,7 +120,7 @@ export const AdminLoginPage: React.FC<AdminLoginPageProps> = ({
                   <button
                     type="button"
                     onClick={onNavigateToForgotPassword}
-                    className="text-[11px] text-neutral-400 hover:text-rose-400 transition-colors font-medium"
+                    className="text-[11px] text-zinc-400 hover:text-rose-400 transition-colors font-medium"
                   >
                     Forgot admin password?
                   </button>
@@ -134,17 +134,16 @@ export const AdminLoginPage: React.FC<AdminLoginPageProps> = ({
             size="lg"
             fullWidth
             isLoading={loading}
-            rightIcon={<ArrowRight className="w-4 h-4" />}
-            className="bg-rose-600 hover:bg-rose-500 text-white font-bold border-none shadow-lg shadow-rose-600/20"
+            className="bg-rose-600 hover:bg-rose-500 text-white font-bold border-none"
           >
             Authenticate Admin Console
           </Button>
 
-          <div className="pt-3 border-t border-neutral-800/80 text-center">
+          <div className="pt-6 border-t border-zinc-800/80 text-center">
             <button
               type="button"
               onClick={onNavigateToGymLogin}
-              className="text-xs font-medium text-neutral-400 hover:text-neutral-200 transition-colors"
+              className="text-xs font-medium text-zinc-400 hover:text-white transition-colors"
             >
               Gym Owner Sign In →
             </button>
@@ -153,7 +152,7 @@ export const AdminLoginPage: React.FC<AdminLoginPageProps> = ({
       </div>
 
       {/* Footer */}
-      <div className="text-center text-[11px] text-neutral-600 font-medium">
+      <div className="text-center text-[11px] text-zinc-600 font-medium">
         GymFlow Platform Operations • Protected by Supabase Database RLS
       </div>
     </div>

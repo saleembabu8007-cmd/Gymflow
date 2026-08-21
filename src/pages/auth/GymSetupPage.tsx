@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Building2, Phone, ArrowRight, ShieldCheck, AlertCircle } from 'lucide-react';
+import { ShieldCheck, AlertCircle } from 'lucide-react';
 import { Button, Input, Select, Card } from '../../components/ui';
 import { useAuth } from '../../hooks/useAuth';
 
@@ -81,7 +81,6 @@ export const GymSetupPage: React.FC<GymSetupPageProps> = ({ onComplete }) => {
                 value={formData.name}
                 onChange={(e) => setFormData({ ...formData, name: e.target.value })}
                 required
-                leftIcon={<Building2 className="w-4 h-4 text-neutral-400" />}
               />
             </div>
 
@@ -92,7 +91,6 @@ export const GymSetupPage: React.FC<GymSetupPageProps> = ({ onComplete }) => {
                 value={formData.phone}
                 onChange={(e) => setFormData({ ...formData, phone: e.target.value })}
                 required
-                leftIcon={<Phone className="w-4 h-4 text-neutral-400" />}
               />
             </div>
 
@@ -146,7 +144,6 @@ export const GymSetupPage: React.FC<GymSetupPageProps> = ({ onComplete }) => {
               size="lg"
               fullWidth
               isLoading={loading}
-              rightIcon={<ArrowRight className="w-4 h-4" />}
             >
               Complete Setup & Open Dashboard
             </Button>

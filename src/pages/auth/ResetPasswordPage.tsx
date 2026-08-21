@@ -3,7 +3,7 @@ import { AuthLayout } from '../../layouts/AuthLayout';
 import { Button } from '../../components/ui/Button';
 import { Input } from '../../components/ui/Input';
 import { useAuth } from '../../hooks/useAuth';
-import { Lock, CheckCircle2, AlertCircle, ArrowRight } from 'lucide-react';
+import { CheckCircle2, AlertCircle } from 'lucide-react';
 
 interface ResetPasswordPageProps {
   onNavigateToLogin: () => void;
@@ -58,7 +58,7 @@ export const ResetPasswordPage: React.FC<ResetPasswordPageProps> = ({
             <CheckCircle2 className="w-6 h-6" />
           </div>
 
-          <p className="text-xs text-neutral-600 leading-relaxed">
+          <p className="text-xs font-medium text-zinc-600 leading-relaxed">
             Your new password has been saved. You can now use it to sign in to GymFlow.
           </p>
 
@@ -68,7 +68,6 @@ export const ResetPasswordPage: React.FC<ResetPasswordPageProps> = ({
               className="w-full"
               size="lg"
               onClick={onNavigateToLogin}
-              rightIcon={<ArrowRight className="w-4 h-4" />}
             >
               Sign In to Dashboard
             </Button>
@@ -110,7 +109,6 @@ export const ResetPasswordPage: React.FC<ResetPasswordPageProps> = ({
             if (errorMessage) setErrorMessage(null);
           }}
           placeholder="Min 6 characters"
-          leftIcon={<Lock className="w-4 h-4 text-neutral-400" />}
           autoComplete="new-password"
           disabled={isSubmitting}
         />
@@ -127,7 +125,6 @@ export const ResetPasswordPage: React.FC<ResetPasswordPageProps> = ({
             if (errorMessage) setErrorMessage(null);
           }}
           placeholder="Re-enter password"
-          leftIcon={<Lock className="w-4 h-4 text-neutral-400" />}
           autoComplete="new-password"
           disabled={isSubmitting}
         />
@@ -147,7 +144,7 @@ export const ResetPasswordPage: React.FC<ResetPasswordPageProps> = ({
           <button
             type="button"
             onClick={onNavigateToLogin}
-            className="w-full text-center text-xs font-medium text-neutral-600 hover:text-neutral-950 flex items-center justify-center gap-1.5 py-1.5 transition-colors cursor-pointer"
+            className="w-full text-center text-xs font-medium text-zinc-600 hover:text-zinc-950 flex items-center justify-center gap-1.5 py-1.5 transition-colors cursor-pointer"
           >
             <span>Cancel and return to Sign In</span>
           </button>

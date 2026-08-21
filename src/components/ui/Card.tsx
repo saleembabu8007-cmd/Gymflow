@@ -3,24 +3,16 @@ import { cn } from '../../utils/classNames';
 
 export interface CardProps extends React.HTMLAttributes<HTMLDivElement> {
   hoverable?: boolean;
-  variant?: 'flat' | 'subtle' | 'outline';
 }
 
 export const Card = React.forwardRef<HTMLDivElement, CardProps>(
-  ({ className, hoverable = false, variant = 'flat', ...props }, ref) => {
-    const variantClasses = {
-      flat: 'bg-white border border-zinc-200/60 text-zinc-950',
-      subtle: 'bg-zinc-100/70 border border-zinc-200/40 text-zinc-950',
-      outline: 'bg-transparent border border-zinc-200 text-zinc-950',
-    };
-
+  ({ className, hoverable = false, ...props }, ref) => {
     return (
       <div
         ref={ref}
         className={cn(
-          'rounded-xl transition-all duration-100',
-          variantClasses[variant],
-          hoverable && 'hover:border-zinc-300 hover:bg-zinc-50/80 cursor-pointer',
+          'transition-colors duration-150',
+          hoverable && 'hover:bg-zinc-50/80 cursor-pointer',
           className
         )}
         {...props}

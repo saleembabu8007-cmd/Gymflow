@@ -40,13 +40,13 @@ export const Select = React.forwardRef<HTMLSelectElement, SelectProps>(
     return (
       <div className="w-full flex flex-col gap-1.5">
         {label && (
-          <label htmlFor={selectId} className="text-xs font-semibold text-neutral-700 select-none">
+          <label htmlFor={selectId} className="text-xs font-bold text-zinc-800 select-none">
             {label}
           </label>
         )}
         <div className="relative flex items-center w-full">
           {leftIcon && (
-            <div className="absolute left-3.5 text-neutral-400 pointer-events-none flex items-center justify-center">
+            <div className="absolute left-0 text-zinc-400 pointer-events-none flex items-center justify-center">
               {leftIcon}
             </div>
           )}
@@ -57,9 +57,9 @@ export const Select = React.forwardRef<HTMLSelectElement, SelectProps>(
             aria-invalid={Boolean(error)}
             aria-describedby={describedBy}
             className={cn(
-              'w-full h-10 rounded-xl bg-white border border-neutral-200 pl-3.5 pr-10 text-sm text-neutral-900 transition-colors appearance-none shadow-2xs focus:outline-none focus:border-neutral-900 focus:ring-1 focus:ring-neutral-900 disabled:bg-neutral-50 disabled:text-neutral-400 disabled:cursor-not-allowed',
-              leftIcon && 'pl-10',
-              error && 'border-rose-400 focus:border-rose-600 focus:ring-rose-600 text-rose-950',
+              'w-full h-10 bg-transparent border-b border-zinc-200 pl-0 pr-8 text-sm font-semibold text-zinc-950 transition-colors appearance-none focus:outline-none focus:border-zinc-950 disabled:opacity-50 disabled:cursor-not-allowed',
+              leftIcon && 'pl-8',
+              error && 'border-rose-500 focus:border-rose-600 text-rose-950',
               className
             )}
             {...props}
@@ -72,7 +72,7 @@ export const Select = React.forwardRef<HTMLSelectElement, SelectProps>(
                 ))
               : children}
           </select>
-          <div className="absolute right-3.5 text-neutral-400 pointer-events-none flex items-center justify-center">
+          <div className="absolute right-0 text-zinc-400 pointer-events-none flex items-center justify-center">
             <ChevronDown className="w-4 h-4" />
           </div>
         </div>
@@ -81,7 +81,7 @@ export const Select = React.forwardRef<HTMLSelectElement, SelectProps>(
             {error}
           </p>
         ) : helperText ? (
-          <p id={helperId} className="text-xs text-neutral-500">
+          <p id={helperId} className="text-xs font-medium text-zinc-600">
             {helperText}
           </p>
         ) : null}

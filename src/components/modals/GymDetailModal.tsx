@@ -200,7 +200,6 @@ export const GymDetailModal: React.FC<GymDetailModalProps> = ({
               variant={isSuspended ? 'outline' : 'destructive'}
               size="sm"
               onClick={() => setShowConfirm(true)}
-              leftIcon={<ShieldAlert className="w-3.5 h-3.5" />}
             >
               {isSuspended ? 'Reactivate Gym Account' : 'Suspend Gym Account'}
             </Button>

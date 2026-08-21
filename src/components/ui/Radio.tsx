@@ -31,14 +31,14 @@ export const Radio = React.forwardRef<HTMLInputElement, RadioProps>(
           />
           <div
             className={cn(
-              'w-4 h-4 rounded-full border border-neutral-300 bg-white transition-all flex items-center justify-center',
-              'peer-checked:border-neutral-900',
-              'peer-focus-visible:ring-2 peer-focus-visible:ring-neutral-900 peer-focus-visible:ring-offset-2',
-              'group-hover:border-neutral-400',
+              'w-4 h-4 rounded-full border border-zinc-300 bg-white transition-all flex items-center justify-center duration-150',
+              'peer-checked:border-zinc-950',
+              'peer-focus-visible:ring-2 peer-focus-visible:ring-zinc-950 peer-focus-visible:ring-offset-2',
+              'group-hover:border-zinc-400',
               className
             )}
           >
-            {checked && <div className="w-2 h-2 rounded-full bg-neutral-900" />}
+            {checked && <div className="w-2 h-2 rounded-full bg-zinc-950" />}
           </div>
         </div>
 

@@ -32,10 +32,10 @@ export const Checkbox = React.forwardRef<HTMLInputElement, CheckboxProps>(
           />
           <div
             className={cn(
-              'w-4 h-4 rounded-md border border-neutral-300 bg-white transition-all flex items-center justify-center',
-              'peer-checked:bg-neutral-900 peer-checked:border-neutral-900 peer-checked:text-white',
-              'peer-focus-visible:ring-2 peer-focus-visible:ring-neutral-900 peer-focus-visible:ring-offset-2',
-              'group-hover:border-neutral-400',
+              'w-4 h-4 rounded-sm border border-zinc-300 bg-white transition-all flex items-center justify-center duration-150',
+              'peer-checked:bg-zinc-950 peer-checked:border-zinc-950 peer-checked:text-white',
+              'peer-focus-visible:ring-2 peer-focus-visible:ring-zinc-950 peer-focus-visible:ring-offset-2',
+              'group-hover:border-zinc-400',
               className
             )}
           >

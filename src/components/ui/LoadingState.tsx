@@ -1,5 +1,6 @@
 import React from 'react';
 import { Loader2 } from 'lucide-react';
+import { SkeletonRow } from './Skeleton';
 import { cn } from '../../utils/classNames';
 
 export interface LoadingStateProps {
@@ -15,10 +16,10 @@ export const LoadingState: React.FC<LoadingStateProps> = ({
 }) => {
   if (variant === 'skeleton') {
     return (
-      <div className={cn('w-full space-y-3 animate-pulse', className)}>
-        <div className="h-10 bg-neutral-100 rounded-xl w-full" />
-        <div className="h-16 bg-neutral-100 rounded-xl w-full" />
-        <div className="h-16 bg-neutral-100 rounded-xl w-full" />
+      <div className={cn('w-full', className)}>
+        <SkeletonRow />
+        <SkeletonRow />
+        <SkeletonRow />
       </div>
     );
   }
@@ -31,8 +32,8 @@ export const LoadingState: React.FC<LoadingStateProps> = ({
           className
         )}
       >
-        <Loader2 className="w-6 h-6 animate-spin text-neutral-800" />
-        {message && <p className="text-xs font-medium text-neutral-600 mt-2">{message}</p>}
+        <Loader2 className="w-6 h-6 animate-spin text-zinc-900" />
+        {message && <p className="text-xs font-medium text-zinc-600 mt-2">{message}</p>}
       </div>
     );
   }
@@ -40,12 +41,12 @@ export const LoadingState: React.FC<LoadingStateProps> = ({
   return (
     <div
       className={cn(
-        'flex flex-col items-center justify-center p-12 text-center text-neutral-500',
+        'flex flex-col items-center justify-center p-12 text-center text-zinc-500',
         className
       )}
     >
-      <Loader2 className="w-7 h-7 animate-spin text-neutral-800 mb-3" />
-      <p className="text-sm font-medium text-neutral-600">{message}</p>
+      <Loader2 className="w-7 h-7 animate-spin text-zinc-900 mb-3" />
+      <p className="text-sm font-medium text-zinc-600">{message}</p>
     </div>
   );
 };

@@ -129,6 +129,7 @@ export function useMembers(overrideGymId?: string) {
       const result = await memberService.markAsPaid(memberId, paymentDetails);
       setMembers((prev) => prev.map((m) => (m.id === memberId ? result.member : m)));
       window.dispatchEvent(new Event('gymflow_storage_updated'));
+      window.dispatchEvent(new CustomEvent('gymflow_payment_success', { detail: { memberId } }));
       return result;
     },
     [memberService]

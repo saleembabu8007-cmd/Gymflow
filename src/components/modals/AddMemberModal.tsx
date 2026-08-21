@@ -296,7 +296,6 @@ export const AddMemberModal: React.FC<AddMemberModalProps> = ({
               size="md"
               onClick={handleResetForAnother}
               className="w-full sm:flex-1 py-2.5 font-semibold"
-              leftIcon={<Plus className="w-4 h-4" />}
             >
               Add Another Member
             </Button>
@@ -312,7 +311,6 @@ export const AddMemberModal: React.FC<AddMemberModalProps> = ({
                 }
               }}
               className="w-full sm:flex-1 py-2.5 font-semibold bg-neutral-900 text-white hover:bg-neutral-800"
-              leftIcon={<Eye className="w-4 h-4" />}
             >
               View Member
             </Button>

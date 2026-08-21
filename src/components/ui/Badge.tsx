@@ -17,29 +17,38 @@ export const Badge: React.FC<BadgeProps> = ({
   icon,
 }) => {
   const variantClasses = {
-    neutral: 'bg-neutral-100 border-neutral-200 text-neutral-700',
-    primary: 'bg-neutral-900 border-neutral-900 text-white',
-    success: 'bg-emerald-50 border-emerald-200 text-emerald-700',
-    warning: 'bg-amber-50 border-amber-300 text-amber-900',
-    danger: 'bg-rose-50 border-rose-200 text-rose-700',
-    info: 'bg-indigo-50 border-indigo-200 text-indigo-700',
+    neutral: 'text-zinc-500',
+    primary: 'text-zinc-900',
+    success: 'text-emerald-600',
+    warning: 'text-amber-600',
+    danger: 'text-rose-600',
+    info: 'text-sky-600',
+  };
+
+  const dotClasses = {
+    neutral: 'bg-zinc-400',
+    primary: 'bg-zinc-900',
+    success: 'bg-emerald-500',
+    warning: 'bg-amber-500',
+    danger: 'bg-rose-500',
+    info: 'bg-sky-500',
   };
 
   const sizeClasses = {
-    sm: 'text-[10px] px-2 py-0.5 gap-1 font-bold',
-    md: 'text-xs px-2.5 py-1 gap-1.5 font-semibold',
+    sm: 'text-[10px] gap-1.5 font-bold uppercase tracking-wider',
+    md: 'text-[11px] gap-1.5 font-bold uppercase tracking-wider',
   };
 
   return (
     <span
       className={cn(
-        'inline-flex items-center rounded-full border whitespace-nowrap select-none transition-colors',
+        'inline-flex items-center whitespace-nowrap select-none transition-colors font-mono',
         variantClasses[variant],
         sizeClasses[size],
         className
       )}
     >
-      {icon && <span className="shrink-0">{icon}</span>}
+      {icon ? <span className="shrink-0">{icon}</span> : <span className={cn('w-1.5 h-1.5 rounded-full shrink-0', dotClasses[variant])} />}
       <span>{children}</span>
     </span>
   );

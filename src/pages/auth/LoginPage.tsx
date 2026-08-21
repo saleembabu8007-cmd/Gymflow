@@ -4,7 +4,7 @@ import { Button } from '../../components/ui/Button';
 import { Input } from '../../components/ui/Input';
 import { useAuth } from '../../hooks/useAuth';
 import { parseAuthError } from '../../utils/errorUtils';
-import { Mail, Lock, AlertCircle, ArrowRight } from 'lucide-react';
+import { AlertCircle } from 'lucide-react';
 
 interface LoginPageProps {
   onNavigateToForgotPassword: () => void;
@@ -117,7 +117,6 @@ export const LoginPage: React.FC<LoginPageProps> = ({
             if (errorMessage) setErrorMessage(null);
           }}
           placeholder="owner@yourgym.com"
-          leftIcon={<Mail className="w-4 h-4 text-neutral-400" />}
           autoComplete="email"
           disabled={isSubmitting}
         />
@@ -126,7 +125,7 @@ export const LoginPage: React.FC<LoginPageProps> = ({
           <div className="flex items-center justify-between mb-1.5">
             <label
               htmlFor="login-password"
-              className="text-xs font-medium text-neutral-700"
+              className="text-xs font-medium text-zinc-700"
             >
               Password
             </label>
@@ -134,7 +133,7 @@ export const LoginPage: React.FC<LoginPageProps> = ({
               type="button"
               id="link-forgot-password"
               onClick={onNavigateToForgotPassword}
-              className="text-xs font-semibold text-neutral-600 hover:text-neutral-950 transition-colors cursor-pointer"
+              className="text-xs font-semibold text-zinc-600 hover:text-zinc-950 transition-colors cursor-pointer"
             >
               Forgot password?
             </button>
@@ -150,7 +149,6 @@ export const LoginPage: React.FC<LoginPageProps> = ({
               if (errorMessage) setErrorMessage(null);
             }}
             placeholder="••••••••"
-            leftIcon={<Lock className="w-4 h-4 text-neutral-400" />}
             autoComplete="current-password"
             disabled={isSubmitting}
           />
@@ -164,19 +162,18 @@ export const LoginPage: React.FC<LoginPageProps> = ({
             size="lg"
             isLoading={isSubmitting}
             disabled={isSubmitting}
-            rightIcon={!isSubmitting ? <ArrowRight className="w-4 h-4" /> : undefined}
           >
             {isSubmitting ? 'Signing in...' : 'Sign In'}
           </Button>
         </div>
 
         {onNavigateToRegister && (
-          <div className="pt-4 border-t border-neutral-100 text-center">
-            <span className="text-xs text-neutral-600">Don't have a gym account? </span>
+          <div className="pt-4 border-t border-zinc-100 text-center">
+            <span className="text-xs text-zinc-600">Don't have a gym account? </span>
             <button
               type="button"
               onClick={onNavigateToRegister}
-              className="text-xs font-semibold text-neutral-900 hover:underline cursor-pointer"
+              className="text-xs font-semibold text-zinc-900 hover:underline cursor-pointer"
             >
               Create Account
             </button>

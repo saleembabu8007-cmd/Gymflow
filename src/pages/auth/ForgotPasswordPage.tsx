@@ -3,7 +3,7 @@ import { AuthLayout } from '../../layouts/AuthLayout';
 import { Button } from '../../components/ui/Button';
 import { Input } from '../../components/ui/Input';
 import { useAuth } from '../../hooks/useAuth';
-import { Mail, ArrowLeft, CheckCircle2, AlertCircle, KeyRound } from 'lucide-react';
+import { CheckCircle2, AlertCircle } from 'lucide-react';
 
 interface ForgotPasswordPageProps {
   onNavigateToLogin: () => void;
@@ -52,8 +52,8 @@ export const ForgotPasswordPage: React.FC<ForgotPasswordPageProps> = ({
             <CheckCircle2 className="w-6 h-6" />
           </div>
 
-          <p className="text-xs text-neutral-600 leading-relaxed">
-            If an account exists for <strong className="text-neutral-900">{email}</strong>, you will receive an email with a link to reset your password.
+          <p className="text-xs font-medium text-zinc-600 leading-relaxed">
+            If an account exists for <strong className="text-zinc-900">{email}</strong>, you will receive an email with a link to reset your password.
           </p>
 
           <div className="space-y-2 pt-2">
@@ -63,7 +63,6 @@ export const ForgotPasswordPage: React.FC<ForgotPasswordPageProps> = ({
                 className="w-full"
                 size="md"
                 onClick={() => onNavigateToResetPassword(email)}
-                leftIcon={<KeyRound className="w-4 h-4" />}
               >
                 Enter New Password
               </Button>
@@ -75,7 +74,6 @@ export const ForgotPasswordPage: React.FC<ForgotPasswordPageProps> = ({
               className="w-full"
               size="md"
               onClick={onNavigateToLogin}
-              leftIcon={<ArrowLeft className="w-4 h-4" />}
             >
               Back to Sign In
             </Button>
@@ -113,7 +111,6 @@ export const ForgotPasswordPage: React.FC<ForgotPasswordPageProps> = ({
             if (errorMessage) setErrorMessage(null);
           }}
           placeholder="e.g. vikram@ironfitness.in"
-          leftIcon={<Mail className="w-4 h-4 text-neutral-400" />}
           autoComplete="email"
           disabled={isSubmitting}
         />
@@ -133,9 +130,8 @@ export const ForgotPasswordPage: React.FC<ForgotPasswordPageProps> = ({
           <button
             type="button"
             onClick={onNavigateToLogin}
-            className="w-full text-center text-xs font-medium text-neutral-600 hover:text-neutral-950 flex items-center justify-center gap-1.5 py-1.5 transition-colors cursor-pointer"
+            className="w-full text-center text-xs font-medium text-zinc-600 hover:text-zinc-950 flex items-center justify-center py-1.5 transition-colors cursor-pointer"
           >
-            <ArrowLeft className="w-3.5 h-3.5" />
             <span>Back to Sign In</span>
           </button>
         </div>

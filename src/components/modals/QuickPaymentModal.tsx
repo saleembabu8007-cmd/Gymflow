@@ -313,7 +313,6 @@ export const QuickPaymentModal: React.FC<QuickPaymentModalProps> = ({
             size="md"
             isLoading={isSubmitting}
             className="bg-neutral-900 text-white hover:bg-neutral-800 font-semibold px-6"
-            leftIcon={<CreditCard className="w-4 h-4" />}
           >
             {isSubmitting ? 'Saving payment...' : 'Mark as Paid'}
           </Button>

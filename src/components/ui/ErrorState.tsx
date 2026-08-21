@@ -21,15 +21,15 @@ export const ErrorState: React.FC<ErrorStateProps> = ({
   return (
     <div
       className={cn(
-        'p-8 sm:p-12 rounded-2xl bg-white border border-neutral-200/90 text-center shadow-2xs flex flex-col items-center justify-center',
+        'p-8 sm:p-12 rounded-2xl bg-white border border-zinc-200 text-center flex flex-col items-center justify-center',
         className
       )}
     >
       <div className="w-12 h-12 rounded-2xl bg-rose-50 text-rose-600 flex items-center justify-center mb-3.5 border border-rose-100">
         <AlertCircle className="w-6 h-6" />
       </div>
-      <h3 className="text-base font-bold text-neutral-950 tracking-tight">{title}</h3>
-      <p className="text-xs sm:text-sm text-neutral-500 mt-1 max-w-sm leading-relaxed">
+      <h3 className="text-sm sm:text-base font-bold text-zinc-950 tracking-tight">{title}</h3>
+      <p className="text-xs font-medium text-zinc-600 mt-1 max-w-sm leading-relaxed">
         {message}
       </p>
       {onRetry && (
@@ -38,7 +38,7 @@ export const ErrorState: React.FC<ErrorStateProps> = ({
             size="sm"
             onClick={onRetry}
             leftIcon={<RefreshCw className="w-3.5 h-3.5" />}
-            className="bg-neutral-900 hover:bg-neutral-800 text-white font-semibold"
+            className="bg-zinc-900 hover:bg-zinc-800 text-white font-semibold"
           >
             {retryLabel}
           </Button>

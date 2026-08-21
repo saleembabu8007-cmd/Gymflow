@@ -31,7 +31,7 @@ export const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
     ref
   ) => {
     const baseStyles =
-      'inline-flex items-center justify-center font-semibold rounded-md transition-all duration-100 focus:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 disabled:opacity-50 disabled:cursor-not-allowed select-none active:scale-[0.98]';
+      'inline-flex items-center justify-center font-semibold rounded transition-all duration-100 focus:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 disabled:opacity-50 disabled:cursor-not-allowed select-none active:scale-[0.98]';
 
     const sizeStyles = {
       sm: 'text-xs px-3 py-1.5 gap-1.5 h-8',
@@ -41,11 +41,11 @@ export const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
 
     const variantStyles = {
       primary:
-        'bg-zinc-950 text-white hover:bg-zinc-850 active:bg-zinc-900 focus-visible:ring-zinc-950',
+        'bg-zinc-950 text-white hover:bg-zinc-800 active:bg-zinc-900 focus-visible:ring-zinc-950',
       secondary:
-        'bg-zinc-100 text-zinc-900 hover:bg-zinc-200/80 active:bg-zinc-200 focus-visible:ring-zinc-400',
+        'bg-zinc-100/50 text-zinc-800 hover:bg-zinc-100 active:bg-zinc-200 focus-visible:ring-zinc-400',
       outline:
-        'border border-zinc-200 bg-white text-zinc-800 hover:bg-zinc-50 hover:border-zinc-300 active:bg-zinc-100 focus-visible:ring-zinc-400',
+        'border border-zinc-200 bg-transparent text-zinc-800 hover:bg-zinc-50 hover:border-zinc-300 active:bg-zinc-100 focus-visible:ring-zinc-400',
       ghost:
         'text-zinc-700 hover:bg-zinc-100 active:bg-zinc-200 focus-visible:ring-zinc-400',
       destructive:

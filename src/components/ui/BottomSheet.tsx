@@ -42,7 +42,7 @@ export const BottomSheet: React.FC<BottomSheetProps> = ({
             exit={{ opacity: 0 }}
             transition={{ duration: 0.15 }}
             onClick={onClose}
-            className="fixed inset-0 bg-neutral-950/40 backdrop-blur-xs"
+            className="fixed inset-0 bg-zinc-950/40 backdrop-blur-xs"
           />
 
           {/* Sheet Surface */}
@@ -50,25 +50,25 @@ export const BottomSheet: React.FC<BottomSheetProps> = ({
             initial={{ y: '100%' }}
             animate={{ y: 0 }}
             exit={{ y: '100%' }}
-            transition={{ type: 'spring', damping: 28, stiffness: 300 }}
+            transition={{ duration: 0.2, ease: [0.16, 1, 0.3, 1] }}
             className={cn(
-              'relative w-full max-w-lg bg-white rounded-t-3xl sm:rounded-2xl shadow-2xl border border-neutral-200/80 z-10 max-h-[85vh] flex flex-col overflow-hidden pb-6 sm:pb-0'
+              'relative w-full max-w-lg bg-white rounded-t-3xl sm:rounded-2xl border border-zinc-200 z-10 max-h-[85vh] flex flex-col overflow-hidden pb-6 sm:pb-0'
             )}
           >
             {/* Grab handle for mobile */}
-            <div className="w-12 h-1.5 bg-neutral-300 rounded-full mx-auto my-3 sm:hidden shrink-0" />
+            <div className="w-12 h-1.5 bg-zinc-300 rounded-full mx-auto my-3 sm:hidden shrink-0" />
 
             {(title || showCloseButton) && (
-              <div className="flex items-center justify-between px-6 pb-3 sm:py-4 border-b border-neutral-100 shrink-0">
+              <div className="flex items-center justify-between px-6 pb-3 sm:py-4 border-b border-zinc-100 shrink-0">
                 <div>
-                  {title && <h3 className="text-base font-semibold text-neutral-900">{title}</h3>}
-                  {description && <p className="text-xs text-neutral-500 mt-0.5">{description}</p>}
+                  {title && <h3 className="text-sm sm:text-base font-bold text-zinc-950 tracking-tight">{title}</h3>}
+                  {description && <p className="text-xs font-medium text-zinc-600 mt-0.5">{description}</p>}
                 </div>
                 {showCloseButton && (
                   <button
                     type="button"
                     onClick={onClose}
-                    className="text-neutral-400 hover:text-neutral-600 p-1.5 rounded-lg hover:bg-neutral-100 transition-colors"
+                    className="text-zinc-400 hover:text-zinc-600 p-1.5 rounded-lg hover:bg-zinc-100 transition-colors"
                   >
                     <X className="w-4 h-4" />
                   </button>
