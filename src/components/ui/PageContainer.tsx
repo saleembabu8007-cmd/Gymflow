@@ -6,7 +6,7 @@ export interface PageContainerProps extends Omit<PageHeaderProps, 'className'> {
   children: React.ReactNode;
   containerClassName?: string;
   headerClassName?: string;
-  maxWidth?: 'sm' | 'md' | 'lg' | 'xl' | '2xl' | '6xl' | '7xl' | 'full';
+  maxWidth?: 'sm' | 'md' | 'lg' | 'xl' | '2xl' | '5xl' | '6xl' | '7xl' | 'full';
   showBack?: boolean;
 }
 
@@ -16,6 +16,7 @@ const maxWidthMap = {
   lg: 'max-w-screen-lg',
   xl: 'max-w-screen-xl',
   '2xl': 'max-w-screen-2xl',
+  '5xl': 'max-w-5xl',
   '6xl': 'max-w-6xl',
   '7xl': 'max-w-7xl',
   full: 'max-w-full',
@@ -33,7 +34,7 @@ export const PageContainer: React.FC<PageContainerProps> = ({
   maxWidth = '7xl',
 }) => {
   return (
-    <div className={cn('w-full mx-auto space-y-6', maxWidthMap[maxWidth], containerClassName)}>
+    <div className={cn('w-full mx-auto space-y-6 sm:space-y-8 pb-16 sm:pb-8', maxWidthMap[maxWidth], containerClassName)}>
       <PageHeader
         title={title}
         subtitle={subtitle}
