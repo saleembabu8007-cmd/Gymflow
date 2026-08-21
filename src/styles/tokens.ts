@@ -1,31 +1,31 @@
 /**
- * GymFlow V2.0 — Foundational Design Tokens Catalog
- * Programmatic TypeScript Token Mappings for Design System Components
+ * GymFlow V2.5 — Complete Visual Design Reset Tokens Catalog
+ * Programmatic TypeScript Token Mappings for Human-Centric Operational Design
  */
 
 export const colors = {
   bg: {
     app: '#fafafa',
     surface: '#ffffff',
-    subtle: '#f4f4f5',
+    subtle: '#f4f4f2',
     elevated: '#ffffff',
   },
   foreground: {
-    main: '#09090b',
+    main: '#0c0c0e',
     muted: '#52525b',
     subtle: '#71717a',
     disabled: '#a1a1aa',
   },
   border: {
-    subtle: '#f4f4f5',
+    subtle: '#f4f4f2',
     default: '#e4e4e7',
     strong: '#d4d4d8',
   },
   primary: {
-    main: '#09090b',
+    main: '#0c0c0e',
     hover: '#18181b',
     active: '#27272a',
-    subtle: '#f4f4f5',
+    subtle: '#f4f4f2',
     foreground: '#ffffff',
   },
   status: {
@@ -55,7 +55,7 @@ export const colors = {
     },
     expired: {
       main: '#71717a',
-      subtle: '#f4f4f5',
+      subtle: '#f4f4f2',
       border: '#e4e4e7',
       foreground: '#52525b',
     },
@@ -129,17 +129,17 @@ export const controlHeights = {
 
 export const densityTiers = {
   high: 'py-2.5 px-4',   // Tables & ledgers
-  medium: 'p-5 gap-4',   // Dashboard cards
+  medium: 'p-5 gap-4',   // Dashboard sections
   low: 'p-6 space-y-5',  // Forms & onboarding
 };
 
 export const borderRadius = {
   none: '0px',
-  xs: '4px',
-  sm: '6px',
-  md: '8px',
-  lg: '12px',
-  xl: '16px',
+  xs: '3px',
+  sm: '4px',
+  md: '6px',
+  lg: '10px',
+  xl: '14px',
   full: '9999px',
 };
 
@@ -167,16 +167,16 @@ export const sizing = {
 };
 
 export const shadows = {
-  xs: '0 1px 2px 0 rgba(0, 0, 0, 0.04)',
-  sm: '0 1px 3px 0 rgba(0, 0, 0, 0.06), 0 1px 2px -1px rgba(0, 0, 0, 0.06)',
-  md: '0 4px 6px -1px rgba(0, 0, 0, 0.07), 0 2px 4px -2px rgba(0, 0, 0, 0.05)',
-  lg: '0 10px 25px -5px rgba(0, 0, 0, 0.08), 0 8px 10px -6px rgba(0, 0, 0, 0.04)',
+  xs: 'none',
+  sm: 'none',
+  md: 'none',
+  lg: 'none',
 };
 
 export const motion = {
-  fast: '100ms cubic-bezier(0.4, 0, 0.2, 1)',
-  normal: '150ms cubic-bezier(0.4, 0, 0.2, 1)',
-  slow: '200ms cubic-bezier(0, 0, 0.2, 1)',
+  fast: '100ms cubic-bezier(0.16, 1, 0.3, 1)',
+  normal: '150ms cubic-bezier(0.16, 1, 0.3, 1)',
+  slow: '200ms cubic-bezier(0.16, 1, 0.3, 1)',
 };
 
 export const breakpoints = {

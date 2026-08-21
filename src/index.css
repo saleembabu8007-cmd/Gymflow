@@ -1,31 +1,31 @@
 @import "tailwindcss";
 
-/* GymFlow V2.0 — Foundational Design Tokens */
+/* GymFlow V2.5 — Complete Visual Design Reset Tokens */
 
 @theme {
   /* Typography Tokens */
   --font-sans: 'Inter', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
   --font-mono: 'JetBrains Mono', ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
 
-  /* Semantic Color Tokens */
+  /* Semantic Porcelain & Obsidian Color Tokens */
   --color-bg-app: #fafafa;
   --color-surface: #ffffff;
-  --color-surface-subtle: #f4f4f5;
+  --color-surface-subtle: #f4f4f2;
   --color-surface-elevated: #ffffff;
 
-  --color-foreground: #09090b;
+  --color-foreground: #0c0c0e;
   --color-foreground-muted: #52525b;
   --color-foreground-subtle: #71717a;
   --color-foreground-disabled: #a1a1aa;
 
-  --color-border-subtle: #f4f4f5;
+  --color-border-subtle: #f4f4f2;
   --color-border: #e4e4e7;
   --color-border-strong: #d4d4d8;
 
-  --color-primary: #09090b;
+  --color-primary: #0c0c0e;
   --color-primary-hover: #18181b;
   --color-primary-active: #27272a;
-  --color-primary-subtle: #f4f4f5;
+  --color-primary-subtle: #f4f4f2;
   --color-primary-foreground: #ffffff;
 
   --color-success: #059669;
@@ -48,33 +48,34 @@
   --color-info-border: #bae6fd;
   --color-info-foreground: #0369a1;
 
-  /* Restrained Radius Tokens */
-  --radius-xs: 4px;
-  --radius-sm: 6px;
-  --radius-md: 8px;
-  --radius-lg: 12px;
-  --radius-xl: 16px;
+  /* Restrained Micro Geometry Radius Tokens */
+  --radius-xs: 3px;
+  --radius-sm: 4px;
+  --radius-md: 6px;
+  --radius-lg: 10px;
+  --radius-xl: 14px;
 
-  /* Minimal Elevation & Shadow Tokens */
-  --shadow-xs: 0 1px 2px 0 rgba(0, 0, 0, 0.04);
-  --shadow-sm: 0 1px 3px 0 rgba(0, 0, 0, 0.06), 0 1px 2px -1px rgba(0, 0, 0, 0.06);
-  --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.07), 0 2px 4px -2px rgba(0, 0, 0, 0.05);
-  --shadow-lg: 0 10px 25px -5px rgba(0, 0, 0, 0.08), 0 8px 10px -6px rgba(0, 0, 0, 0.04);
+  /* Zero Drop Shadow Defaults (Flat Soft Surfaces) */
+  --shadow-none: none;
+  --shadow-xs: none;
+  --shadow-sm: none;
+  --shadow-md: none;
+  --shadow-lg: none;
 
-  /* Motion Tokens */
-  --ease-fast: cubic-bezier(0.4, 0, 0.2, 1);
-  --ease-normal: cubic-bezier(0.4, 0, 0.2, 1);
-  --ease-slow: cubic-bezier(0, 0, 0.2, 1);
+  /* Rapid 100ms Micro Motion */
+  --ease-fast: cubic-bezier(0.16, 1, 0.3, 1);
+  --ease-normal: cubic-bezier(0.16, 1, 0.3, 1);
+  --ease-slow: cubic-bezier(0.16, 1, 0.3, 1);
 }
 
 :root {
   --bg-app: #fafafa;
   --bg-surface: #ffffff;
-  --bg-subtle: #f4f4f5;
-  --text-main: #09090b;
+  --bg-subtle: #f4f4f2;
+  --text-main: #0c0c0e;
   --text-muted: #52525b;
   --border-main: #e4e4e7;
-  --focus-ring: #09090b;
+  --focus-ring: #0c0c0e;
 }
 
 @layer base {
@@ -106,7 +107,7 @@
   background: #d4d4d8;
 }
 
-/* Subtle focus ring styling for accessibility */
+/* Crisp focus ring styling for accessibility */
 *:focus-visible {
   outline: 2px solid var(--focus-ring);
   outline-offset: 2px;

@@ -31,27 +31,27 @@ export const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
     ref
   ) => {
     const baseStyles =
-      'inline-flex items-center justify-center font-medium rounded-xl transition-all duration-150 focus:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 disabled:opacity-50 disabled:cursor-not-allowed select-none active:scale-[0.98]';
+      'inline-flex items-center justify-center font-semibold rounded-md transition-all duration-100 focus:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 disabled:opacity-50 disabled:cursor-not-allowed select-none active:scale-[0.98]';
 
     const sizeStyles = {
       sm: 'text-xs px-3 py-1.5 gap-1.5 h-8',
-      md: 'text-sm px-4 py-2 gap-2 h-10',
-      lg: 'text-base px-5 py-2.5 gap-2.5 h-12',
+      md: 'text-xs sm:text-sm px-4 py-2 gap-2 h-10',
+      lg: 'text-sm sm:text-base px-5 py-2.5 gap-2.5 h-11',
     };
 
     const variantStyles = {
       primary:
-        'bg-neutral-900 text-white hover:bg-neutral-800 active:bg-neutral-950 focus-visible:ring-neutral-900 shadow-sm',
+        'bg-zinc-950 text-white hover:bg-zinc-850 active:bg-zinc-900 focus-visible:ring-zinc-950',
       secondary:
-        'bg-neutral-100 text-neutral-800 hover:bg-neutral-200 active:bg-neutral-300 focus-visible:ring-neutral-400',
+        'bg-zinc-100 text-zinc-900 hover:bg-zinc-200/80 active:bg-zinc-200 focus-visible:ring-zinc-400',
       outline:
-        'border border-neutral-200 bg-white text-neutral-700 hover:bg-neutral-50 hover:border-neutral-300 active:bg-neutral-100 focus-visible:ring-neutral-400 shadow-2xs',
+        'border border-zinc-200 bg-white text-zinc-800 hover:bg-zinc-50 hover:border-zinc-300 active:bg-zinc-100 focus-visible:ring-zinc-400',
       ghost:
-        'text-neutral-700 hover:bg-neutral-100 active:bg-neutral-200 focus-visible:ring-neutral-400',
+        'text-zinc-700 hover:bg-zinc-100 active:bg-zinc-200 focus-visible:ring-zinc-400',
       destructive:
-        'bg-rose-600 text-white hover:bg-rose-700 active:bg-rose-800 focus-visible:ring-rose-600 shadow-sm',
+        'bg-rose-600 text-white hover:bg-rose-700 active:bg-rose-800 focus-visible:ring-rose-600',
       success:
-        'bg-emerald-600 text-white hover:bg-emerald-700 active:bg-emerald-800 focus-visible:ring-emerald-600 shadow-sm',
+        'bg-emerald-600 text-white hover:bg-emerald-700 active:bg-emerald-800 focus-visible:ring-emerald-600',
     };
 
     return (

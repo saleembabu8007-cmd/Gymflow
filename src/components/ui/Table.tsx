@@ -10,7 +10,7 @@ export const Table: React.FC<TableProps> = ({ children, className, containerClas
   return (
     <div
       className={cn(
-        'w-full bg-white rounded-2xl border border-neutral-200/80 shadow-2xs overflow-hidden',
+        'w-full bg-white rounded-xl border border-zinc-200/60 overflow-hidden',
         containerClassName
       )}
     >
@@ -29,7 +29,7 @@ export const TableHeader: React.FC<TableHeaderProps> = ({ children, className, .
   return (
     <thead
       className={cn(
-        'border-b border-neutral-100 bg-neutral-50/50 text-[11px] font-bold uppercase tracking-wider text-neutral-400 select-none',
+        'border-b border-zinc-150 bg-zinc-50/70 text-[11px] font-bold uppercase tracking-wider text-zinc-500 select-none',
         className
       )}
       {...props}
@@ -53,8 +53,8 @@ export const TableRow: React.FC<TableRowProps> = ({
   return (
     <tr
       className={cn(
-        'transition-colors border-b border-neutral-100 last:border-0',
-        isHoverable && 'hover:bg-neutral-50/70 group',
+        'transition-colors border-b border-zinc-100/80 last:border-0',
+        isHoverable && 'hover:bg-zinc-50/80 group',
         className
       )}
       {...props}
@@ -81,15 +81,15 @@ export const TableCell: React.FC<TableCellProps> = ({
   const alignClasses = {
     left: 'text-left',
     center: 'text-center',
-    right: 'text-right font-mono',
+    right: 'text-right font-mono font-bold text-zinc-950',
   };
 
   return (
     <Component
       className={cn(
-        'py-3 px-4',
+        'py-3.5 px-4',
         alignClasses[align],
-        isHeader ? 'py-3 font-bold' : 'text-neutral-900',
+        isHeader ? 'py-3 font-bold text-zinc-500' : 'text-zinc-900',
         className
       )}
       {...props}
