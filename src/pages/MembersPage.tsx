@@ -1,4 +1,5 @@
 import React, { useState, useMemo, useEffect } from 'react';
+import { motion, AnimatePresence } from 'motion/react';
 import { PageHeader } from '../components/ui/PageHeader';
 import { Avatar } from '../components/ui/Avatar';
 import { Button } from '../components/ui/Button';
@@ -10,7 +11,11 @@ import { useMembers } from '../hooks/useMembers';
 import { useGymSettings } from '../hooks/useGymSettings';
 import { formatCurrency } from '../utils/currencyUtils';
 import { formatDate, getDifferenceInDays } from '../utils/dateUtils';
-import { Search, X, MessageSquare, Users, AlertCircle, Clock, ChevronLeft, ChevronRight } from 'lucide-react';
+import { MemberRow } from '../components/ui/MemberRow';
+import { SearchInput } from '../components/ui/SearchInput';
+import { FilterChips, FilterChipOption } from '../components/ui/FilterChips';
+import { Search, X, Users, ChevronLeft, ChevronRight, LayoutList, AlignJustify, Plus, CheckCircle2, Clock, AlertCircle } from 'lucide-react';
+import { IconButton } from '../components/ui/IconButton';
 import { cn } from '../utils/classNames';
 
 interface MembersPageProps {
@@ -29,13 +34,14 @@ export const MembersPage: React.FC<MembersPageProps> = ({
   onAddMember,
   onSelectMember,
 }) => {
-  const { members, loading, isRefreshing, isStale, error, setFilter, fetchMembers } = useMembers();
+  const { members, loading, isRefreshing, isStale, error, setFilter, fetchMembers, counts } = useMembers();
   const { currencySymbol } = useGymSettings();
 
   const [activeFilter, setActiveFilter] = useState<FilterStatus>('ALL');
   const [searchInput, setSearchInput] = useState<string>('');
   const [currentPage, setCurrentPage] = useState<number>(1);
   const [recentPaymentId, setRecentPaymentId] = useState<string | null>(null);
+  const [viewMode, setViewMode] = useState<'comfortable' | 'compact'>('comfortable');
 
   useEffect(() => {
     const handlePaymentSuccess = (e: any) => {
@@ -68,12 +74,12 @@ export const MembersPage: React.FC<MembersPageProps> = ({
     setFilter((prev) => ({ ...prev, status: status }));
   };
 
-  const filterTabs: { id: FilterStatus; label: string }[] = [
-    { id: 'ALL', label: 'All' },
-    { id: 'ACTIVE', label: 'Active' },
-    { id: 'PENDING', label: 'Pending' },
-    { id: 'DUE_SOON', label: 'Due Soon' },
-    { id: 'EXPIRED', label: 'Expired' },
+  const filterTabs: FilterChipOption<FilterStatus>[] = [
+    { id: 'ALL', label: 'All', count: counts.ALL },
+    { id: 'ACTIVE', label: 'Active', badgeVariant: 'success', count: counts.ACTIVE, icon: <CheckCircle2 className="w-4 h-4" /> },
+    { id: 'PENDING', label: 'Pending', count: counts.PENDING },
+    { id: 'DUE_SOON', label: 'Due Soon', badgeVariant: 'warning', count: counts.DUE_SOON, icon: <Clock className="w-4 h-4" /> },
+    { id: 'EXPIRED', label: 'Expired', badgeVariant: 'danger', count: counts.EXPIRED, icon: <AlertCircle className="w-4 h-4" /> },
   ];
 
   const totalMembersCount = members.length;
@@ -83,33 +89,6 @@ export const MembersPage: React.FC<MembersPageProps> = ({
     return members.slice(start, start + PAGE_SIZE);
   }, [members, currentPage]);
 
-  const renderStatus = (member: Member) => {
-    const diffDays = getDifferenceInDays(member.nextPaymentDate);
-    const isOverdue = diffDays < 0;
-    const isDueToday = diffDays === 0;
-
-    if (isOverdue) {
-      const days = Math.abs(diffDays);
-      return (
-        <span className="inline-flex items-center gap-1.5 text-rose-700 font-semibold text-sm">
-          <AlertCircle className="w-4 h-4" />
-          Overdue by {days} {days === 1 ? 'day' : 'days'}
-        </span>
-      );
-    }
-    if (isDueToday) {
-      return (
-        <span className="inline-flex items-center gap-1.5 text-amber-700 font-semibold text-sm">
-          <Clock className="w-4 h-4" />
-          Due today
-        </span>
-      );
-    }
-    if (diffDays <= 3) {
-      return <span className="text-zinc-900 font-semibold text-sm">Due in {diffDays} {diffDays === 1 ? 'day' : 'days'}</span>;
-    }
-    return <span className="text-zinc-500 font-medium text-sm">Paid up • Next due {formatDate(member.nextPaymentDate, { format: 'short' })}</span>;
-  };
 
   const isSearching = searchInput.trim().length > 0 || activeFilter !== 'ALL';
   const hasNoMembersEver = !loading && members.length === 0 && !isSearching;
@@ -139,48 +118,42 @@ export const MembersPage: React.FC<MembersPageProps> = ({
       />
 
       <div className="space-y-4 pt-2">
-        <div className="relative w-full max-w-2xl">
-          <div className="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none text-zinc-400">
-            <Search className="w-5 h-5" />
+        <div className="flex flex-col sm:flex-row sm:items-center gap-4">
+          <div className="w-full sm:flex-1">
+            <SearchInput
+              value={searchInput}
+              onSearchChange={(val) => {
+                setSearchInput(val);
+                setCurrentPage(1);
+                setFilter((prev) => ({ ...prev, search: val }));
+              }}
+              placeholder="Search by name or phone..."
+            />
           </div>
-          <input
-            type="text"
-            value={searchInput}
-            onChange={handleSearchChange}
-            placeholder="Search by name or phone..."
-            className="w-full pl-11 pr-11 py-3.5 bg-white border border-zinc-200 shadow-sm rounded-2xl text-base text-zinc-900 placeholder:text-zinc-400 focus:outline-none focus:ring-2 focus:ring-zinc-900 focus:border-transparent transition-all"
-          />
-          {searchInput && (
-            <button
-              type="button"
-              onClick={handleClearSearch}
-              className="absolute inset-y-0 right-0 pr-4 flex items-center text-zinc-400 hover:text-zinc-700 cursor-pointer"
-            >
-              <X className="w-5 h-5" />
-            </button>
-          )}
+          
+          <div className="hidden sm:flex items-center gap-1.5 p-1 bg-slate-100 rounded-xl border border-slate-200">
+            <IconButton
+              icon={<AlignJustify className="w-4 h-4" />}
+              aria-label="Comfortable view"
+              variant="ghost"
+              onClick={() => setViewMode('comfortable')}
+              className={cn("rounded-lg hover:bg-white hover:shadow-sm", viewMode === 'comfortable' && "bg-white shadow-sm text-teal-600")}
+            />
+            <IconButton
+              icon={<LayoutList className="w-4 h-4" />}
+              aria-label="Compact view"
+              variant="ghost"
+              onClick={() => setViewMode('compact')}
+              className={cn("rounded-lg hover:bg-white hover:shadow-sm", viewMode === 'compact' && "bg-white shadow-sm text-teal-600")}
+            />
+          </div>
         </div>
 
-        <div className="flex items-center gap-2 overflow-x-auto pb-2 scrollbar-none">
-          {filterTabs.map((tab) => {
-            const isActive = activeFilter === tab.id;
-            return (
-              <button
-                key={tab.id}
-                type="button"
-                onClick={() => handleFilterChange(tab.id)}
-                className={cn(
-                  'px-4 py-2 rounded-xl text-sm font-semibold whitespace-nowrap transition-all cursor-pointer',
-                  isActive
-                    ? 'bg-zinc-900 text-white shadow-sm'
-                    : 'bg-white border border-zinc-200 text-zinc-600 hover:bg-zinc-50 hover:text-zinc-900'
-                )}
-              >
-                {tab.label}
-              </button>
-            );
-          })}
-        </div>
+        <FilterChips<FilterStatus>
+          options={filterTabs}
+          activeId={activeFilter}
+          onChange={handleFilterChange}
+        />
       </div>
 
       {loading && members.length === 0 ? (
@@ -223,103 +196,73 @@ export const MembersPage: React.FC<MembersPageProps> = ({
           </div>
         </div>
       ) : (
-        <div className="space-y-2">
-          {paginatedMembers.map((member) => {
-            const diffDays = getDifferenceInDays(member.nextPaymentDate);
-            const isPending = diffDays <= 0;
-            const displayName = member.name || 'Member';
-            const displayFee = Number(member.monthlyFee) || 0;
-
-            return (
-              <div
+        <AnimatePresence mode="wait">
+          <motion.div
+            key={`${activeFilter}-${currentPage}-${viewMode}`}
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            transition={{ duration: 0.15 }}
+            className={cn("flex flex-col", viewMode === 'compact' ? "gap-1" : "gap-2")}
+          >
+            {paginatedMembers.map((member) => (
+              <MemberRow
                 key={member.id}
-                className={cn(
-                  "py-4 sm:py-5 px-2 sm:px-4 -mx-2 sm:-mx-4 rounded-2xl flex flex-col sm:flex-row sm:items-center justify-between gap-4 transition-colors cursor-pointer group",
-                  recentPaymentId === member.id ? "bg-emerald-50" : "hover:bg-zinc-50/70"
-                )}
-                onClick={() => onSelectMember(member)}
-              >
-                <div className="flex items-center gap-4 flex-1 min-w-0">
-                  <Avatar name={displayName} size="md" />
-                  <div className="flex-1 min-w-0">
-                    <div className="flex items-center gap-3">
-                      <span className="font-bold text-lg text-zinc-950 truncate max-w-[200px] sm:max-w-xs transition-colors group-hover:text-zinc-700">
-                        {displayName}
-                      </span>
-                      <span className="text-zinc-400 font-mono text-sm hidden sm:inline-block">{member.phone}</span>
-                    </div>
-                    <div className="mt-1 flex items-center gap-3 flex-wrap">
-                      {renderStatus(member)}
-                      <span className="text-zinc-300 hidden sm:inline-block">•</span>
-                      <span className="text-zinc-500 text-sm">
-                        {member.planName || 'Standard'} ({formatCurrency(displayFee, currencySymbol)})
-                      </span>
-                    </div>
-                  </div>
-                </div>
+                member={member}
+                currencySymbol={currencySymbol}
+                onSelect={onSelectMember}
+                onRemind={onSendReminder}
+                onQuickPay={onQuickPay}
+                highlighted={recentPaymentId === member.id}
+                className={cn(viewMode === 'compact' && "py-2.5 sm:py-3")}
+              />
+            ))}
 
-                {isPending && (
-                  <div className="flex items-center gap-2 pt-2 sm:pt-0 sm:shrink-0 w-full sm:w-auto">
-                    <Button
-                      variant="outline"
-                      size="md"
-                      className="w-full sm:w-auto"
-                      onClick={(e) => {
-                        e.stopPropagation();
-                        onSendReminder(member);
-                      }}
-                      leftIcon={<MessageSquare className="w-4 h-4" />}
-                    >
-                      <span className="sm:hidden">Remind</span>
-                    </Button>
-                    <Button
-                      size="md"
-                      className="w-full sm:w-auto bg-zinc-900 text-white hover:bg-zinc-800"
-                      onClick={(e) => {
-                        e.stopPropagation();
-                        onQuickPay(member);
-                      }}
-                    >
-                      Mark Paid
-                    </Button>
-                  </div>
-                )}
-              </div>
-            );
-          })}
-
-          {totalPages > 1 && (
-            <div className="flex items-center justify-between py-6 border-t border-zinc-100 mt-6 text-sm">
-              <span className="text-zinc-500 hidden sm:inline-block">
-                Showing {((currentPage - 1) * PAGE_SIZE) + 1}–{Math.min(currentPage * PAGE_SIZE, totalMembersCount)} of {totalMembersCount} members
-              </span>
-              <div className="flex items-center gap-2 w-full sm:w-auto justify-between sm:justify-end">
-                <Button
-                  variant="outline"
-                  size="sm"
-                  onClick={() => setCurrentPage((p) => Math.max(1, p - 1))}
-                  disabled={currentPage === 1}
-                  leftIcon={<ChevronLeft className="w-4 h-4" />}
-                >
-                  Previous
-                </Button>
-                <span className="px-3 font-semibold text-zinc-700 sm:hidden">
-                  {currentPage} / {totalPages}
+            {totalPages > 1 && (
+              <div className="flex items-center justify-between py-6 border-t border-zinc-100 mt-6 text-sm">
+                <span className="text-zinc-500 hidden sm:inline-block">
+                  Showing {((currentPage - 1) * PAGE_SIZE) + 1}–{Math.min(currentPage * PAGE_SIZE, totalMembersCount)} of {totalMembersCount} members
                 </span>
-                <Button
-                  variant="outline"
-                  size="sm"
-                  onClick={() => setCurrentPage((p) => Math.min(totalPages, p + 1))}
-                  disabled={currentPage === totalPages}
-                  rightIcon={<ChevronRight className="w-4 h-4" />}
-                >
-                  Next
-                </Button>
+                <div className="flex items-center gap-2 w-full sm:w-auto justify-between sm:justify-end">
+                  <Button
+                    variant="outline"
+                    size="sm"
+                    onClick={() => setCurrentPage((p) => Math.max(1, p - 1))}
+                    disabled={currentPage === 1}
+                    leftIcon={<ChevronLeft className="w-4 h-4" />}
+                  >
+                    Previous
+                  </Button>
+                  <span className="px-3 font-semibold text-zinc-700 sm:hidden">
+                    {currentPage} / {totalPages}
+                  </span>
+                  <Button
+                    variant="outline"
+                    size="sm"
+                    onClick={() => setCurrentPage((p) => Math.min(totalPages, p + 1))}
+                    disabled={currentPage === totalPages}
+                    rightIcon={<ChevronRight className="w-4 h-4" />}
+                  >
+                    Next
+                  </Button>
+                </div>
               </div>
-            </div>
-          )}
-        </div>
+            )}
+          </motion.div>
+        </AnimatePresence>
       )}
+
+      {/* Mobile Sticky FAB */}
+      <div className="fixed bottom-24 right-4 sm:hidden z-30">
+        <button
+          type="button"
+          onClick={onAddMember}
+          className="flex items-center justify-center w-14 h-14 bg-teal-600 text-white rounded-[20px] shadow-lg shadow-teal-600/30 active:scale-95 transition-transform"
+          aria-label="Add Member"
+        >
+          <Plus className="w-6 h-6 stroke-[2.5]" />
+        </button>
+      </div>
     </div>
   );
 };

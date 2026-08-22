@@ -3,52 +3,34 @@ import { cn } from '../../utils/classNames';
 
 export interface BadgeProps {
   children: React.ReactNode;
-  variant?: 'neutral' | 'primary' | 'success' | 'warning' | 'danger' | 'info';
-  size?: 'sm' | 'md';
-  className?: string;
+  variant?: 'neutral' | 'success' | 'warning' | 'danger' | 'info';
   icon?: React.ReactNode;
+  className?: string;
 }
 
 export const Badge: React.FC<BadgeProps> = ({
   children,
   variant = 'neutral',
-  size = 'md',
-  className,
   icon,
+  className,
 }) => {
   const variantClasses = {
-    neutral: 'text-zinc-500',
-    primary: 'text-zinc-900',
-    success: 'text-emerald-600',
-    warning: 'text-amber-600',
-    danger: 'text-rose-600',
-    info: 'text-sky-600',
-  };
-
-  const dotClasses = {
-    neutral: 'bg-zinc-400',
-    primary: 'bg-zinc-900',
-    success: 'bg-emerald-500',
-    warning: 'bg-amber-500',
-    danger: 'bg-rose-500',
-    info: 'bg-sky-500',
-  };
-
-  const sizeClasses = {
-    sm: 'text-[10px] gap-1.5 font-bold uppercase tracking-wider',
-    md: 'text-[11px] gap-1.5 font-bold uppercase tracking-wider',
+    neutral: 'bg-slate-100 text-slate-700',
+    success: 'bg-emerald-50 text-emerald-700',
+    warning: 'bg-amber-50 text-amber-700',
+    danger: 'bg-rose-50 text-rose-700',
+    info: 'bg-sky-50 text-sky-700',
   };
 
   return (
     <span
       className={cn(
-        'inline-flex items-center whitespace-nowrap select-none transition-colors font-mono',
+        'inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-[11px] font-bold tracking-wide uppercase whitespace-nowrap select-none transition-colors font-mono',
         variantClasses[variant],
-        sizeClasses[size],
         className
       )}
     >
-      {icon ? <span className="shrink-0">{icon}</span> : <span className={cn('w-1.5 h-1.5 rounded-full shrink-0', dotClasses[variant])} />}
+      {icon && <span className="shrink-0">{icon}</span>}
       <span>{children}</span>
     </span>
   );

@@ -1,4 +1,5 @@
 import React, { useState, useMemo, useCallback } from 'react';
+import { motion, AnimatePresence } from 'motion/react';
 import { PageHeader } from '../components/ui/PageHeader';
 import { Button } from '../components/ui/Button';
 import { SearchInput } from '../components/ui/SearchInput';
@@ -29,6 +30,8 @@ import {
   ChevronLeft,
   Download,
 } from 'lucide-react';
+import { FilterChips, FilterChipOption } from '../components/ui/FilterChips';
+import { MemberRow } from '../components/ui/MemberRow';
 import { cn } from '../utils/classNames';
 
 type TabType = 'pending' | 'upcoming' | 'paid';
@@ -262,7 +265,6 @@ export const PaymentsPage: React.FC<PaymentsPageProps> = ({
                 id="btn-payments-record-payment"
                 size="md"
                 onClick={onRecordPayment}
-                className="bg-zinc-900 text-white hover:bg-zinc-800 font-semibold"
               >
                 Record Payment
               </Button>
@@ -272,83 +274,17 @@ export const PaymentsPage: React.FC<PaymentsPageProps> = ({
       />
 
       {/* Primary Tab Navigation & Controls */}
-      <div className="flex flex-col md:flex-row md:items-center justify-between gap-3 pt-1">
-        {/* Primary Tabs: Pending, Upcoming, Paid */}
-        <div className="flex items-center p-1 bg-zinc-100/90 rounded-2xl w-full sm:w-auto border border-zinc-200/70">
-          <button
-            type="button"
-            id="tab-payments-pending"
-            onClick={() => setActiveTab('pending')}
-            className={cn(
-              'flex-1 sm:flex-initial px-4 py-2 rounded-xl text-xs sm:text-sm font-semibold transition-all flex items-center justify-center gap-2 cursor-pointer',
-              activeTab === 'pending'
-                ? 'bg-white text-zinc-950'
-                : 'text-zinc-600 hover:text-zinc-950 hover:bg-white/50'
-            )}
-          >
-            <span>Pending</span>
-            <span
-              className={cn(
-                'px-1.5 py-0.5 rounded-full text-[11px] font-bold font-mono',
-                activeTab === 'pending'
-                  ? pendingMembers.length > 0
-                    ? 'bg-rose-100 text-rose-800'
-                    : 'bg-zinc-200 text-zinc-800'
-                  : 'bg-zinc-200/80 text-zinc-600'
-              )}
-            >
-              {pendingMembers.length}
-            </span>
-          </button>
-
-          <button
-            type="button"
-            id="tab-payments-upcoming"
-            onClick={() => setActiveTab('upcoming')}
-            className={cn(
-              'flex-1 sm:flex-initial px-4 py-2 rounded-xl text-xs sm:text-sm font-semibold transition-all flex items-center justify-center gap-2 cursor-pointer',
-              activeTab === 'upcoming'
-                ? 'bg-white text-zinc-950'
-                : 'text-zinc-600 hover:text-zinc-950 hover:bg-white/50'
-            )}
-          >
-            <span>Upcoming</span>
-            <span
-              className={cn(
-                'px-1.5 py-0.5 rounded-full text-[11px] font-bold font-mono',
-                activeTab === 'upcoming'
-                  ? 'bg-amber-100 text-amber-800'
-                  : 'bg-zinc-200/80 text-zinc-600'
-              )}
-            >
-              {upcomingMembers.length}
-            </span>
-          </button>
-
-          <button
-            type="button"
-            id="tab-payments-paid"
-            onClick={() => setActiveTab('paid')}
-            className={cn(
-              'flex-1 sm:flex-initial px-4 py-2 rounded-xl text-xs sm:text-sm font-semibold transition-all flex items-center justify-center gap-2 cursor-pointer',
-              activeTab === 'paid'
-                ? 'bg-white text-zinc-950'
-                : 'text-zinc-600 hover:text-zinc-950 hover:bg-white/50'
-            )}
-          >
-            <span>Paid</span>
-            <span
-              className={cn(
-                'px-1.5 py-0.5 rounded-full text-[11px] font-bold font-mono',
-                activeTab === 'paid'
-                  ? 'bg-emerald-100 text-emerald-800'
-                  : 'bg-zinc-200/80 text-zinc-600'
-              )}
-            >
-              {payments.length}
-            </span>
-          </button>
-        </div>
+      <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 pt-1">
+        {/* Primary Tabs */}
+        <FilterChips
+          options={[
+            { id: 'pending', label: 'Pending', count: pendingMembers.length, badgeVariant: pendingMembers.length > 0 ? 'danger' : 'neutral' },
+            { id: 'upcoming', label: 'Upcoming', count: upcomingMembers.length, badgeVariant: 'warning' },
+            { id: 'paid', label: 'Paid', count: payments.length, badgeVariant: 'success' },
+          ]}
+          activeId={activeTab}
+          onChange={(id) => setActiveTab(id as any)}
+        />
 
         {/* Global Search across active tab */}
         <div className="w-full md:w-72">
@@ -359,495 +295,274 @@ export const PaymentsPage: React.FC<PaymentsPageProps> = ({
         </div>
       </div>
 
-      {/* Minimal Sub-filters based on Active Tab */}
-      <div className="flex items-center gap-1.5 overflow-x-auto pb-1 scrollbar-none text-xs">
+      {/* Sub-filters based on Active Tab */}
+      <div className="pt-2 pb-1">
         {activeTab === 'pending' && (
-          <>
-            <button
-              type="button"
-              id="filter-pending-all"
-              onClick={() => setPendingFilter('ALL')}
-              className={cn(
-                'px-3 py-1.5 rounded-xl font-medium transition-colors whitespace-nowrap cursor-pointer',
-                pendingFilter === 'ALL'
-                  ? 'bg-zinc-900 text-white font-semibold'
-                  : 'bg-white border border-zinc-200 text-zinc-600 hover:bg-zinc-50'
-              )}
-            >
-              All Pending ({pendingMembers.length})
-            </button>
-            <button
-              type="button"
-              id="filter-pending-overdue"
-              onClick={() => setPendingFilter('OVERDUE')}
-              className={cn(
-                'px-3 py-1.5 rounded-xl font-medium transition-colors whitespace-nowrap cursor-pointer',
-                pendingFilter === 'OVERDUE'
-                  ? 'bg-rose-600 text-white font-semibold'
-                  : 'bg-white border border-zinc-200 text-rose-700 hover:bg-rose-50'
-              )}
-            >
-              Overdue Only ({pendingMembers.filter((m) => getDifferenceInDays(m.nextPaymentDate) < 0).length})
-            </button>
-            <button
-              type="button"
-              id="filter-pending-today"
-              onClick={() => setPendingFilter('TODAY')}
-              className={cn(
-                'px-3 py-1.5 rounded-xl font-medium transition-colors whitespace-nowrap cursor-pointer',
-                pendingFilter === 'TODAY'
-                  ? 'bg-amber-500 text-zinc-950 font-semibold'
-                  : 'bg-white border border-zinc-200 text-amber-800 hover:bg-amber-50'
-              )}
-            >
-              Due Today ({pendingMembers.filter((m) => getDifferenceInDays(m.nextPaymentDate) === 0).length})
-            </button>
-          </>
+          <FilterChips
+            options={[
+              { id: 'ALL', label: 'All Pending', count: pendingMembers.length },
+              { id: 'OVERDUE', label: 'Overdue Only', count: pendingMembers.filter((m) => getDifferenceInDays(m.nextPaymentDate) < 0).length, badgeVariant: 'danger', icon: <AlertCircle className="w-4 h-4" /> },
+              { id: 'TODAY', label: 'Due Today', count: pendingMembers.filter((m) => getDifferenceInDays(m.nextPaymentDate) === 0).length, badgeVariant: 'warning', icon: <Clock className="w-4 h-4" /> },
+            ]}
+            activeId={pendingFilter}
+            onChange={(id) => setPendingFilter(id as any)}
+          />
         )}
 
         {activeTab === 'upcoming' && (
-          <>
-            {[
-              { id: 'ALL', label: `All Upcoming (${upcomingMembers.length})` },
-              {
-                id: '7_DAYS',
-                label: `Next 7 Days (${upcomingMembers.filter((m) => getDifferenceInDays(m.nextPaymentDate) <= 7).length})`,
-              },
-              {
-                id: '14_DAYS',
-                label: `Next 14 Days (${upcomingMembers.filter((m) => getDifferenceInDays(m.nextPaymentDate) <= 14).length})`,
-              },
-              {
-                id: '30_DAYS',
-                label: `Next 30 Days (${upcomingMembers.filter((m) => getDifferenceInDays(m.nextPaymentDate) <= 30).length})`,
-              },
-            ].map((f) => (
-              <button
-                key={f.id}
-                type="button"
-                id={`filter-upcoming-${f.id.toLowerCase()}`}
-                onClick={() => setUpcomingFilter(f.id as any)}
-                className={cn(
-                  'px-3 py-1.5 rounded-xl font-medium transition-colors whitespace-nowrap cursor-pointer',
-                  upcomingFilter === f.id
-                    ? 'bg-zinc-900 text-white font-semibold'
-                    : 'bg-white border border-zinc-200 text-zinc-600 hover:bg-zinc-50'
-                )}
-              >
-                {f.label}
-              </button>
-            ))}
-          </>
+          <FilterChips
+            options={[
+              { id: 'ALL', label: 'All Upcoming', count: upcomingMembers.length },
+              { id: '7_DAYS', label: 'Next 7 Days', count: upcomingMembers.filter((m) => getDifferenceInDays(m.nextPaymentDate) <= 7).length },
+              { id: '14_DAYS', label: 'Next 14 Days', count: upcomingMembers.filter((m) => getDifferenceInDays(m.nextPaymentDate) <= 14).length },
+              { id: '30_DAYS', label: 'Next 30 Days', count: upcomingMembers.filter((m) => getDifferenceInDays(m.nextPaymentDate) <= 30).length },
+            ]}
+            activeId={upcomingFilter}
+            onChange={(id) => setUpcomingFilter(id as any)}
+          />
         )}
 
         {activeTab === 'paid' && (
-          <>
-            {[
+          <FilterChips
+            options={[
               { id: 'ALL', label: 'All Methods' },
               { id: 'UPI', label: 'UPI' },
               { id: 'CASH', label: 'Cash' },
               { id: 'BANK_TRANSFER', label: 'Bank Transfer' },
               { id: 'OTHER', label: 'Other' },
-            ].map((method) => (
-              <button
-                key={method.id}
-                type="button"
-                id={`filter-paid-${method.id.toLowerCase()}`}
-                onClick={() => {
-                  setPaidMethodFilter(method.id);
-                  setPaidPage(1);
-                }}
-                className={cn(
-                  'px-3 py-1.5 rounded-xl font-medium transition-colors whitespace-nowrap cursor-pointer',
-                  paidMethodFilter === method.id
-                    ? 'bg-zinc-900 text-white font-semibold'
-                    : 'bg-white border border-zinc-200 text-zinc-600 hover:bg-zinc-50'
-                )}
-              >
-                {method.label}
-              </button>
-            ))}
-          </>
+            ]}
+            activeId={paidMethodFilter}
+            onChange={(id) => {
+              setPaidMethodFilter(id);
+              setPaidPage(1);
+            }}
+          />
         )}
       </div>
 
       {/* TAB CONTENTS */}
-
-      {/* 1. PENDING TAB */}
-      {activeTab === 'pending' && (
-        <div className="space-y-3">
-          {loadingMembers ? (
-            <LoadingState message="Loading pending dues..." />
-          ) : filteredPending.length === 0 ? (
-            <div className="py-16 text-center flex flex-col items-center justify-center space-y-2">
-              <div className="w-12 h-12 rounded-full bg-emerald-50 text-emerald-600 flex items-center justify-center mb-1">
-                <CheckCircle2 className="w-6 h-6" />
-              </div>
-              <h3 className="text-base font-bold text-zinc-950">No pending payments.</h3>
-              <p className="text-xs sm:text-sm text-zinc-500 mt-1 max-w-sm">
-                {searchQuery ? `No pending members match "${searchQuery}".` : 'All member dues are settled and up to date.'}
-              </p>
-              {searchQuery && (
-                <div className="pt-2">
-                  <Button
-                    variant="outline"
-                    size="sm"
-                    onClick={() => setSearchQuery('')}
-                    className="text-xs"
-                  >
-                    Clear Search
-                  </Button>
+      <AnimatePresence mode="wait">
+        {/* 1. PENDING TAB */}
+        {activeTab === 'pending' && (
+          <motion.div
+            key="pending"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            transition={{ duration: 0.15 }}
+            className="space-y-3"
+          >
+            {loadingMembers ? (
+              <LoadingState message="Loading pending dues..." />
+            ) : filteredPending.length === 0 ? (
+              <div className="py-16 text-center flex flex-col items-center justify-center space-y-2">
+                <div className="w-12 h-12 rounded-full bg-emerald-50 text-emerald-600 flex items-center justify-center mb-1">
+                  <CheckCircle2 className="w-6 h-6" />
                 </div>
-              )}
-            </div>
-          ) : (
-            <div className="space-y-2.5">
-              {filteredPending.map((member) => {
-                const diffDays = getDifferenceInDays(member.nextPaymentDate);
-                const isOverdue = diffDays < 0;
-                const overdueDaysCount = Math.abs(diffDays);
-                const displayName = member.name || 'Member';
-                const displayPhone = member.phone || 'No phone';
-                const displayFee = Number(member.monthlyFee) || 0;
-
-                return (
-                  <div
-                    key={member.id}
-                    id={`payment-pending-card-${member.id}`}
-                    className={cn(
-                      'py-5 border-b border-zinc-100 transition-colors flex flex-col sm:flex-row sm:items-center justify-between gap-4 -mx-4 px-4 group',
-                      isOverdue
-                        ? 'hover:bg-rose-50/40'
-                        : 'hover:bg-amber-50/40'
-                    )}
-                  >
-                    {/* Left: Member Identity & Urgency Badge */}
-                    <div className="flex items-start sm:items-center gap-3.5 min-w-0 flex-1">
-                      <Avatar name={displayName} size="md" />
-                      <div className="min-w-0 flex-1">
-                        <div className="flex items-center gap-2 flex-wrap">
-                          <button
-                            type="button"
-                            onClick={() => handleMemberClick(member)}
-                            className="font-bold text-sm sm:text-base text-zinc-950 hover:underline text-left truncate cursor-pointer max-w-[200px] sm:max-w-xs group-hover:text-zinc-700 transition-colors"
-                          >
-                            {displayName}
-                          </button>
-
-                          {/* Overdue / Due Today Badge */}
-                          {isOverdue ? (
-                            <span className="px-2.5 py-0.5 rounded-full text-[11px] font-bold bg-rose-100 text-rose-800 border border-rose-200/90 flex items-center gap-1 shrink-0">
-                              <AlertCircle className="w-3 h-3 text-rose-600 shrink-0" />
-                              <span>Overdue · {overdueDaysCount} {overdueDaysCount === 1 ? 'day' : 'days'}</span>
-                            </span>
-                          ) : (
-                            <span className="px-2.5 py-0.5 rounded-full text-[11px] font-bold bg-amber-100 text-amber-900 border border-amber-200/90 flex items-center gap-1 shrink-0">
-                              <Clock className="w-3 h-3 text-amber-600 shrink-0" />
-                              <span>Due today</span>
-                            </span>
-                          )}
-                        </div>
-
-                        <div className="flex items-center gap-3 text-xs text-neutral-500 mt-1 flex-wrap font-mono">
-                          <a
-                            href={`tel:${member.phone}`}
-                            className="flex items-center gap-1 hover:text-neutral-900 transition-colors"
-                          >
-                            <Phone className="w-3.5 h-3.5 text-neutral-400 shrink-0" />
-                            <span className="truncate">{displayPhone}</span>
-                          </a>
-                          <span className="font-sans text-neutral-400">•</span>
-                          <span className="font-sans text-neutral-600">
-                            Due {formatDate(member.nextPaymentDate, { format: 'medium' })}
-                          </span>
-                        </div>
-                      </div>
-                    </div>
-
-                    {/* Right: Amount & Actions (Remind + Mark Paid) */}
-                    <div className="flex items-center justify-between sm:justify-end gap-3 pt-2 sm:pt-0 border-t sm:border-t-0 border-zinc-100 shrink-0">
-                      <div className="text-left sm:text-right pr-2">
-                        <span className="text-base sm:text-lg font-mono font-bold text-zinc-950 block">
-                          {formatCurrency(displayFee, currencySymbol)}
-                        </span>
-                        <span className="text-[10px] text-zinc-400 font-medium block truncate max-w-[120px]">
-                          {member.planName || 'Monthly'}
-                        </span>
-                      </div>
-
-                      <div className="flex items-center gap-2">
-                        {onSendReminder && (
-                          <Button
-                            id={`btn-remind-pending-${member.id}`}
-                            variant="secondary"
-                            size="sm"
-                            onClick={() => onSendReminder(member)}
-                            className="text-xs px-3 font-semibold"
-                            leftIcon={<MessageSquare className="w-3.5 h-3.5 text-zinc-600" />}
-                          >
-                            Remind
-                          </Button>
-                        )}
-
-                        {onQuickPay && (
-                          <Button
-                            id={`btn-markpaid-pending-${member.id}`}
-                            size="sm"
-                            onClick={() => onQuickPay(member)}
-                            className="bg-zinc-900 hover:bg-zinc-800 text-white text-xs px-3.5 font-semibold"
-                          >
-                            Mark Paid
-                          </Button>
-                        )}
-                      </div>
-                    </div>
-                  </div>
-                );
-              })}
-            </div>
-          )}
-        </div>
-      )}
-
-      {/* 2. UPCOMING TAB */}
-      {activeTab === 'upcoming' && (
-        <div className="space-y-3">
-          {loadingMembers ? (
-            <LoadingState message="Loading upcoming renewals..." />
-          ) : filteredUpcoming.length === 0 ? (
-            <div className="py-16 text-center flex flex-col items-center justify-center">
-              <div className="w-12 h-12 rounded-full bg-zinc-100 text-zinc-400 flex items-center justify-center mb-3">
-                <Calendar className="w-6 h-6" />
-              </div>
-              <h3 className="text-base font-bold text-zinc-950">No payments due soon.</h3>
-              <p className="text-xs sm:text-sm text-zinc-500 mt-1 max-w-sm">
-                {searchQuery ? 'No upcoming renewals match your search.' : 'No member renewals scheduled within the selected period.'}
-              </p>
-            </div>
-          ) : (
-            <div className="space-y-2.5">
-              {filteredUpcoming.map((member) => {
-                const diffDays = getDifferenceInDays(member.nextPaymentDate);
-                const displayName = member.name || 'Member';
-                const displayPhone = member.phone || 'No phone';
-                const displayFee = Number(member.monthlyFee) || 0;
-
-                return (
-                  <div
-                    key={member.id}
-                    id={`payment-upcoming-card-${member.id}`}
-                    className="py-5 border-b border-zinc-100 hover:bg-zinc-50/50 transition-colors flex flex-col sm:flex-row sm:items-center justify-between gap-4 -mx-4 px-4 group"
-                  >
-                    {/* Left: Member Info & Calmer Days Remaining Badge */}
-                    <div className="flex items-start sm:items-center gap-3.5 min-w-0 flex-1">
-                      <Avatar name={displayName} size="md" />
-                      <div className="min-w-0 flex-1">
-                        <div className="flex items-center gap-2 flex-wrap">
-                          <button
-                            type="button"
-                            onClick={() => handleMemberClick(member)}
-                            className="font-bold text-sm sm:text-base text-zinc-900 hover:underline text-left truncate cursor-pointer max-w-[200px] sm:max-w-xs group-hover:text-zinc-700 transition-colors"
-                          >
-                            {displayName}
-                          </button>
-
-                          <span className="px-2.5 py-0.5 rounded-full text-[11px] font-medium bg-zinc-100 text-zinc-700 border border-zinc-200/80 flex items-center gap-1 shrink-0">
-                            <Calendar className="w-3 h-3 text-zinc-400" />
-                            <span>
-                              {diffDays === 1 ? 'Due tomorrow' : `Due in ${diffDays} days`}
-                            </span>
-                          </span>
-                        </div>
-
-                        <div className="flex items-center gap-3 text-xs text-neutral-500 mt-1 flex-wrap font-mono">
-                          <a
-                            href={`tel:${member.phone}`}
-                            className="flex items-center gap-1 hover:text-neutral-900 transition-colors"
-                          >
-                            <Phone className="w-3.5 h-3.5 text-neutral-400 shrink-0" />
-                            <span className="truncate">{displayPhone}</span>
-                          </a>
-                          <span className="font-sans text-neutral-400">•</span>
-                          <span className="font-sans text-neutral-600">
-                            Due {formatDate(member.nextPaymentDate, { format: 'medium' })}
-                          </span>
-                        </div>
-                      </div>
-                    </div>
-
-                    {/* Right: Expected Amount & Remind Action */}
-                    <div className="flex items-center justify-between sm:justify-end gap-3 pt-2 sm:pt-0 border-t sm:border-t-0 border-zinc-100 shrink-0">
-                      <div className="text-left sm:text-right pr-2">
-                        <span className="text-base sm:text-lg font-mono font-bold text-zinc-900 block">
-                          {formatCurrency(displayFee, currencySymbol)}
-                        </span>
-                        <span className="text-[10px] text-zinc-400 font-medium block truncate max-w-[120px]">
-                          {member.planName || 'Monthly'}
-                        </span>
-                      </div>
-
-                      <div className="flex items-center gap-2">
-                        {onSendReminder && (
-                          <Button
-                            id={`btn-remind-upcoming-${member.id}`}
-                            variant="secondary"
-                            size="sm"
-                            onClick={() => onSendReminder(member)}
-                            className="text-xs px-3 font-medium text-zinc-700"
-                            leftIcon={<MessageSquare className="w-3.5 h-3.5 text-zinc-500" />}
-                          >
-                            Remind
-                          </Button>
-                        )}
-
-                        {onQuickPay && (
-                          <Button
-                            id={`btn-markpaid-upcoming-${member.id}`}
-                            variant="outline"
-                            size="sm"
-                            onClick={() => onQuickPay(member)}
-                            className="text-xs px-3 font-medium text-zinc-700"
-                          >
-                            Mark Paid
-                          </Button>
-                        )}
-                      </div>
-                    </div>
-                  </div>
-                );
-              })}
-            </div>
-          )}
-        </div>
-      )}
-
-      {/* 3. PAID TAB */}
-      {activeTab === 'paid' && (
-        <div className="space-y-3">
-          {loadingPayments ? (
-            <LoadingState message="Loading payment history..." />
-          ) : filteredPaid.length === 0 ? (
-            <div className="py-16 text-center flex flex-col items-center justify-center space-y-2">
-              <div className="w-12 h-12 rounded-full bg-zinc-100 text-zinc-400 flex items-center justify-center mb-1">
-                <CreditCard className="w-6 h-6" />
-              </div>
-              <h3 className="text-base font-bold text-zinc-950">No payments recorded.</h3>
-              <p className="text-xs sm:text-sm text-zinc-500 mt-1 max-w-sm">
-                {searchQuery ? `No payment records match "${searchQuery}".` : 'Transactions recorded using the "Mark Paid" button will appear here.'}
-              </p>
-              {searchQuery && (
-                <div className="pt-2">
-                  <Button
-                    variant="outline"
-                    size="sm"
-                    onClick={() => setSearchQuery('')}
-                    className="text-xs"
-                  >
-                    Clear Search
-                  </Button>
-                </div>
-              )}
-            </div>
-          ) : (
-            <>
-              <div className="divide-y divide-zinc-100">
-                {paginatedPaid.map((item) => {
-                  const itemMemberName = item.memberName || 'Member';
-                  const itemAmount = Number(item.amount) || 0;
-
-                  return (
-                    <div
-                      key={item.id}
-                      id={`payment-paid-row-${item.id}`}
-                      onClick={() => handlePaidRecordClick(item)}
-                      className="py-4 flex items-center justify-between gap-3 hover:bg-zinc-50/70 transition-colors cursor-pointer -mx-4 px-4"
-                    >
-                      {/* Left: Member info, paid date, method */}
-                      <div className="flex items-center gap-3.5 min-w-0 flex-1">
-                        <div className="w-9 h-9 rounded-xl bg-emerald-50/80 text-emerald-700 flex items-center justify-center shrink-0 border border-emerald-200/60">
-                          <Check className="w-4 h-4 text-emerald-600" />
-                        </div>
-
-                        <div className="min-w-0 flex-1">
-                          <div className="flex items-center gap-2 flex-wrap">
-                            <span className="font-semibold text-xs sm:text-sm text-zinc-900 truncate max-w-[200px] sm:max-w-xs">
-                              {itemMemberName}
-                            </span>
-                            <span className="px-2 py-0.5 text-[10px] font-semibold rounded-md bg-zinc-100 text-zinc-600 shrink-0">
-                              {item.paymentMethod === 'BANK_TRANSFER'
-                                ? 'Bank Transfer'
-                                : item.paymentMethod || 'Cash'}
-                            </span>
-                          </div>
-
-                          <div className="flex items-center gap-2 text-xs text-zinc-500 mt-0.5 flex-wrap font-mono">
-                            {item.memberPhone && <span>{item.memberPhone}</span>}
-                            {item.memberPhone && <span className="font-sans text-zinc-300">•</span>}
-                            <span className="font-sans text-zinc-600">
-                              Paid on {formatDate(item.paymentDate, { format: 'medium' })}
-                            </span>
-                            {item.notes && (
-                              <>
-                                <span className="font-sans text-zinc-300">•</span>
-                                <span className="font-sans text-zinc-400 truncate max-w-[160px] sm:max-w-[240px]">
-                                  {item.notes}
-                                </span>
-                              </>
-                            )}
-                          </div>
-                        </div>
-                      </div>
-
-                      {/* Right: Received Amount */}
-                      <div className="flex items-center gap-2.5 text-right shrink-0 pr-2">
-                        <div>
-                          <span className="text-xs sm:text-sm font-mono font-bold text-emerald-700 block">
-                            +{formatCurrency(itemAmount, currencySymbol)}
-                          </span>
-                          <span className="text-[10px] text-zinc-400 font-medium">Received</span>
-                        </div>
-                        <ChevronRight className="w-4 h-4 text-zinc-300 hidden sm:block" />
-                      </div>
-                    </div>
-                  );
-                })}
-              </div>
-
-              {/* Pagination for Paid Records */}
-              {totalPaidPages > 1 && (
-                <div className="flex items-center justify-between py-4 border-t border-zinc-100 text-xs mt-2">
-                  <span className="text-zinc-500">
-                    Showing {((paidPage - 1) * PAID_PAGE_SIZE) + 1}–{Math.min(paidPage * PAID_PAGE_SIZE, totalPaidCount)} of {totalPaidCount} payments
-                  </span>
-                  <div className="flex items-center gap-2">
+                <h3 className="text-base font-bold text-zinc-950">No pending payments.</h3>
+                <p className="text-xs sm:text-sm text-zinc-500 mt-1 max-w-sm">
+                  {searchQuery ? `No pending members match "${searchQuery}".` : 'All member dues are settled and up to date.'}
+                </p>
+                {searchQuery && (
+                  <div className="pt-2">
                     <Button
                       variant="outline"
                       size="sm"
-                      onClick={() => setPaidPage((p) => Math.max(1, p - 1))}
-                      disabled={paidPage === 1}
-                      leftIcon={<ChevronLeft className="w-3.5 h-3.5" />}
+                      onClick={() => setSearchQuery('')}
+                      className="text-xs"
                     >
-                      Previous
+                      Clear Search
                     </Button>
-                    <span className="px-2 font-semibold text-zinc-700">
-                      Page {paidPage} of {totalPaidPages}
+                  </div>
+                )}
+              </div>
+            ) : (
+              <div className="space-y-2">
+                {filteredPending.map((member) => (
+                  <MemberRow
+                    key={member.id}
+                    member={member}
+                    currencySymbol={currencySymbol}
+                    onSelect={handleMemberClick}
+                    onRemind={onSendReminder}
+                    onQuickPay={onQuickPay}
+                  />
+                ))}
+              </div>
+            )}
+          </motion.div>
+        )}
+
+        {/* 2. UPCOMING TAB */}
+        {activeTab === 'upcoming' && (
+          <motion.div
+            key="upcoming"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            transition={{ duration: 0.15 }}
+            className="space-y-3"
+          >
+            {loadingMembers ? (
+              <LoadingState message="Loading upcoming renewals..." />
+            ) : filteredUpcoming.length === 0 ? (
+              <div className="py-16 text-center flex flex-col items-center justify-center">
+                <div className="w-12 h-12 rounded-full bg-zinc-100 text-zinc-400 flex items-center justify-center mb-3">
+                  <Calendar className="w-6 h-6" />
+                </div>
+                <h3 className="text-base font-bold text-zinc-950">No payments due soon.</h3>
+                <p className="text-xs sm:text-sm text-zinc-500 mt-1 max-w-sm">
+                  {searchQuery ? 'No upcoming renewals match your search.' : 'No member renewals scheduled within the selected period.'}
+                </p>
+              </div>
+            ) : (
+              <div className="space-y-2">
+                {filteredUpcoming.map((member) => (
+                  <MemberRow
+                    key={member.id}
+                    member={member}
+                    currencySymbol={currencySymbol}
+                    onSelect={handleMemberClick}
+                    onRemind={onSendReminder}
+                    onQuickPay={onQuickPay}
+                  />
+                ))}
+              </div>
+            )}
+          </motion.div>
+        )}
+
+        {/* 3. PAID TAB */}
+        {activeTab === 'paid' && (
+          <motion.div
+            key="paid"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            transition={{ duration: 0.15 }}
+            className="space-y-3"
+          >
+            {loadingPayments ? (
+              <LoadingState message="Loading payment history..." />
+            ) : filteredPaid.length === 0 ? (
+              <div className="py-16 text-center flex flex-col items-center justify-center space-y-2">
+                <div className="w-12 h-12 rounded-full bg-zinc-100 text-zinc-400 flex items-center justify-center mb-1">
+                  <CreditCard className="w-6 h-6" />
+                </div>
+                <h3 className="text-base font-bold text-zinc-950">No payments recorded.</h3>
+                <p className="text-xs sm:text-sm text-zinc-500 mt-1 max-w-sm">
+                  {searchQuery ? `No payment records match "${searchQuery}".` : 'Transactions recorded using the "Mark Paid" button will appear here.'}
+                </p>
+                {searchQuery && (
+                  <div className="pt-2">
+                    <Button
+                      variant="outline"
+                      size="sm"
+                      onClick={() => setSearchQuery('')}
+                      className="text-xs"
+                    >
+                      Clear Search
+                    </Button>
+                  </div>
+                )}
+              </div>
+            ) : (
+              <>
+                <div className="space-y-2">
+                  {paginatedPaid.map((item) => {
+                    const itemMemberName = item.memberName || 'Member';
+                    const itemAmount = Number(item.amount) || 0;
+
+                    return (
+                      <div
+                        key={item.id}
+                        id={`payment-paid-row-${item.id}`}
+                        onClick={() => handlePaidRecordClick(item)}
+                        className="group relative flex flex-col sm:flex-row sm:items-center justify-between gap-4 p-4 sm:p-5 rounded-2xl bg-white border border-slate-100 transition-all duration-200 hover:shadow-[0_4px_20px_rgba(15,23,42,0.05)] cursor-pointer overflow-hidden"
+                      >
+                        {/* Left: Member info, paid date, method */}
+                        <div className="flex items-center gap-4 flex-1 min-w-0">
+                          <Avatar name={itemMemberName} size="md" />
+
+                          <div className="flex-1 min-w-0">
+                            <div className="flex items-center gap-2 flex-wrap">
+                              <span className="font-semibold text-[15px] sm:text-base text-slate-900 truncate">
+                                {itemMemberName}
+                              </span>
+                              <span className="px-2 py-0.5 text-[10px] font-bold uppercase tracking-wider rounded border border-slate-200 bg-slate-50 text-slate-500 shrink-0">
+                                {item.paymentMethod === 'BANK_TRANSFER'
+                                  ? 'Bank Transfer'
+                                  : item.paymentMethod || 'Cash'}
+                              </span>
+                            </div>
+
+                            <div className="mt-1.5 flex items-center gap-3">
+                              {item.memberPhone && (
+                                <span className="text-[13px] text-slate-500 font-mono tracking-tight">{item.memberPhone}</span>
+                              )}
+                              <span className="inline-flex items-center gap-1.5 px-2 py-0.5 rounded border border-emerald-200 bg-emerald-50 text-[11px] font-bold uppercase tracking-wider text-emerald-600">
+                                <CheckCircle2 className="w-3.5 h-3.5 text-emerald-500" />
+                                Paid {formatDate(item.paymentDate, { format: 'short' })}
+                              </span>
+                            </div>
+                          </div>
+                        </div>
+
+                        {/* Right: Received Amount */}
+                        <div className="flex items-center gap-2.5 text-right shrink-0">
+                          <div className="text-right mr-2">
+                            <span className="text-[15px] sm:text-base font-mono font-bold text-slate-900 block tracking-tight">
+                              +{formatCurrency(itemAmount, currencySymbol)}
+                            </span>
+                            <span className="text-[11px] font-bold uppercase tracking-wider text-slate-400 mt-0.5 block">
+                              Received
+                            </span>
+                          </div>
+                          <div className="w-8 h-8 rounded-full bg-slate-50 flex items-center justify-center border border-slate-100 group-hover:bg-slate-100 transition-colors hidden sm:flex">
+                            <ChevronRight className="w-4 h-4 text-slate-400" />
+                          </div>
+                        </div>
+                      </div>
+                    );
+                  })}
+                </div>
+
+                {/* Pagination for Paid Records */}
+                {totalPaidPages > 1 && (
+                  <div className="flex items-center justify-between py-4 border-t border-zinc-100 text-xs mt-2">
+                    <span className="text-zinc-500">
+                      Showing {((paidPage - 1) * PAID_PAGE_SIZE) + 1}–{Math.min(paidPage * PAID_PAGE_SIZE, totalPaidCount)} of {totalPaidCount} payments
                     </span>
-                    <Button
-                      variant="outline"
-                      size="sm"
-                      onClick={() => setPaidPage((p) => Math.min(totalPaidPages, p + 1))}
-                      disabled={paidPage === totalPaidPages}
-                      rightIcon={<ChevronRight className="w-3.5 h-3.5" />}
-                    >
-                      Next
-                    </Button>
+                    <div className="flex items-center gap-2">
+                      <Button
+                        variant="outline"
+                        size="sm"
+                        onClick={() => setPaidPage((p) => Math.max(1, p - 1))}
+                        disabled={paidPage === 1}
+                        leftIcon={<ChevronLeft className="w-3.5 h-3.5" />}
+                      >
+                        Previous
+                      </Button>
+                      <span className="px-2 font-semibold text-zinc-700">
+                        Page {paidPage} of {totalPaidPages}
+                      </span>
+                      <Button
+                        variant="outline"
+                        size="sm"
+                        onClick={() => setPaidPage((p) => Math.min(totalPaidPages, p + 1))}
+                        disabled={paidPage === totalPaidPages}
+                        rightIcon={<ChevronRight className="w-3.5 h-3.5" />}
+                      >
+                        Next
+                      </Button>
+                    </div>
                   </div>
-                </div>
-              )}
-            </>
-          )}
-        </div>
-      )}
+                )}
+              </>
+            )}
+          </motion.div>
+        )}
+      </AnimatePresence>
     </div>
   );
 };

@@ -9,6 +9,9 @@ import { StatusBadge } from '../components/ui/StatusBadge';
 import { Avatar } from '../components/ui/Avatar';
 import { EmptyState } from '../components/ui/EmptyState';
 import { LoadingState } from '../components/ui/LoadingState';
+import { ProgressBar } from '../components/ui/ProgressBar';
+import { ProgressRing } from '../components/ui/ProgressRing';
+import { MetricCard } from '../components/ui/MetricCard';
 import { useToast } from '../components/ui/Toast';
 import { colors, spacing, borderRadius, typography } from '../styles/tokens';
 import { PAYMENT_STATUS } from '../types';
@@ -193,16 +196,49 @@ export const DesignSystemPage: React.FC = () => {
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
           <Card>
             <CardHeader>
-              <CardTitle className="text-sm">Deterministic Avatar System</CardTitle>
-              <CardDescription>Generates matching color palettes from initials</CardDescription>
+              <CardTitle className="text-sm">Avatar Atom</CardTitle>
+              <CardDescription>Identity colors, photo support, and status dots</CardDescription>
             </CardHeader>
-            <CardContent>
-              <div className="flex items-center gap-4 flex-wrap">
-                <Avatar name="Rahul Verma" size="xl" />
-                <Avatar name="Pooja Hegde" size="lg" />
-                <Avatar name="Amit Patel" size="md" />
-                <Avatar name="Sneha Reddy" size="sm" />
-                <Avatar name="Vikram Sharma" size="xs" />
+            <CardContent className="space-y-6">
+              <div className="space-y-2">
+                <span className="text-xs font-semibold text-neutral-500 uppercase tracking-wider block">Sizes (lg, md, sm)</span>
+                <div className="flex items-end gap-4">
+                  <Avatar name="Amit Patel" size="lg" />
+                  <Avatar name="Sneha Reddy" size="md" />
+                  <Avatar name="Vikram Sharma" size="sm" />
+                </div>
+              </div>
+              
+              <div className="space-y-2">
+                <span className="text-xs font-semibold text-neutral-500 uppercase tracking-wider block">Identity Colors</span>
+                <div className="flex items-center gap-3">
+                  <Avatar name="Coral" size="md" />
+                  <Avatar name="Orange" size="md" />
+                  <Avatar name="Yellow" size="md" />
+                  <Avatar name="Lime" size="md" />
+                  <Avatar name="Cyan" size="md" />
+                  <Avatar name="Violet User" size="md" />
+                </div>
+              </div>
+
+              <div className="space-y-2">
+                <span className="text-xs font-semibold text-neutral-500 uppercase tracking-wider block">Status & Photos</span>
+                <div className="flex items-center gap-4">
+                  <Avatar name="Rahul Verma" size="md" status="paid" />
+                  <Avatar name="Pooja Hegde" size="md" status="overdue" />
+                  <Avatar 
+                    name="John Doe" 
+                    size="md" 
+                    status="paid"
+                    imageUrl="https://images.unsplash.com/photo-1599566150163-29194dcaad36?auto=format&fit=crop&q=80&w=100&h=100" 
+                  />
+                  <Avatar 
+                    name="Jane Smith" 
+                    size="lg" 
+                    status="overdue"
+                    imageUrl="https://images.unsplash.com/photo-1494790108377-be9c29b29330?auto=format&fit=crop&q=80&w=150&h=150" 
+                  />
+                </div>
               </div>
             </CardContent>
           </Card>
@@ -227,6 +263,86 @@ export const DesignSystemPage: React.FC = () => {
               </Button>
             </CardContent>
           </Card>
+        </div>
+      </section>
+
+      {/* 5. Progress Indicators */}
+      <section className="space-y-4">
+        <h2 className="text-lg font-bold text-neutral-900">5. Progress Indicators</h2>
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+          <Card>
+            <CardHeader>
+              <CardTitle className="text-sm">Linear Progress Bar</CardTitle>
+              <CardDescription>Value-driven or fixed semantic linear bars</CardDescription>
+            </CardHeader>
+            <CardContent className="space-y-6">
+              <div className="space-y-4">
+                <div className="space-y-1">
+                  <span className="text-xs font-semibold text-neutral-500 uppercase tracking-wider block">Sizes</span>
+                  <div className="space-y-3">
+                    <ProgressBar value={40} size="sm" variant="brand" />
+                    <ProgressBar value={60} size="md" variant="brand" />
+                    <ProgressBar value={80} size="lg" variant="brand" />
+                  </div>
+                </div>
+                
+                <div className="space-y-1">
+                  <span className="text-xs font-semibold text-neutral-500 uppercase tracking-wider block">Colors (Auto-driven by value)</span>
+                  <div className="space-y-3">
+                    <ProgressBar value={25} variant="auto" showLabel />
+                    <ProgressBar value={65} variant="auto" showLabel />
+                    <ProgressBar value={90} variant="auto" showLabel />
+                  </div>
+                </div>
+              </div>
+            </CardContent>
+          </Card>
+
+          <Card>
+            <CardHeader>
+              <CardTitle className="text-sm">Progress Ring</CardTitle>
+              <CardDescription>Circular hero stats</CardDescription>
+            </CardHeader>
+            <CardContent className="flex flex-col items-center gap-8 py-4">
+              <div className="flex items-end justify-center gap-8 w-full">
+                <ProgressRing value={25} size="sm" variant="danger" />
+                <ProgressRing value={65} size="md" variant="warning" caption="Goal Progress" />
+                <ProgressRing value={85} size="lg" variant="success" caption="Security Score" />
+              </div>
+            </CardContent>
+          </Card>
+        </div>
+      </section>
+
+      {/* 6. Hero Stat Cards */}
+      <section className="space-y-4">
+        <h2 className="text-lg font-bold text-neutral-900">6. Hero Stat Cards (MetricCard)</h2>
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+          <MetricCard
+            title="Collected This Month"
+            value="₹1,24,500"
+            trend={{ value: 12.5, isPositive: true }}
+            caption="Total revenue collected so far this month."
+            variant="brand"
+            onAction={() => success('Clicked', 'View ledger clicked')}
+            actionLabel="View ledger"
+          />
+          <MetricCard
+            title="Security Status"
+            progress={{ value: 92, variant: 'success' }}
+            caption="All backups and data streams are healthy."
+            variant="success"
+            onAction={() => success('Clicked', 'View security clicked')}
+            actionLabel="View security"
+          />
+          <MetricCard
+            title="Fuel Meter"
+            progress={{ value: 35, variant: 'warning' }}
+            caption="Running low on operational bandwidth."
+            variant="warning"
+            onAction={() => warning('Clicked', 'View bandwidth clicked')}
+            actionLabel="View bandwidth"
+          />
         </div>
       </section>
     </div>

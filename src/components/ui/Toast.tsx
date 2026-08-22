@@ -57,7 +57,7 @@ export const ToastProvider: React.FC<{ children: React.ReactNode }> = ({ childre
       {children}
       <div
         id="toast-portal-container"
-        className="fixed bottom-4 right-4 z-50 flex flex-col gap-2 max-w-sm w-full pointer-events-none px-4 sm:px-0"
+        className="fixed bottom-6 left-1/2 -translate-x-1/2 sm:left-auto sm:translate-x-0 sm:right-8 z-[100] flex flex-col gap-3 max-w-sm w-[calc(100vw-32px)] sm:w-full pointer-events-none"
       >
         <AnimatePresence>
           {toasts.map((toast) => {
@@ -69,37 +69,55 @@ export const ToastProvider: React.FC<{ children: React.ReactNode }> = ({ childre
             };
 
             const bgBorders = {
-              success: 'bg-white border-emerald-200 text-zinc-950',
-              error: 'bg-white border-rose-200 text-zinc-950',
-              warning: 'bg-white border-amber-200 text-zinc-950',
-              info: 'bg-white border-sky-200 text-zinc-950',
+              success: 'bg-emerald-50 border-emerald-100/50 shadow-[0_8px_30px_rgb(0,0,0,0.04)]',
+              error: 'bg-rose-50 border-rose-100/50 shadow-[0_8px_30px_rgb(0,0,0,0.04)]',
+              warning: 'bg-amber-50 border-amber-100/50 shadow-[0_8px_30px_rgb(0,0,0,0.04)]',
+              info: 'bg-sky-50 border-sky-100/50 shadow-[0_8px_30px_rgb(0,0,0,0.04)]',
+            };
+
+            const textColors = {
+              success: 'text-emerald-900',
+              error: 'text-rose-900',
+              warning: 'text-amber-900',
+              info: 'text-sky-900',
+            };
+            
+            const messageColors = {
+              success: 'text-emerald-700',
+              error: 'text-rose-700',
+              warning: 'text-amber-700',
+              info: 'text-sky-700',
             };
 
             return (
               <motion.div
                 key={toast.id}
-                initial={{ opacity: 0, y: 20, scale: 0.95 }}
+                initial={{ opacity: 0, y: 30, scale: 0.95 }}
                 animate={{ opacity: 1, y: 0, scale: 1 }}
-                exit={{ opacity: 0, y: 10, scale: 0.95 }}
-                transition={{ duration: 0.2 }}
+                exit={{ opacity: 0, y: 15, scale: 0.95 }}
+                transition={{ duration: 0.3, type: 'spring', bounce: 0.25 }}
                 id={`toast-${toast.id}`}
                 className={cn(
-                  'pointer-events-auto p-4 rounded-xl border flex items-start gap-3 transition-all',
+                  'pointer-events-auto p-4 rounded-[16px] border flex items-start gap-3 transition-all w-full',
                   bgBorders[toast.type]
                 )}
               >
                 {icons[toast.type]}
-                <div className="flex-1 min-w-0">
-                  <h4 className="text-sm font-bold text-zinc-950 leading-tight">{toast.title}</h4>
+                <div className="flex-1 min-w-0 pt-0.5">
+                  <h4 className={cn("text-[15px] font-bold leading-tight tracking-tight", textColors[toast.type])}>
+                    {toast.title}
+                  </h4>
                   {toast.message && (
-                    <p className="text-xs font-medium text-zinc-600 mt-0.5 leading-relaxed">{toast.message}</p>
+                    <p className={cn("text-[13px] font-medium mt-1 leading-relaxed", messageColors[toast.type])}>
+                      {toast.message}
+                    </p>
                   )}
                 </div>
                 <button
                   type="button"
                   id={`toast-close-${toast.id}`}
                   onClick={() => dismissToast(toast.id)}
-                  className="text-zinc-400 hover:text-zinc-600 p-1 rounded-md transition-colors"
+                  className={cn("p-1.5 rounded-full transition-colors hover:bg-black/5 opacity-70 hover:opacity-100", textColors[toast.type])}
                 >
                   <X className="w-4 h-4" />
                 </button>

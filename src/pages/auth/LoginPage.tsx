@@ -125,7 +125,7 @@ export const LoginPage: React.FC<LoginPageProps> = ({
           <div className="flex items-center justify-between mb-1.5">
             <label
               htmlFor="login-password"
-              className="text-xs font-medium text-zinc-700"
+              className="text-sm font-semibold text-slate-700"
             >
               Password
             </label>
@@ -133,7 +133,7 @@ export const LoginPage: React.FC<LoginPageProps> = ({
               type="button"
               id="link-forgot-password"
               onClick={onNavigateToForgotPassword}
-              className="text-xs font-semibold text-zinc-600 hover:text-zinc-950 transition-colors cursor-pointer"
+              className="text-sm font-bold text-teal-600 hover:text-teal-700 transition-colors cursor-pointer"
             >
               Forgot password?
             </button>
@@ -159,6 +159,7 @@ export const LoginPage: React.FC<LoginPageProps> = ({
             type="submit"
             id="btn-login-submit"
             className="w-full"
+            variant="primary"
             size="lg"
             isLoading={isSubmitting}
             disabled={isSubmitting}
@@ -168,12 +169,12 @@ export const LoginPage: React.FC<LoginPageProps> = ({
         </div>
 
         {onNavigateToRegister && (
-          <div className="pt-4 border-t border-zinc-100 text-center">
-            <span className="text-xs text-zinc-600">Don't have a gym account? </span>
+          <div className="pt-5 border-t border-slate-100 text-center">
+            <span className="text-sm text-slate-500">Don't have a gym account? </span>
             <button
               type="button"
               onClick={onNavigateToRegister}
-              className="text-xs font-semibold text-zinc-900 hover:underline cursor-pointer"
+              className="text-sm font-bold text-slate-900 hover:text-teal-600 transition-colors cursor-pointer"
             >
               Create Account
             </button>

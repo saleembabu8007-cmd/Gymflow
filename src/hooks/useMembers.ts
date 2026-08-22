@@ -10,6 +10,7 @@ export function useMembers(overrideGymId?: string) {
   const { members: memberService } = useServices();
 
   const [members, setMembers] = useState<Member[]>([]);
+  const [allMembers, setAllMembers] = useState<Member[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
   const [isRefreshing, setIsRefreshing] = useState<boolean>(false);
   const [isStale, setIsStale] = useState<boolean>(false);
@@ -32,11 +33,15 @@ export function useMembers(overrideGymId?: string) {
       } else {
         setIsRefreshing(true);
       }
-      const data = await memberService.getMembers(gymId, {
-        status: filterStatus,
-        search: filterSearch,
-      });
-      setMembers(data);
+      const [allData, filteredData] = await Promise.all([
+        memberService.getMembers(gymId),
+        memberService.getMembers(gymId, {
+          status: filterStatus,
+          search: filterSearch,
+        })
+      ]);
+      setAllMembers(allData);
+      setMembers(filteredData);
       setError(null);
       setIsStale(false);
       setLastFetchedAt(Date.now());
@@ -163,6 +168,16 @@ export function useMembers(overrideGymId?: string) {
     );
   }, [overdueMembers, dueTodayMembers, dueSoonMembers]);
 
+  const counts = useMemo(() => {
+    return {
+      ALL: allMembers.length,
+      ACTIVE: allMembers.filter(m => m.status === 'ACTIVE').length,
+      PENDING: allMembers.filter(m => m.calculatedStatus === PAYMENT_STATUS.OVERDUE || m.calculatedStatus === PAYMENT_STATUS.DUE_TODAY).length,
+      DUE_SOON: allMembers.filter(m => m.calculatedStatus === PAYMENT_STATUS.DUE_SOON).length,
+      EXPIRED: allMembers.filter(m => m.status === 'INACTIVE' || m.calculatedStatus === PAYMENT_STATUS.EXPIRED).length,
+    };
+  }, [allMembers]);
+
   return {
     members,
     loading,
@@ -183,5 +198,6 @@ export function useMembers(overrideGymId?: string) {
     dueSoonMembers,
     paidMembers,
     totalPendingAmount,
+    counts,
   };
 }

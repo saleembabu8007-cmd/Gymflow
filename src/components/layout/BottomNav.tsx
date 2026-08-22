@@ -91,23 +91,25 @@ export const BottomNav: React.FC<BottomNavProps> = ({
               onClick={() => onNavigate(item.id)}
               className={cn(
                 'relative flex flex-col items-center justify-center min-h-[48px] py-1 px-3 rounded-xl text-[11px] font-medium transition-colors min-w-[64px] touch-manipulation',
-                isActive ? 'text-neutral-950 font-bold' : 'text-neutral-500 hover:text-neutral-800'
+                isActive ? 'text-teal-700 font-bold' : 'text-slate-400 hover:text-slate-600'
               )}
             >
               <div className="relative">
-                <Icon
-                  className={cn(
-                    'w-5 h-5 mb-0.5 transition-transform',
-                    isActive ? 'text-neutral-950 stroke-[2.25] scale-105' : 'text-neutral-400'
-                  )}
-                />
+                <div className={cn("p-1 rounded-full transition-colors", isActive ? "bg-teal-50" : "bg-transparent")}>
+                  <Icon
+                    className={cn(
+                      'w-[22px] h-[22px] transition-transform',
+                      isActive ? 'text-teal-600 stroke-[2.5]' : 'text-slate-400 stroke-[2]'
+                    )}
+                  />
+                </div>
                 {item.badge !== undefined && (
-                  <span className="absolute -top-1 -right-2.5 min-w-[16px] h-4 px-1 bg-rose-600 text-white text-[9px] font-bold rounded-full flex items-center justify-center ring-2 ring-white">
+                  <span className="absolute -top-1 -right-1 min-w-[16px] h-4 px-1 bg-rose-500 text-white text-[9px] font-bold rounded-full flex items-center justify-center ring-2 ring-white">
                     {item.badge}
                   </span>
                 )}
               </div>
-              <span className="truncate">{item.label}</span>
+              <span className="truncate mt-0.5">{item.label}</span>
             </button>
           );
         })}
@@ -120,24 +122,26 @@ export const BottomNav: React.FC<BottomNavProps> = ({
           className={cn(
             'relative flex flex-col items-center justify-center min-h-[48px] py-1 px-3 rounded-xl text-[11px] font-medium transition-colors min-w-[64px] touch-manipulation',
             isSecondaryActive || isMoreOpen
-              ? 'text-neutral-950 font-bold'
-              : 'text-neutral-500 hover:text-neutral-800'
+              ? 'text-teal-700 font-bold'
+              : 'text-slate-400 hover:text-slate-600'
           )}
         >
           <div className="relative">
-            <MoreHorizontal
-              className={cn(
-                'w-5 h-5 mb-0.5 transition-transform',
-                isSecondaryActive || isMoreOpen
-                  ? 'text-neutral-950 stroke-[2.25] scale-105'
-                  : 'text-neutral-400'
-              )}
-            />
+            <div className={cn("p-1 rounded-full transition-colors", (isSecondaryActive || isMoreOpen) ? "bg-teal-50" : "bg-transparent")}>
+              <MoreHorizontal
+                className={cn(
+                  'w-[22px] h-[22px] transition-transform',
+                  isSecondaryActive || isMoreOpen
+                    ? 'text-teal-600 stroke-[2.5]'
+                    : 'text-slate-400 stroke-[2]'
+                )}
+              />
+            </div>
             {isSecondaryActive && (
-              <span className="absolute -top-0.5 -right-0.5 w-2 h-2 bg-neutral-900 rounded-full ring-2 ring-white" />
+              <span className="absolute -top-0.5 -right-0.5 w-2 h-2 bg-rose-500 rounded-full ring-2 ring-white" />
             )}
           </div>
-          <span>More</span>
+          <span className="mt-0.5">More</span>
         </button>
       </nav>
 

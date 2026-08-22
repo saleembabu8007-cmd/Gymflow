@@ -109,7 +109,7 @@ export const Modal: React.FC<ModalProps> = ({
   return (
     <AnimatePresence>
       {isOpen && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 sm:p-6 overflow-y-auto">
+        <div className="fixed inset-0 z-50 flex flex-col sm:items-center sm:justify-center p-0 sm:p-6 overflow-hidden">
           {/* Backdrop */}
           <motion.div
             initial={{ opacity: 0 }}
@@ -125,12 +125,14 @@ export const Modal: React.FC<ModalProps> = ({
           <motion.div
             ref={modalRef}
             tabIndex={-1}
-            initial={{ opacity: 0, scale: 0.98, y: 4 }}
-            animate={{ opacity: 1, scale: 1, y: 0 }}
-            exit={{ opacity: 0, scale: 0.98, y: 4 }}
-            transition={{ duration: 0.15, ease: [0.16, 1, 0.3, 1] }}
+            initial={{ opacity: 0, y: 100, scale: 1 }}
+            animate={{ opacity: 1, y: 0, scale: 1 }}
+            exit={{ opacity: 0, y: 100, scale: 1 }}
+            transition={{ duration: 0.3, ease: [0.16, 1, 0.3, 1] }}
             className={cn(
-              'relative w-full bg-white rounded-2xl border border-zinc-200 z-10 overflow-hidden flex flex-col max-h-[90vh] focus:outline-none',
+              'relative w-full bg-white sm:rounded-2xl rounded-t-2xl sm:border border-slate-200 z-10 flex flex-col focus:outline-none shadow-[0_0_40px_-10px_rgba(13,148,136,0.15)] sm:shadow-[0_20px_40px_-15px_rgba(13,148,136,0.15)]',
+              'mt-auto sm:mt-0', // Push to bottom on mobile, centered on desktop
+              'max-h-[90vh] sm:max-h-[85vh]', // Max height handling
               maxWidthClasses[maxWidth]
             )}
             role="dialog"
@@ -138,8 +140,13 @@ export const Modal: React.FC<ModalProps> = ({
             aria-labelledby={titleId}
             aria-describedby={descriptionId}
           >
+            {/* Mobile Drag Handle */}
+            <div className="sm:hidden flex justify-center pt-3 pb-1">
+              <div className="w-10 h-1.5 bg-slate-200 rounded-full" />
+            </div>
+
             {(title || showCloseButton) && (
-              <div className="flex items-center justify-between px-6 py-4 border-b border-zinc-100 shrink-0">
+              <div className="flex items-center justify-between px-6 pb-4 sm:py-4 border-b border-slate-100 shrink-0">
                 <div>
                   {title && (
                     <h3 id={titleId} className="text-sm sm:text-base font-bold text-zinc-950 tracking-tight">
@@ -156,16 +163,15 @@ export const Modal: React.FC<ModalProps> = ({
                   <button
                     type="button"
                     onClick={onClose}
-                    aria-label="Close modal"
-                    className="text-zinc-400 hover:text-zinc-600 p-1.5 rounded-lg hover:bg-zinc-100 transition-colors focus-visible:ring-2 focus-visible:ring-zinc-900"
+                    className="text-slate-400 hover:text-slate-600 flex items-center justify-center min-w-[44px] min-h-[44px] rounded-full hover:bg-slate-100 transition-colors focus-visible:ring-2 focus-visible:ring-teal-600"
                   >
-                    <X className="w-4 h-4" />
+                    <X className="w-5 h-5" />
                   </button>
                 )}
               </div>
             )}
 
-            <div className="p-6 overflow-y-auto">{children}</div>
+            <div className="flex-1 overflow-y-auto min-h-0 flex flex-col">{children}</div>
           </motion.div>
         </div>
       )}

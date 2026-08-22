@@ -318,128 +318,159 @@ export const AddMemberModal: React.FC<AddMemberModalProps> = ({
         </div>
       ) : (
         /* --- ADD MEMBER FORM --- */
-        <form onSubmit={handleSubmit} className="space-y-4">
-          {/* 1. Full name * */}
-          <Input
-            id="member-fullname-input"
-            label="Full name *"
-            placeholder="e.g. Rahul Verma"
-            value={name}
-            onChange={(e) => {
-              setName(e.target.value);
-              if (errors.name) setErrors((prev) => ({ ...prev, name: undefined }));
-            }}
-            error={errors.name}
-            required
-            autoFocus
-          />
+        <form onSubmit={handleSubmit} className="flex flex-col h-full">
+          <div className="space-y-6 flex-1 pb-6">
+            {/* 1. Personal Details Card */}
+            {/* 1. Personal Details Card */}
+            <div className="bg-slate-50 p-4 sm:p-5 rounded-[20px] border border-slate-100 space-y-4">
+              <h4 className="text-sm font-bold text-slate-900 flex items-center gap-2">
+                <User className="w-4 h-4 text-teal-600" />
+                Who's joining?
+              </h4>
+              <Input
+                id="member-fullname-input"
+                label="Full name *"
+                placeholder="e.g. Rahul Verma"
+                value={name}
+                onChange={(e) => {
+                  setName(e.target.value);
+                  if (errors.name) setErrors((prev) => ({ ...prev, name: undefined }));
+                }}
+                error={errors.name}
+                required
+                autoFocus
+              />
 
-          {/* 2. Phone number * & Email (optional) */}
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-            <Input
-              id="member-phone-input"
-              label="Phone number *"
-              type="tel"
-              placeholder="e.g. 9876543210"
-              value={phone}
-              onChange={(e) => {
-                setPhone(e.target.value);
-                if (errors.phone) setErrors((prev) => ({ ...prev, phone: undefined }));
-              }}
-              error={errors.phone}
-              required
-            />
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                <Input
+                  id="member-phone-input"
+                  label="Phone number *"
+                  type="tel"
+                  placeholder="e.g. 9876543210"
+                  value={phone}
+                  onChange={(e) => {
+                    setPhone(e.target.value);
+                    if (errors.phone) setErrors((prev) => ({ ...prev, phone: undefined }));
+                  }}
+                  error={errors.phone}
+                  required
+                />
 
-            <Input
-              id="member-email-input"
-              label="Email"
-              type="email"
-              placeholder="e.g. rahul@example.com"
-              value={email}
-              onChange={(e) => {
-                setEmail(e.target.value);
-                if (errors.email) setErrors((prev) => ({ ...prev, email: undefined }));
-              }}
-              error={errors.email}
-              helperText="Optional"
-            />
+                <Input
+                  id="member-email-input"
+                  label="Email"
+                  type="email"
+                  placeholder="e.g. rahul@example.com"
+                  value={email}
+                  onChange={(e) => {
+                    setEmail(e.target.value);
+                    if (errors.email) setErrors((prev) => ({ ...prev, email: undefined }));
+                  }}
+                  error={errors.email}
+                  helperText="Optional"
+                />
+              </div>
+            </div>
+
+            {/* 2. Membership Card */}
+            {/* 2. Membership Card */}
+            <div className="bg-slate-50 p-4 sm:p-5 rounded-[20px] border border-slate-100 space-y-4">
+              <h4 className="text-sm font-bold text-slate-900 flex items-center gap-2">
+                <CreditCard className="w-4 h-4 text-purple-600" />
+                Membership
+              </h4>
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                <Select
+                  id="member-plan-select"
+                  label="Membership plan *"
+                  value={selectedPlanId}
+                  onChange={(e) => handlePlanChange(e.target.value)}
+                  options={plans.map((p) => ({
+                    value: p.id,
+                    label: `${p.name} (${p.durationMonths} ${p.durationMonths === 1 ? 'month' : 'months'})`,
+                  }))}
+                />
+
+                <Input
+                  id="member-fee-input"
+                  label={`Monthly fee (${currencySymbol}) *`}
+                  type="number"
+                  min="1"
+                  placeholder="e.g. 1500"
+                  value={monthlyFee}
+                  onChange={(e) => {
+                    setMonthlyFee(e.target.value);
+                    if (errors.monthlyFee) setErrors((prev) => ({ ...prev, monthlyFee: undefined }));
+                  }}
+                  prefixText={currencySymbol}
+                  error={errors.monthlyFee}
+                  required
+                />
+              </div>
+            </div>
+
+            {/* 3. Dates & Notes Card */}
+            {/* 3. Dates & Notes Card */}
+            <div className="bg-slate-50 p-4 sm:p-5 rounded-[20px] border border-slate-100 space-y-4">
+              <h4 className="text-sm font-bold text-slate-900 flex items-center gap-2">
+                <Calendar className="w-4 h-4 text-sky-600" />
+                Schedule
+              </h4>
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                <Input
+                  id="member-startdate-input"
+                  label="Start date *"
+                  type="date"
+                  value={startDate}
+                  onChange={(e) => handleStartDateChange(e.target.value)}
+                  error={errors.startDate}
+                  required
+                />
+
+                <div className="flex flex-col gap-1.5">
+                  <Input
+                    id="member-nextpayment-input"
+                    label="Next payment date *"
+                    type="date"
+                    value={nextPaymentDate}
+                    onChange={(e) => {
+                      setNextPaymentDate(e.target.value);
+                      if (errors.nextPaymentDate) setErrors((prev) => ({ ...prev, nextPaymentDate: undefined }));
+                    }}
+                    error={errors.nextPaymentDate}
+                    required
+                  />
+                  {!errors.nextPaymentDate && (
+                    <div className="inline-flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg bg-sky-50 border border-sky-100/50 text-[10px] font-semibold text-sky-700 w-fit">
+                      <Calendar className="w-3 h-3" />
+                      Suggested based on {durationMonths} mo plan
+                    </div>
+                  )}
+                </div>
+              </div>
+
+              <div className="pt-2">
+                <Input
+                  id="member-notes-input"
+                  label="Notes"
+                  placeholder="e.g. Morning 7:00 AM batch, prefers UPI"
+                  value={notes}
+                  onChange={(e) => setNotes(e.target.value)}
+                  helperText="Optional"
+                />
+              </div>
+            </div>
           </div>
 
-          {/* 3. Membership plan * & Monthly fee * */}
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-            <Select
-              id="member-plan-select"
-              label="Membership plan *"
-              value={selectedPlanId}
-              onChange={(e) => handlePlanChange(e.target.value)}
-              options={plans.map((p) => ({
-                value: p.id,
-                label: `${p.name} (${p.durationMonths} ${p.durationMonths === 1 ? 'month' : 'months'})`,
-              }))}
-            />
-
-            <Input
-              id="member-fee-input"
-              label={`Monthly fee (${currencySymbol}) *`}
-              type="number"
-              min="1"
-              placeholder="e.g. 1500"
-              value={monthlyFee}
-              onChange={(e) => {
-                setMonthlyFee(e.target.value);
-                if (errors.monthlyFee) setErrors((prev) => ({ ...prev, monthlyFee: undefined }));
-              }}
-              prefixText={currencySymbol}
-              error={errors.monthlyFee}
-              required
-            />
-          </div>
-
-          {/* 4. Start date * & Next payment date * */}
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-            <Input
-              id="member-startdate-input"
-              label="Start date *"
-              type="date"
-              value={startDate}
-              onChange={(e) => handleStartDateChange(e.target.value)}
-              error={errors.startDate}
-              required
-            />
-
-            <Input
-              id="member-nextpayment-input"
-              label="Next payment date *"
-              type="date"
-              value={nextPaymentDate}
-              onChange={(e) => {
-                setNextPaymentDate(e.target.value);
-                if (errors.nextPaymentDate) setErrors((prev) => ({ ...prev, nextPaymentDate: undefined }));
-              }}
-              error={errors.nextPaymentDate}
-              helperText={`Suggested based on ${durationMonths} mo plan duration`}
-              required
-            />
-          </div>
-
-          {/* 5. Notes (optional) */}
-          <Input
-            id="member-notes-input"
-            label="Notes"
-            placeholder="e.g. Morning 7:00 AM batch, prefers UPI payment"
-            value={notes}
-            onChange={(e) => setNotes(e.target.value)}
-            helperText="Optional"
-          />
-
-          {/* Form Actions */}
-          <div className="flex items-center justify-end gap-2.5 pt-4 border-t border-neutral-100 mt-6">
+          {/* Form Actions - Sticky Footer */}
+          <div className="sticky bottom-0 bg-white border-t border-slate-100 p-4 sm:px-6 -mx-6 -mb-6 flex flex-col sm:flex-row items-center justify-end gap-3 z-10">
             <Button
               type="button"
-              variant="outline"
+              variant="ghost"
               size="md"
               onClick={onClose}
               disabled={isSubmitting}
+              className="w-full sm:w-auto"
             >
               Cancel
             </Button>
@@ -447,9 +478,10 @@ export const AddMemberModal: React.FC<AddMemberModalProps> = ({
             <Button
               id="btn-submit-add-member"
               type="submit"
+              variant="primary"
               size="md"
               isLoading={isSubmitting}
-              className="bg-neutral-900 text-white hover:bg-neutral-800 font-semibold"
+              className="w-full sm:w-auto"
             >
               {isSubmitting ? 'Adding member...' : 'Add Member'}
             </Button>
