@@ -170,7 +170,7 @@ export const LoginPage: React.FC<LoginPageProps> = ({
 
         {onNavigateToRegister && (
           <div className="pt-5 border-t border-slate-100 text-center">
-            <span className="text-sm text-slate-500">Don't have a gym account? </span>
+            <span className="text-sm text-slate-600">Don't have a gym account? </span>
             <button
               type="button"
               onClick={onNavigateToRegister}

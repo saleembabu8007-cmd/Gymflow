@@ -117,7 +117,7 @@ export const Modal: React.FC<ModalProps> = ({
             exit={{ opacity: 0 }}
             transition={{ duration: 0.15 }}
             onClick={onClose}
-            className="fixed inset-0 bg-zinc-950/40 backdrop-blur-xs"
+            className="fixed inset-0 bg-zinc-950/40 backdrop-blur-sm"
             aria-hidden="true"
           />
 
@@ -130,7 +130,7 @@ export const Modal: React.FC<ModalProps> = ({
             exit={{ opacity: 0, y: 100, scale: 1 }}
             transition={{ duration: 0.3, ease: [0.16, 1, 0.3, 1] }}
             className={cn(
-              'relative w-full bg-white sm:rounded-2xl rounded-t-2xl sm:border border-slate-200 z-10 flex flex-col focus:outline-none shadow-[0_0_40px_-10px_rgba(13,148,136,0.15)] sm:shadow-[0_20px_40px_-15px_rgba(13,148,136,0.15)]',
+              'relative w-full bg-white sm:rounded-[24px] rounded-t-[24px] sm:border border-slate-200 z-10 flex flex-col focus:outline-none shadow-[0_0_40px_-10px_rgba(13,148,136,0.15)] sm:shadow-[0_20px_40px_-15px_rgba(13,148,136,0.15)]',
               'mt-auto sm:mt-0', // Push to bottom on mobile, centered on desktop
               'max-h-[90vh] sm:max-h-[85vh]', // Max height handling
               maxWidthClasses[maxWidth]

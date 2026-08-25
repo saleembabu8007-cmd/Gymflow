@@ -124,3 +124,16 @@
     scroll-behavior: auto !important;
   }
 }
+
+@layer utilities {
+  .animate-shimmer {
+    animation: shimmer 1.5s infinite linear;
+    background: linear-gradient(90deg, var(--color-border-subtle) 0%, var(--color-border) 50%, var(--color-border-subtle) 100%);
+    background-size: 200% 100%;
+  }
+}
+
+@keyframes shimmer {
+  0% { background-position: 200% 0; }
+  100% { background-position: -200% 0; }
+}

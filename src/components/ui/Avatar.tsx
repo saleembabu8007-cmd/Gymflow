@@ -4,18 +4,20 @@ import { cn } from '../../utils/classNames';
 export interface AvatarProps {
   name: string;
   imageUrl?: string;
-  size?: 'sm' | 'md' | 'lg';
+  size?: 'xs' | 'sm' | 'md' | 'lg';
   status?: 'paid' | 'overdue';
   className?: string;
 }
 
 const identityPalettes = [
-  'bg-rose-50 text-rose-600',    // Coral
-  'bg-orange-50 text-orange-600', // Orange
-  'bg-yellow-50 text-yellow-700', // Yellow
-  'bg-lime-50 text-lime-700',     // Lime
-  'bg-cyan-50 text-cyan-600',     // Cyan
-  'bg-violet-50 text-violet-600', // Violet
+  'bg-purple-100 text-purple-800',  // Grape
+  'bg-pink-100 text-pink-800',      // Flamingo
+  'bg-indigo-100 text-indigo-800',  // Indigo
+  'bg-emerald-100 text-emerald-800',// Mint
+  'bg-rose-100 text-rose-800',      // Rose
+  'bg-lime-100 text-lime-800',      // Lime
+  'bg-slate-100 text-slate-800',    // Granite
+  'bg-cyan-100 text-cyan-800',      // Cyan
 ];
 
 function getInitials(name: string): string {
@@ -45,12 +47,14 @@ export const Avatar: React.FC<AvatarProps> = ({
   const colorClass = getDeterministicColor(name);
 
   const sizeClasses = {
-    sm: 'w-8 h-8 text-xs', // 32px
-    md: 'w-10 h-10 text-sm', // 40px
-    lg: 'w-14 h-14 text-lg', // 56px
+    xs: 'w-6 h-6 text-[10px]', // 24px
+    sm: 'w-8 h-8 text-xs',     // 32px
+    md: 'w-10 h-10 text-sm',   // 40px
+    lg: 'w-14 h-14 text-lg',   // 56px
   };
 
   const statusDotSizes = {
+    xs: 'w-1.5 h-1.5',
     sm: 'w-2 h-2',
     md: 'w-2.5 h-2.5',
     lg: 'w-3 h-3',
@@ -71,7 +75,7 @@ export const Avatar: React.FC<AvatarProps> = ({
 
   if (imageUrl) {
     return (
-      <div className={cn("relative inline-block shrink-0", className)}>
+      <div className={cn("relative inline-flex shrink-0", className)}>
         <img
           src={imageUrl}
           alt={name}
@@ -86,7 +90,7 @@ export const Avatar: React.FC<AvatarProps> = ({
   }
 
   return (
-    <div className={cn("relative inline-block shrink-0", className)}>
+    <div className={cn("relative inline-flex shrink-0", className)}>
       <div
         className={cn(
           'rounded-full font-bold flex items-center justify-center select-none ring-2 ring-white',

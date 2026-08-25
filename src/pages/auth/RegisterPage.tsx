@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { AlertCircle, CheckCircle2 } from 'lucide-react';
 import { SignUpDTO } from '../../services/interfaces';
-import { Button, Input } from '../../components/ui';
+import { Button, Input, StepProgress } from '../../components/ui';
 import { AuthLayout } from '../../layouts/AuthLayout';
 
 interface RegisterPageProps {
@@ -69,15 +69,12 @@ export const RegisterPage: React.FC<RegisterPageProps> = ({
     <AuthLayout
       title="Create Your Owner Account"
       subtitle={
-        <div className="flex flex-col items-center gap-2 w-full">
-          <div className="flex items-center gap-1.5 mt-1">
-            <div className="h-1.5 w-10 rounded-full bg-teal-600" />
-            <div className="h-1.5 w-10 rounded-full bg-slate-200" />
-          </div>
-          <span className="text-[11px] font-bold uppercase tracking-widest text-teal-700">
-            Account Registration
-          </span>
-        </div>
+        <StepProgress
+          currentStep={1}
+          totalSteps={2}
+          labels={['Account Registration', 'Workspace Setup']}
+          className="mt-2 mb-2"
+        />
       }
     >
       {infoMessage && (
@@ -153,7 +150,7 @@ export const RegisterPage: React.FC<RegisterPageProps> = ({
       </form>
 
       <div className="mt-6 pt-5 border-t border-slate-100 text-center">
-        <span className="text-sm text-slate-500">Already have a gym account? </span>
+        <span className="text-sm text-slate-600">Already have a gym account? </span>
         <button
           type="button"
           onClick={onNavigateToLogin}

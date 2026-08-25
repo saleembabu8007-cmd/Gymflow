@@ -170,9 +170,9 @@ export const MemberDetailModal: React.FC<MemberDetailModalProps> = ({
             {/* Mark Paid Button */}
             <Button
               id="member-detail-btn-markpaid"
+              variant="primary"
               size="sm"
               onClick={() => onQuickPay(member)}
-              className="bg-neutral-900 hover:bg-neutral-800 text-white font-semibold shadow-2xs"
             >
               Mark Paid
             </Button>
@@ -181,7 +181,7 @@ export const MemberDetailModal: React.FC<MemberDetailModalProps> = ({
             {onEditMember && (
               <Button
                 id="member-detail-btn-edit"
-                variant="outline"
+                variant="tertiary"
                 size="sm"
                 onClick={() => onEditMember(member)}
               >
@@ -422,7 +422,7 @@ export const MemberDetailModal: React.FC<MemberDetailModalProps> = ({
                 </div>
                 <div className="flex items-center gap-2 shrink-0">
                   <Button
-                    variant="outline"
+                    variant="tertiary"
                     size="sm"
                     onClick={() => setShowDeleteConfirm(false)}
                     disabled={isDeleting}
@@ -452,7 +452,7 @@ export const MemberDetailModal: React.FC<MemberDetailModalProps> = ({
             )}
 
             <Button
-              variant="outline"
+              variant="tertiary"
               size="sm"
               onClick={onClose}
               className="ml-auto"

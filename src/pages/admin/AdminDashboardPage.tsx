@@ -15,6 +15,7 @@ import {
 import { useServices } from '../../services/provider';
 import { PlatformGymTenant, PlatformStats } from '../../types';
 import { LoadingState } from '../../components/ui/LoadingState';
+import { FilterChips } from '../../components/ui/FilterChips';
 
 interface AdminDashboardPageProps {
   onLogout: () => void;
@@ -172,15 +173,15 @@ export const AdminDashboardPage: React.FC<AdminDashboardPageProps> = ({
                 />
               </div>
 
-              <select
-                value={filterStatus}
-                onChange={(e) => setFilterStatus(e.target.value as any)}
-                className="px-3 py-2 bg-zinc-900 border border-zinc-800 rounded-xl text-xs text-zinc-300 focus:outline-none focus:border-rose-500 cursor-pointer"
-              >
-                <option value="ALL">All Statuses</option>
-                <option value="ACTIVE">Active</option>
-                <option value="SUSPENDED">Suspended</option>
-              </select>
+              <FilterChips
+                options={[
+                  { id: 'ALL', label: 'All Statuses' },
+                  { id: 'ACTIVE', label: 'Active' },
+                  { id: 'SUSPENDED', label: 'Suspended' }
+                ]}
+                activeId={filterStatus}
+                onChange={(val) => setFilterStatus(val as any)}
+              />
             </div>
           </div>
 

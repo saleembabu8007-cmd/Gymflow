@@ -4,13 +4,15 @@ import { PageHeader } from '../components/ui/PageHeader';
 import { Button } from '../components/ui/Button';
 import { SearchInput } from '../components/ui/SearchInput';
 import { EmptyState } from '../components/ui/EmptyState';
-import { LoadingState } from '../components/ui/LoadingState';
 import { ErrorState } from '../components/ui/ErrorState';
+import { Skeleton, MemberRowSkeleton } from '../components/ui/Skeleton';
 import { StaleDataNotification } from '../components/common/StaleDataNotification';
+import { ListSection, LoadMore } from '../components/ui';
 import { Avatar } from '../components/ui/Avatar';
 import { Member, Payment, PaymentMethod } from '../types';
 import { useMembers } from '../hooks/useMembers';
 import { usePayments } from '../hooks/usePayments';
+import { useDelayedLoading } from '../hooks/useDelayedLoading';
 import { useGymSettings } from '../hooks/useGymSettings';
 import { formatCurrency } from '../utils/currencyUtils';
 import { formatDate, getDifferenceInDays } from '../utils/dateUtils';
@@ -31,6 +33,7 @@ import {
   Download,
 } from 'lucide-react';
 import { FilterChips, FilterChipOption } from '../components/ui/FilterChips';
+import { SegmentedControl } from '../components/ui/SegmentedControl';
 import { MemberRow } from '../components/ui/MemberRow';
 import { cn } from '../utils/classNames';
 
@@ -55,6 +58,8 @@ export const PaymentsPage: React.FC<PaymentsPageProps> = ({
 }) => {
   const { members, loading: loadingMembers, isRefreshing, isStale, error: membersError, fetchMembers } = useMembers();
   const { payments, loading: loadingPayments, error: paymentsError, fetchPayments } = usePayments();
+  const showLoadingMembers = useDelayedLoading(loadingMembers, 400);
+  const showLoadingPayments = useDelayedLoading(loadingPayments, 400);
   const { currencySymbol } = useGymSettings();
 
   // Primary Tabs: Pending (Default), Upcoming, Paid
@@ -66,6 +71,16 @@ export const PaymentsPage: React.FC<PaymentsPageProps> = ({
   const [pendingFilter, setPendingFilter] = useState<'ALL' | 'OVERDUE' | 'TODAY'>('ALL');
   const [upcomingFilter, setUpcomingFilter] = useState<'ALL' | '7_DAYS' | '14_DAYS' | '30_DAYS'>('ALL');
   const [paidMethodFilter, setPaidMethodFilter] = useState<string>('ALL');
+
+  // Load More state for Paid tab
+  const [isLoadingMore, setIsLoadingMore] = useState(false);
+  const handleLoadMorePaid = () => {
+    setIsLoadingMore(true);
+    setTimeout(() => {
+      setPaidPage(p => p + 1);
+      setIsLoadingMore(false);
+    }, 400);
+  };
 
   // 1. Compute Pending list (Overdue + Due today, sorted most urgent first)
   const pendingMembers = useMemo(() => {
@@ -159,11 +174,10 @@ export const PaymentsPage: React.FC<PaymentsPageProps> = ({
   }, [payments, paidMethodFilter, searchQuery]);
 
   const totalPaidCount = filteredPaid.length;
-  const totalPaidPages = Math.ceil(totalPaidCount / PAID_PAGE_SIZE) || 1;
   const paginatedPaid = useMemo(() => {
-    const start = (paidPage - 1) * PAID_PAGE_SIZE;
-    return filteredPaid.slice(start, start + PAID_PAGE_SIZE);
+    return filteredPaid.slice(0, paidPage * PAID_PAGE_SIZE);
   }, [filteredPaid, paidPage]);
+  const hasMorePaid = paidPage * PAID_PAGE_SIZE < totalPaidCount;
 
   const handleMemberClick = (member: Member) => {
     if (onSelectMember) {
@@ -234,7 +248,7 @@ export const PaymentsPage: React.FC<PaymentsPageProps> = ({
   };
 
   return (
-    <div className="space-y-5 max-w-6xl mx-auto">
+    <div className="space-y-6 sm:space-y-8 pb-12">
       <StaleDataNotification
         isStale={isStale}
         onRetry={() => {
@@ -243,60 +257,57 @@ export const PaymentsPage: React.FC<PaymentsPageProps> = ({
         }}
         isRefreshing={isRefreshing}
       />
-
-      {/* Page Header */}
-      <PageHeader
-        title="Payments"
-        subtitle="Track pending dues, upcoming renewals, and recorded payments"
-        actions={
-          <div className="flex items-center gap-2">
-            {payments.length > 0 && (
-              <Button
-                id="btn-payments-export-csv"
-                variant="outline"
-                size="md"
-                onClick={handleExportCSV}
-              >
-                Export CSV
-              </Button>
-            )}
-            {onRecordPayment && (
-              <Button
-                id="btn-payments-record-payment"
-                size="md"
-                onClick={onRecordPayment}
-              >
-                Record Payment
-              </Button>
-            )}
-          </div>
-        }
-      />
+      <div className="flex flex-col sm:flex-row sm:items-center justify-end gap-2 shrink-0">
+        {payments.length > 0 && (
+          <Button
+            id="btn-payments-export-csv"
+            variant="tertiary"
+            size="md"
+            onClick={handleExportCSV}
+          >
+            Export CSV
+          </Button>
+        )}
+        {onRecordPayment && (
+          <Button
+            id="btn-payments-record-payment"
+            variant="secondary"
+            size="md"
+            onClick={onRecordPayment}
+          >
+            Record Payment
+          </Button>
+        )}
+      </div>
 
       {/* Primary Tab Navigation & Controls */}
-      <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 pt-1">
-        {/* Primary Tabs */}
-        <FilterChips
-          options={[
-            { id: 'pending', label: 'Pending', count: pendingMembers.length, badgeVariant: pendingMembers.length > 0 ? 'danger' : 'neutral' },
-            { id: 'upcoming', label: 'Upcoming', count: upcomingMembers.length, badgeVariant: 'warning' },
-            { id: 'paid', label: 'Paid', count: payments.length, badgeVariant: 'success' },
-          ]}
-          activeId={activeTab}
-          onChange={(id) => setActiveTab(id as any)}
-        />
-
-        {/* Global Search across active tab */}
-        <div className="w-full md:w-72">
-          <SearchInput
-            placeholder="Search by name or phone..."
-            onSearchChange={setSearchQuery}
+      <div className="pt-1">
+        {/* Primary Tabs (Macro) */}
+        <div className="w-full md:w-[480px]">
+          <SegmentedControl
+            options={[
+              { value: 'pending', label: 'Pending', count: pendingMembers.length, badgeVariant: pendingMembers.length > 0 ? 'danger' : 'neutral' },
+              { value: 'upcoming', label: 'Upcoming', count: upcomingMembers.length, badgeVariant: 'warning' },
+              { value: 'paid', label: 'Paid', count: payments.length, badgeVariant: 'success' },
+            ]}
+            value={activeTab}
+            onChange={(value) => setActiveTab(value as TabType)}
           />
         </div>
       </div>
 
-      {/* Sub-filters based on Active Tab */}
-      <div className="pt-2 pb-1">
+      {/* Sub-filters & Search Strip (Micro) */}
+      <div className="flex items-center gap-3 overflow-x-auto pb-4 pt-2 scrollbar-none w-full">
+        <div className="w-[260px] shrink-0">
+          <SearchInput
+            placeholder="Search name or phone..."
+            value={searchQuery}
+            onSearchChange={setSearchQuery}
+          />
+        </div>
+        
+        <div className="w-px h-6 bg-slate-200 shrink-0 mx-1" />
+
         {activeTab === 'pending' && (
           <FilterChips
             options={[
@@ -306,6 +317,7 @@ export const PaymentsPage: React.FC<PaymentsPageProps> = ({
             ]}
             activeId={pendingFilter}
             onChange={(id) => setPendingFilter(id as any)}
+            className="pb-0"
           />
         )}
 
@@ -319,6 +331,7 @@ export const PaymentsPage: React.FC<PaymentsPageProps> = ({
             ]}
             activeId={upcomingFilter}
             onChange={(id) => setUpcomingFilter(id as any)}
+            className="pb-0"
           />
         )}
 
@@ -336,6 +349,7 @@ export const PaymentsPage: React.FC<PaymentsPageProps> = ({
               setPaidMethodFilter(id);
               setPaidPage(1);
             }}
+            className="pb-0"
           />
         )}
       </div>
@@ -352,32 +366,26 @@ export const PaymentsPage: React.FC<PaymentsPageProps> = ({
             transition={{ duration: 0.15 }}
             className="space-y-3"
           >
-            {loadingMembers ? (
-              <LoadingState message="Loading pending dues..." />
+            {showLoadingMembers ? (
+              <div className="flex flex-col gap-2">
+                {[1, 2, 3].map(i => <MemberRowSkeleton key={i} />)}
+              </div>
             ) : filteredPending.length === 0 ? (
-              <div className="py-16 text-center flex flex-col items-center justify-center space-y-2">
-                <div className="w-12 h-12 rounded-full bg-emerald-50 text-emerald-600 flex items-center justify-center mb-1">
-                  <CheckCircle2 className="w-6 h-6" />
-                </div>
-                <h3 className="text-base font-bold text-zinc-950">No pending payments.</h3>
-                <p className="text-xs sm:text-sm text-zinc-500 mt-1 max-w-sm">
-                  {searchQuery ? `No pending members match "${searchQuery}".` : 'All member dues are settled and up to date.'}
-                </p>
-                {searchQuery && (
-                  <div className="pt-2">
-                    <Button
-                      variant="outline"
-                      size="sm"
-                      onClick={() => setSearchQuery('')}
-                      className="text-xs"
-                    >
-                      Clear Search
-                    </Button>
-                  </div>
-                )}
+              <div className="pt-8">
+                <EmptyState
+                  icon={<CheckCircle2 />}
+                  title="No pending payments"
+                  description={searchQuery ? `No pending members match "${searchQuery}".` : 'All member dues are settled and up to date.'}
+                  actionLabel={searchQuery ? "Clear Search" : undefined}
+                  onAction={searchQuery ? () => setSearchQuery('') : undefined}
+                />
               </div>
             ) : (
-              <div className="space-y-2">
+              <ListSection
+                title={pendingFilter === 'ALL' ? 'All Pending' : pendingFilter === 'OVERDUE' ? 'Overdue' : 'Due Today'}
+                count={filteredPending.length}
+                badgeVariant={pendingFilter === 'OVERDUE' ? 'danger' : 'warning'}
+              >
                 {filteredPending.map((member) => (
                   <MemberRow
                     key={member.id}
@@ -388,7 +396,7 @@ export const PaymentsPage: React.FC<PaymentsPageProps> = ({
                     onQuickPay={onQuickPay}
                   />
                 ))}
-              </div>
+              </ListSection>
             )}
           </motion.div>
         )}
@@ -403,20 +411,26 @@ export const PaymentsPage: React.FC<PaymentsPageProps> = ({
             transition={{ duration: 0.15 }}
             className="space-y-3"
           >
-            {loadingMembers ? (
-              <LoadingState message="Loading upcoming renewals..." />
+            {showLoadingMembers ? (
+              <div className="flex flex-col gap-2">
+                {[1, 2, 3].map(i => <MemberRowSkeleton key={i} />)}
+              </div>
             ) : filteredUpcoming.length === 0 ? (
-              <div className="py-16 text-center flex flex-col items-center justify-center">
-                <div className="w-12 h-12 rounded-full bg-zinc-100 text-zinc-400 flex items-center justify-center mb-3">
-                  <Calendar className="w-6 h-6" />
-                </div>
-                <h3 className="text-base font-bold text-zinc-950">No payments due soon.</h3>
-                <p className="text-xs sm:text-sm text-zinc-500 mt-1 max-w-sm">
-                  {searchQuery ? 'No upcoming renewals match your search.' : 'No member renewals scheduled within the selected period.'}
-                </p>
+              <div className="pt-8">
+                <EmptyState
+                  icon={<Calendar />}
+                  title="No payments due soon"
+                  description={searchQuery ? 'No upcoming renewals match your search.' : 'No member renewals scheduled within the selected period.'}
+                  actionLabel={searchQuery ? "Clear Search" : undefined}
+                  onAction={searchQuery ? () => setSearchQuery('') : undefined}
+                />
               </div>
             ) : (
-              <div className="space-y-2">
+              <ListSection
+                title={upcomingFilter === 'ALL' ? 'All Upcoming' : `Next ${upcomingFilter.split('_')[0]} Days`}
+                count={filteredUpcoming.length}
+                badgeVariant="neutral"
+              >
                 {filteredUpcoming.map((member) => (
                   <MemberRow
                     key={member.id}
@@ -427,7 +441,7 @@ export const PaymentsPage: React.FC<PaymentsPageProps> = ({
                     onQuickPay={onQuickPay}
                   />
                 ))}
-              </div>
+              </ListSection>
             )}
           </motion.div>
         )}
@@ -442,123 +456,89 @@ export const PaymentsPage: React.FC<PaymentsPageProps> = ({
             transition={{ duration: 0.15 }}
             className="space-y-3"
           >
-            {loadingPayments ? (
-              <LoadingState message="Loading payment history..." />
+            {showLoadingPayments ? (
+              <div className="flex flex-col gap-2">
+                {[1, 2, 3, 4].map(i => <MemberRowSkeleton key={i} />)}
+              </div>
             ) : filteredPaid.length === 0 ? (
-              <div className="py-16 text-center flex flex-col items-center justify-center space-y-2">
-                <div className="w-12 h-12 rounded-full bg-zinc-100 text-zinc-400 flex items-center justify-center mb-1">
-                  <CreditCard className="w-6 h-6" />
-                </div>
-                <h3 className="text-base font-bold text-zinc-950">No payments recorded.</h3>
-                <p className="text-xs sm:text-sm text-zinc-500 mt-1 max-w-sm">
-                  {searchQuery ? `No payment records match "${searchQuery}".` : 'Transactions recorded using the "Mark Paid" button will appear here.'}
-                </p>
-                {searchQuery && (
-                  <div className="pt-2">
-                    <Button
-                      variant="outline"
-                      size="sm"
-                      onClick={() => setSearchQuery('')}
-                      className="text-xs"
-                    >
-                      Clear Search
-                    </Button>
-                  </div>
-                )}
+              <div className="pt-8">
+                <EmptyState
+                  icon={<CreditCard />}
+                  title="No payments recorded"
+                  description={searchQuery ? `No payment records match "${searchQuery}".` : 'Transactions recorded using the "Mark Paid" button will appear here.'}
+                  actionLabel={searchQuery ? "Clear Search" : undefined}
+                  onAction={searchQuery ? () => setSearchQuery('') : undefined}
+                />
               </div>
             ) : (
-              <>
-                <div className="space-y-2">
-                  {paginatedPaid.map((item) => {
-                    const itemMemberName = item.memberName || 'Member';
-                    const itemAmount = Number(item.amount) || 0;
+              <ListSection
+                title={paidMethodFilter === 'ALL' ? 'All Received Payments' : `${paidMethodFilter} Payments`}
+                count={totalPaidCount}
+                badgeVariant="success"
+              >
+                {paginatedPaid.map((item) => {
+                  const itemMemberName = item.memberName || 'Member';
+                  const itemAmount = Number(item.amount) || 0;
 
-                    return (
-                      <div
-                        key={item.id}
-                        id={`payment-paid-row-${item.id}`}
-                        onClick={() => handlePaidRecordClick(item)}
-                        className="group relative flex flex-col sm:flex-row sm:items-center justify-between gap-4 p-4 sm:p-5 rounded-2xl bg-white border border-slate-100 transition-all duration-200 hover:shadow-[0_4px_20px_rgba(15,23,42,0.05)] cursor-pointer overflow-hidden"
-                      >
-                        {/* Left: Member info, paid date, method */}
-                        <div className="flex items-center gap-4 flex-1 min-w-0">
-                          <Avatar name={itemMemberName} size="md" />
+                  return (
+                    <div
+                      key={item.id}
+                      id={`payment-paid-row-${item.id}`}
+                      onClick={() => handlePaidRecordClick(item)}
+                      className="group relative flex flex-col sm:flex-row sm:items-center justify-between gap-4 p-4 sm:p-5 rounded-2xl bg-white border border-slate-100 transition-all duration-200 hover:shadow-[0_4px_20px_rgba(15,23,42,0.05)] cursor-pointer overflow-hidden"
+                    >
+                      {/* Left: Member info, paid date, method */}
+                      <div className="flex items-center gap-4 flex-1 min-w-0">
+                        <Avatar name={itemMemberName} size="md" />
 
-                          <div className="flex-1 min-w-0">
-                            <div className="flex items-center gap-2 flex-wrap">
-                              <span className="font-semibold text-[15px] sm:text-base text-slate-900 truncate">
-                                {itemMemberName}
-                              </span>
-                              <span className="px-2 py-0.5 text-[10px] font-bold uppercase tracking-wider rounded border border-slate-200 bg-slate-50 text-slate-500 shrink-0">
-                                {item.paymentMethod === 'BANK_TRANSFER'
-                                  ? 'Bank Transfer'
-                                  : item.paymentMethod || 'Cash'}
-                              </span>
-                            </div>
-
-                            <div className="mt-1.5 flex items-center gap-3">
-                              {item.memberPhone && (
-                                <span className="text-[13px] text-slate-500 font-mono tracking-tight">{item.memberPhone}</span>
-                              )}
-                              <span className="inline-flex items-center gap-1.5 px-2 py-0.5 rounded border border-emerald-200 bg-emerald-50 text-[11px] font-bold uppercase tracking-wider text-emerald-600">
-                                <CheckCircle2 className="w-3.5 h-3.5 text-emerald-500" />
-                                Paid {formatDate(item.paymentDate, { format: 'short' })}
-                              </span>
-                            </div>
-                          </div>
-                        </div>
-
-                        {/* Right: Received Amount */}
-                        <div className="flex items-center gap-2.5 text-right shrink-0">
-                          <div className="text-right mr-2">
-                            <span className="text-[15px] sm:text-base font-mono font-bold text-slate-900 block tracking-tight">
-                              +{formatCurrency(itemAmount, currencySymbol)}
+                        <div className="flex-1 min-w-0">
+                          <div className="flex items-center gap-2 flex-wrap">
+                            <span className="font-semibold text-[15px] sm:text-base text-slate-900 truncate">
+                              {itemMemberName}
                             </span>
-                            <span className="text-[11px] font-bold uppercase tracking-wider text-slate-400 mt-0.5 block">
-                              Received
+                            <span className="px-2 py-0.5 text-[10px] font-bold uppercase tracking-wider rounded border border-slate-200 bg-slate-50 text-slate-600 shrink-0">
+                              {item.paymentMethod === 'BANK_TRANSFER'
+                                ? 'Bank Transfer'
+                                : item.paymentMethod || 'Cash'}
                             </span>
                           </div>
-                          <div className="w-8 h-8 rounded-full bg-slate-50 flex items-center justify-center border border-slate-100 group-hover:bg-slate-100 transition-colors hidden sm:flex">
-                            <ChevronRight className="w-4 h-4 text-slate-400" />
+
+                          <div className="mt-1.5 flex items-center gap-3">
+                            {item.memberPhone && (
+                              <span className="text-[13px] text-slate-600 font-mono tracking-tight">{item.memberPhone}</span>
+                            )}
+                            <span className="inline-flex items-center gap-1.5 px-2 py-0.5 rounded border border-emerald-200 bg-emerald-50 text-[11px] font-bold uppercase tracking-wider text-emerald-600">
+                              <CheckCircle2 className="w-3.5 h-3.5 text-emerald-500" />
+                              Paid {formatDate(item.paymentDate, { format: 'short' })}
+                            </span>
                           </div>
                         </div>
                       </div>
-                    );
-                  })}
-                </div>
 
-                {/* Pagination for Paid Records */}
-                {totalPaidPages > 1 && (
-                  <div className="flex items-center justify-between py-4 border-t border-zinc-100 text-xs mt-2">
-                    <span className="text-zinc-500">
-                      Showing {((paidPage - 1) * PAID_PAGE_SIZE) + 1}–{Math.min(paidPage * PAID_PAGE_SIZE, totalPaidCount)} of {totalPaidCount} payments
-                    </span>
-                    <div className="flex items-center gap-2">
-                      <Button
-                        variant="outline"
-                        size="sm"
-                        onClick={() => setPaidPage((p) => Math.max(1, p - 1))}
-                        disabled={paidPage === 1}
-                        leftIcon={<ChevronLeft className="w-3.5 h-3.5" />}
-                      >
-                        Previous
-                      </Button>
-                      <span className="px-2 font-semibold text-zinc-700">
-                        Page {paidPage} of {totalPaidPages}
-                      </span>
-                      <Button
-                        variant="outline"
-                        size="sm"
-                        onClick={() => setPaidPage((p) => Math.min(totalPaidPages, p + 1))}
-                        disabled={paidPage === totalPaidPages}
-                        rightIcon={<ChevronRight className="w-3.5 h-3.5" />}
-                      >
-                        Next
-                      </Button>
+                      {/* Right: Received Amount */}
+                      <div className="flex items-center gap-2.5 text-right shrink-0">
+                        <div className="text-right mr-2">
+                          <span className="text-[15px] sm:text-base font-mono font-bold text-slate-900 block tracking-tight">
+                            +{formatCurrency(itemAmount, currencySymbol)}
+                          </span>
+                          <span className="text-[11px] font-bold uppercase tracking-wider text-slate-400 mt-0.5 block">
+                            Received
+                          </span>
+                        </div>
+                        <div className="w-8 h-8 rounded-full bg-slate-50 flex items-center justify-center border border-slate-100 group-hover:bg-slate-100 transition-colors hidden sm:flex">
+                          <ChevronRight className="w-4 h-4 text-slate-400" />
+                        </div>
+                      </div>
                     </div>
-                  </div>
-                )}
-              </>
+                  );
+                })}
+
+                <LoadMore 
+                  isLoading={isLoadingMore}
+                  hasMore={hasMorePaid}
+                  onLoadMore={handleLoadMorePaid}
+                />
+              </ListSection>
             )}
           </motion.div>
         )}

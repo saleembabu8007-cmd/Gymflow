@@ -8,6 +8,7 @@ export interface ProgressRingProps {
   variant?: 'auto' | 'success' | 'warning' | 'danger' | 'brand';
   caption?: string;
   label?: React.ReactNode;
+  textColor?: string;
   className?: string;
 }
 
@@ -18,6 +19,7 @@ export const ProgressRing: React.FC<ProgressRingProps> = ({
   variant = 'auto',
   caption,
   label,
+  textColor = 'text-slate-900',
   className,
 }) => {
   const percentage = Math.min(Math.max((value / max) * 100, 0), 100);
@@ -55,7 +57,7 @@ export const ProgressRing: React.FC<ProgressRingProps> = ({
     warning: { stroke: 'text-amber-500', track: 'text-amber-50' },
     danger: { stroke: 'text-rose-500', track: 'text-rose-50' },
     brand: { stroke: 'text-teal-500', track: 'text-teal-50' },
-    auto: { stroke: 'text-slate-500', track: 'text-slate-50' },
+    auto: { stroke: 'text-slate-600', track: 'text-slate-50' },
   };
 
   const colors = colorVariants[activeVariant as keyof typeof colorVariants];
@@ -94,7 +96,7 @@ export const ProgressRing: React.FC<ProgressRingProps> = ({
       
       {/* Centered Value and Caption */}
       <div className="absolute inset-0 flex flex-col items-center justify-center text-center">
-        <span className={cn('font-bold tracking-tighter text-slate-900 leading-none', fontSize)}>
+        <span className={cn('font-black font-display tabular-nums tracking-tight leading-none', fontSize, textColor)}>
           {label ?? `${Math.round(percentage)}%`}
         </span>
         {caption && size !== 'sm' && (

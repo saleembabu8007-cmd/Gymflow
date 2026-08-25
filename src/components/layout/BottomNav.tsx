@@ -90,26 +90,24 @@ export const BottomNav: React.FC<BottomNavProps> = ({
               id={`bottom-nav-${item.id.replace('/', '') || 'today'}`}
               onClick={() => onNavigate(item.id)}
               className={cn(
-                'relative flex flex-col items-center justify-center min-h-[48px] py-1 px-3 rounded-xl text-[11px] font-medium transition-colors min-w-[64px] touch-manipulation',
-                isActive ? 'text-teal-700 font-bold' : 'text-slate-400 hover:text-slate-600'
+                'relative flex flex-col items-center justify-center min-h-[48px] py-1.5 px-3 rounded-2xl text-[11px] font-medium transition-colors min-w-[64px] touch-manipulation',
+                isActive ? 'bg-teal-50 text-teal-700 font-bold' : 'text-slate-400 hover:text-slate-600 bg-transparent'
               )}
             >
-              <div className="relative">
-                <div className={cn("p-1 rounded-full transition-colors", isActive ? "bg-teal-50" : "bg-transparent")}>
-                  <Icon
-                    className={cn(
-                      'w-[22px] h-[22px] transition-transform',
-                      isActive ? 'text-teal-600 stroke-[2.5]' : 'text-slate-400 stroke-[2]'
-                    )}
-                  />
-                </div>
+              <div className="relative flex items-center justify-center mb-0.5">
+                <Icon
+                  className={cn(
+                    'w-[22px] h-[22px] transition-transform stroke-[2]',
+                    isActive ? 'text-teal-600 fill-teal-100' : 'text-slate-400 fill-transparent'
+                  )}
+                />
                 {item.badge !== undefined && (
-                  <span className="absolute -top-1 -right-1 min-w-[16px] h-4 px-1 bg-rose-500 text-white text-[9px] font-bold rounded-full flex items-center justify-center ring-2 ring-white">
+                  <span className="absolute -top-1 -right-1.5 min-w-[16px] h-4 px-1 bg-rose-500 text-white text-[9px] font-bold rounded-full flex items-center justify-center ring-2 ring-white">
                     {item.badge}
                   </span>
                 )}
               </div>
-              <span className="truncate mt-0.5">{item.label}</span>
+              <span className="truncate">{item.label}</span>
             </button>
           );
         })}
@@ -120,28 +118,26 @@ export const BottomNav: React.FC<BottomNavProps> = ({
           id="bottom-nav-more"
           onClick={() => setIsMoreOpen(true)}
           className={cn(
-            'relative flex flex-col items-center justify-center min-h-[48px] py-1 px-3 rounded-xl text-[11px] font-medium transition-colors min-w-[64px] touch-manipulation',
+            'relative flex flex-col items-center justify-center min-h-[48px] py-1.5 px-3 rounded-2xl text-[11px] font-medium transition-colors min-w-[64px] touch-manipulation',
             isSecondaryActive || isMoreOpen
-              ? 'text-teal-700 font-bold'
-              : 'text-slate-400 hover:text-slate-600'
+              ? 'bg-teal-50 text-teal-700 font-bold'
+              : 'text-slate-400 hover:text-slate-600 bg-transparent'
           )}
         >
-          <div className="relative">
-            <div className={cn("p-1 rounded-full transition-colors", (isSecondaryActive || isMoreOpen) ? "bg-teal-50" : "bg-transparent")}>
-              <MoreHorizontal
-                className={cn(
-                  'w-[22px] h-[22px] transition-transform',
-                  isSecondaryActive || isMoreOpen
-                    ? 'text-teal-600 stroke-[2.5]'
-                    : 'text-slate-400 stroke-[2]'
-                )}
-              />
-            </div>
+          <div className="relative flex items-center justify-center mb-0.5">
+            <MoreHorizontal
+              className={cn(
+                'w-[22px] h-[22px] transition-transform stroke-[2]',
+                isSecondaryActive || isMoreOpen
+                  ? 'text-teal-600 fill-teal-100'
+                  : 'text-slate-400 fill-transparent'
+              )}
+            />
             {isSecondaryActive && (
               <span className="absolute -top-0.5 -right-0.5 w-2 h-2 bg-rose-500 rounded-full ring-2 ring-white" />
             )}
           </div>
-          <span className="mt-0.5">More</span>
+          <span className="truncate">More</span>
         </button>
       </nav>
 

@@ -1,6 +1,6 @@
 import React from 'react';
 import { Loader2 } from 'lucide-react';
-import { SkeletonRow } from './Skeleton';
+import { MemberRowSkeleton } from './Skeleton';
 import { cn } from '../../utils/classNames';
 
 export interface LoadingStateProps {
@@ -16,10 +16,10 @@ export const LoadingState: React.FC<LoadingStateProps> = ({
 }) => {
   if (variant === 'skeleton') {
     return (
-      <div className={cn('w-full', className)}>
-        <SkeletonRow />
-        <SkeletonRow />
-        <SkeletonRow />
+      <div className={cn('w-full flex flex-col gap-3', className)}>
+        <MemberRowSkeleton />
+        <MemberRowSkeleton />
+        <MemberRowSkeleton />
       </div>
     );
   }

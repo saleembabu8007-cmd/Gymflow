@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { ShieldCheck, AlertCircle } from 'lucide-react';
-import { Button, Input, Select, Card } from '../../components/ui';
+import { Button, Input, Select, StepProgress } from '../../components/ui';
+import { AuthLayout } from '../../layouts/AuthLayout';
 import { useAuth } from '../../hooks/useAuth';
 
 interface GymSetupPageProps {
@@ -49,107 +50,106 @@ export const GymSetupPage: React.FC<GymSetupPageProps> = ({ onComplete }) => {
   };
 
   return (
-    <div className="min-h-screen bg-neutral-50 flex items-center justify-center p-4 sm:p-6 lg:p-8">
-      <div className="w-full max-w-md space-y-6">
-        {/* Header */}
-        <div className="text-center space-y-2">
-          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-neutral-900 text-white text-xs font-semibold tracking-wide">
-            Step 2 of 2 — Gym Setup
+    <AuthLayout
+      title="Let's set up your gym"
+      subtitle={
+        <div className="flex flex-col items-center gap-2 w-full">
+          <StepProgress
+            currentStep={2}
+            totalSteps={2}
+            labels={['Account Registration', 'Workspace Setup']}
+            className="mt-2 mb-2"
+          />
+          <p className="text-[14px] text-slate-600 mt-2 max-w-sm mx-auto text-center leading-relaxed">
+            Welcome, <span className="font-semibold text-slate-900">{user?.name || 'Gym Owner'}</span>! Enter your gym details to configure your workspace.
+          </p>
+        </div>
+      }
+    >
+      {errorMessage && (
+        <div className="mb-6 p-3.5 bg-rose-50 border border-rose-200 text-rose-700 text-xs font-semibold rounded-xl flex items-center gap-2.5">
+          <AlertCircle className="w-4 h-4 shrink-0 text-rose-600" />
+          <span>{errorMessage}</span>
+        </div>
+      )}
+
+      <form onSubmit={handleSubmit} className="space-y-5">
+        <div>
+          <Input
+            label="Gym Name"
+            placeholder="e.g. Iron Vault Fitness"
+            value={formData.name}
+            onChange={(e) => setFormData({ ...formData, name: e.target.value })}
+            required
+          />
+        </div>
+
+        <div>
+          <Input
+            label="Contact Phone Number"
+            placeholder="+91 98765 43210"
+            value={formData.phone}
+            onChange={(e) => setFormData({ ...formData, phone: e.target.value })}
+            required
+          />
+        </div>
+
+        <div className="grid grid-cols-2 gap-4">
+          <div>
+            <Select
+              label="Currency"
+              value={formData.currency}
+              onChange={(val) => setFormData({ ...formData, currency: val })}
+              options={[
+                { value: 'INR', label: '₹ INR (Rupees)' },
+                { value: 'USD', label: '$ USD (Dollars)' },
+                { value: 'EUR', label: '€ EUR (Euros)' },
+                { value: 'AED', label: 'AED (Dirhams)' },
+              ]}
+            />
           </div>
-          <h1 className="text-2xl font-bold tracking-tight text-neutral-900">
-            Let's set up your gym
-          </h1>
-          <p className="text-sm text-neutral-600">
-            Welcome, <span className="font-semibold text-neutral-900">{user?.name || 'Gym Owner'}</span>! Enter your gym details to configure your workspace.
+
+          <div>
+            <Select
+              label="Timezone"
+              value={formData.timezone}
+              onChange={(val) => setFormData({ ...formData, timezone: val })}
+              options={[
+                { value: 'Asia/Kolkata', label: 'IST (Kolkata)' },
+                { value: 'UTC', label: 'UTC (GMT)' },
+                { value: 'America/New_York', label: 'EST (New York)' },
+                { value: 'Europe/London', label: 'BST (London)' },
+              ]}
+            />
+          </div>
+        </div>
+
+        {/* Workspace Setup Summary */}
+        <div className="p-4 rounded-xl bg-slate-50 border border-slate-200 space-y-1.5">
+          <div className="flex items-center justify-between text-xs font-semibold text-slate-900">
+            <span className="flex items-center gap-1.5">
+              <ShieldCheck className="w-4 h-4 text-emerald-600" />
+              GymFlow Workspace Setup
+            </span>
+            <span className="text-emerald-700 font-bold text-[11px] bg-emerald-100 px-2 py-0.5 rounded uppercase tracking-wider">Ready</span>
+          </div>
+          <p className="text-[13px] text-slate-600 leading-relaxed">
+            Includes member management, WhatsApp payment reminders, and payment collection ledgers.
           </p>
         </div>
 
-        {/* Card Form */}
-        <Card className="p-6 sm:p-8 shadow-xs border border-neutral-200 bg-white">
-          {errorMessage && (
-            <div className="mb-6 p-3.5 bg-rose-50 border border-rose-200 text-rose-700 text-xs font-semibold rounded-xl flex items-center gap-2.5">
-              <AlertCircle className="w-4 h-4 shrink-0 text-rose-600" />
-              <span>{errorMessage}</span>
-            </div>
-          )}
-
-          <form onSubmit={handleSubmit} className="space-y-5">
-            <div>
-              <Input
-                label="Gym Name"
-                placeholder="e.g. Iron Vault Fitness"
-                value={formData.name}
-                onChange={(e) => setFormData({ ...formData, name: e.target.value })}
-                required
-              />
-            </div>
-
-            <div>
-              <Input
-                label="Contact Phone Number"
-                placeholder="+91 98765 43210"
-                value={formData.phone}
-                onChange={(e) => setFormData({ ...formData, phone: e.target.value })}
-                required
-              />
-            </div>
-
-            <div className="grid grid-cols-2 gap-4">
-              <div>
-                <Select
-                  label="Currency"
-                  value={formData.currency}
-                  onChange={(e) => setFormData({ ...formData, currency: e.target.value })}
-                  options={[
-                    { value: 'INR', label: '₹ INR (Rupees)' },
-                    { value: 'USD', label: '$ USD (Dollars)' },
-                    { value: 'EUR', label: '€ EUR (Euros)' },
-                    { value: 'AED', label: 'AED (Dirhams)' },
-                  ]}
-                />
-              </div>
-
-              <div>
-                <Select
-                  label="Timezone"
-                  value={formData.timezone}
-                  onChange={(e) => setFormData({ ...formData, timezone: e.target.value })}
-                  options={[
-                    { value: 'Asia/Kolkata', label: 'IST (Kolkata)' },
-                    { value: 'UTC', label: 'UTC (GMT)' },
-                    { value: 'America/New_York', label: 'EST (New York)' },
-                    { value: 'Europe/London', label: 'BST (London)' },
-                  ]}
-                />
-              </div>
-            </div>
-
-            {/* Workspace Setup Summary */}
-            <div className="p-4 rounded-xl bg-neutral-50 border border-neutral-200 space-y-1.5">
-              <div className="flex items-center justify-between text-xs font-semibold text-neutral-900">
-                <span className="flex items-center gap-1.5">
-                  <ShieldCheck className="w-4 h-4 text-emerald-600" />
-                  GymFlow Workspace Setup
-                </span>
-                <span className="text-emerald-700 font-bold text-[11px] bg-emerald-100 px-2 py-0.5 rounded">Ready</span>
-              </div>
-              <p className="text-xs text-neutral-500 leading-relaxed">
-                Includes member management, WhatsApp payment reminders, and payment collection ledgers.
-              </p>
-            </div>
-
-            <Button
-              type="submit"
-              variant="primary"
-              size="lg"
-              fullWidth
-              isLoading={loading}
-            >
-              Complete Setup & Open Dashboard
-            </Button>
-          </form>
-        </Card>
-      </div>
-    </div>
+        <div className="pt-2">
+          <Button
+            type="submit"
+            variant="primary"
+            size="lg"
+            fullWidth
+            isLoading={loading}
+          >
+            Complete Setup & Open Dashboard
+          </Button>
+        </div>
+      </form>
+    </AuthLayout>
   );
 };

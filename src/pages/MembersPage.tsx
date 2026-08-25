@@ -1,13 +1,15 @@
 import React, { useState, useMemo, useEffect } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
-import { PageHeader } from '../components/ui/PageHeader';
 import { Avatar } from '../components/ui/Avatar';
 import { Button } from '../components/ui/Button';
 import { ErrorState } from '../components/ui/ErrorState';
-import { Skeleton } from '../components/ui/Skeleton';
+import { Skeleton, MemberRowSkeleton } from '../components/ui/Skeleton';
+import { EmptyState } from '../components/ui/EmptyState';
+import { ListSection, LoadMore } from '../components/ui';
 import { StaleDataNotification } from '../components/common/StaleDataNotification';
 import { Member } from '../types';
 import { useMembers } from '../hooks/useMembers';
+import { useDelayedLoading } from '../hooks/useDelayedLoading';
 import { useGymSettings } from '../hooks/useGymSettings';
 import { formatCurrency } from '../utils/currencyUtils';
 import { formatDate, getDifferenceInDays } from '../utils/dateUtils';
@@ -35,6 +37,7 @@ export const MembersPage: React.FC<MembersPageProps> = ({
   onSelectMember,
 }) => {
   const { members, loading, isRefreshing, isStale, error, setFilter, fetchMembers, counts } = useMembers();
+  const showLoading = useDelayedLoading(loading, 400);
   const { currencySymbol } = useGymSettings();
 
   const [activeFilter, setActiveFilter] = useState<FilterStatus>('ALL');
@@ -83,11 +86,17 @@ export const MembersPage: React.FC<MembersPageProps> = ({
   ];
 
   const totalMembersCount = members.length;
-  const totalPages = Math.ceil(totalMembersCount / PAGE_SIZE) || 1;
-  const paginatedMembers = useMemo(() => {
-    const start = (currentPage - 1) * PAGE_SIZE;
-    return members.slice(start, start + PAGE_SIZE);
-  }, [members, currentPage]);
+  const paginatedMembers = members.slice(0, currentPage * PAGE_SIZE);
+  const hasMore = currentPage * PAGE_SIZE < totalMembersCount;
+
+  const [isLoadingMore, setIsLoadingMore] = useState(false);
+  const handleLoadMore = () => {
+    setIsLoadingMore(true);
+    setTimeout(() => {
+      setCurrentPage(p => p + 1);
+      setIsLoadingMore(false);
+    }, 400);
+  };
 
 
   const isSearching = searchInput.trim().length > 0 || activeFilter !== 'ALL';
@@ -111,99 +120,94 @@ export const MembersPage: React.FC<MembersPageProps> = ({
     <div className="space-y-6 sm:space-y-8 max-w-5xl mx-auto pb-12">
       <StaleDataNotification isStale={isStale} onRetry={() => fetchMembers(true)} isRefreshing={isRefreshing} />
 
-      <PageHeader
-        title="Members"
-        subtitle="Manage your gym members and their payments."
-        actions={<Button size="md" onClick={onAddMember}>Add Member</Button>}
-      />
-
-      <div className="space-y-4 pt-2">
-        <div className="flex flex-col sm:flex-row sm:items-center gap-4">
-          <div className="w-full sm:flex-1">
-            <SearchInput
-              value={searchInput}
-              onSearchChange={(val) => {
-                setSearchInput(val);
-                setCurrentPage(1);
-                setFilter((prev) => ({ ...prev, search: val }));
-              }}
-              placeholder="Search by name or phone..."
-            />
-          </div>
-          
-          <div className="hidden sm:flex items-center gap-1.5 p-1 bg-slate-100 rounded-xl border border-slate-200">
-            <IconButton
-              icon={<AlignJustify className="w-4 h-4" />}
-              aria-label="Comfortable view"
-              variant="ghost"
-              onClick={() => setViewMode('comfortable')}
-              className={cn("rounded-lg hover:bg-white hover:shadow-sm", viewMode === 'comfortable' && "bg-white shadow-sm text-teal-600")}
-            />
-            <IconButton
-              icon={<LayoutList className="w-4 h-4" />}
-              aria-label="Compact view"
-              variant="ghost"
-              onClick={() => setViewMode('compact')}
-              className={cn("rounded-lg hover:bg-white hover:shadow-sm", viewMode === 'compact' && "bg-white shadow-sm text-teal-600")}
-            />
-          </div>
+      <div className="flex items-center gap-3 overflow-x-auto pb-2 pt-2 scrollbar-none w-full">
+        <div className="w-[260px] shrink-0">
+          <SearchInput
+            value={searchInput}
+            onSearchChange={(val) => {
+              setSearchInput(val);
+              setCurrentPage(1);
+              setFilter((prev) => ({ ...prev, search: val }));
+            }}
+            placeholder="Search name or phone..."
+          />
         </div>
+        
+        <div className="w-px h-6 bg-slate-200 shrink-0 mx-1" />
 
         <FilterChips<FilterStatus>
           options={filterTabs}
           activeId={activeFilter}
           onChange={handleFilterChange}
+          className="pb-0"
         />
+
+        <div className="hidden sm:flex items-center gap-1 p-1 bg-slate-100/80 rounded-xl border border-slate-200 shrink-0 ml-auto h-[40px]">
+          <IconButton
+            icon={<AlignJustify className="w-4 h-4" />}
+            aria-label="Comfortable view"
+            variant="default"
+            size="sm"
+            onClick={() => setViewMode('comfortable')}
+            className={cn("rounded-lg hover:bg-white hover:shadow-sm h-full w-8", viewMode === 'comfortable' && "bg-white shadow-sm text-teal-600")}
+          />
+          <IconButton
+            icon={<LayoutList className="w-4 h-4" />}
+            aria-label="Compact view"
+            variant="default"
+            size="sm"
+            onClick={() => setViewMode('compact')}
+            className={cn("rounded-lg hover:bg-white hover:shadow-sm h-full w-8", viewMode === 'compact' && "bg-white shadow-sm text-teal-600")}
+          />
+        </div>
       </div>
 
-      {loading && members.length === 0 ? (
-        <div className="space-y-4">
+      {showLoading && members.length === 0 ? (
+        <div className={cn("flex flex-col", viewMode === 'compact' ? "gap-1" : "gap-2")}>
           {[1, 2, 3, 4].map(i => (
-            <div key={i} className="py-4 border-b border-zinc-100 flex items-center gap-4">
-              <Skeleton className="w-12 h-12 rounded-full" />
-              <div className="space-y-2 flex-1">
-                <Skeleton className="h-5 w-48" />
-                <Skeleton className="h-4 w-32" />
-              </div>
-            </div>
+            <MemberRowSkeleton key={i} className={cn(viewMode === 'compact' && "py-2.5 sm:py-3")} />
           ))}
         </div>
       ) : hasNoMembersEver ? (
-        <div className="py-24 flex flex-col items-center justify-center text-center bg-zinc-50/50 rounded-3xl border border-zinc-100 mt-4">
-          <div className="w-16 h-16 rounded-2xl bg-white shadow-sm border border-zinc-100 text-zinc-400 flex items-center justify-center mb-6">
-            <Users className="w-8 h-8" />
-          </div>
-          <h2 className="text-xl font-bold text-zinc-950">Add your first member</h2>
-          <p className="text-base text-zinc-500 mt-2 max-w-md">
-            Start tracking memberships, collecting payments, and sending WhatsApp reminders from one place.
-          </p>
-          <div className="mt-8">
-            <Button size="lg" onClick={onAddMember}>Add Member</Button>
-          </div>
-        </div>
+        <motion.div 
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ duration: 0.15 }}
+          className="pt-8"
+        >
+          <EmptyState
+            icon={<Users />}
+            title="Add your first member"
+            description="Start tracking memberships, collecting payments, and sending WhatsApp reminders from one place."
+            actionLabel="Add Member"
+            onAction={onAddMember}
+          />
+        </motion.div>
       ) : hasNoSearchResults ? (
-        <div className="py-24 flex flex-col items-center justify-center text-center">
-          <div className="w-16 h-16 rounded-2xl bg-zinc-50 text-zinc-400 flex items-center justify-center mb-4">
-            <Search className="w-8 h-8" />
-          </div>
-          <h2 className="text-xl font-bold text-zinc-950">No members found</h2>
-          <p className="text-base text-zinc-500 mt-2 max-w-md">
-            {searchInput ? `We couldn't find anyone matching "${searchInput}".` : 'No members found with the current filter.'}
-          </p>
-          <div className="mt-6 flex gap-3">
-            {searchInput && <Button variant="outline" onClick={handleClearSearch}>Clear Search</Button>}
-            {activeFilter !== 'ALL' && <Button variant="secondary" onClick={() => handleFilterChange('ALL')}>View All Members</Button>}
-          </div>
-        </div>
+        <motion.div 
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ duration: 0.15 }}
+          className="pt-8"
+        >
+          <EmptyState
+            icon={<Search />}
+            title="No members found"
+            description={searchInput ? `We couldn't find anyone matching "${searchInput}".` : 'No members found with the current filter.'}
+            actionLabel={searchInput ? "Clear Search" : activeFilter !== 'ALL' ? "View All Members" : undefined}
+            onAction={searchInput ? handleClearSearch : activeFilter !== 'ALL' ? () => handleFilterChange('ALL') : undefined}
+          />
+        </motion.div>
       ) : (
-        <AnimatePresence mode="wait">
-          <motion.div
-            key={`${activeFilter}-${currentPage}-${viewMode}`}
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
-            transition={{ duration: 0.15 }}
-            className={cn("flex flex-col", viewMode === 'compact' ? "gap-1" : "gap-2")}
+        <motion.div
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ duration: 0.15 }}
+        >
+          <ListSection
+            title={activeFilter === 'ALL' ? 'All Members' : `${activeFilter} Members`}
+            count={totalMembersCount}
+            badgeVariant={activeFilter === 'EXPIRED' ? 'danger' : activeFilter === 'DUE_SOON' ? 'warning' : 'neutral'}
           >
             {paginatedMembers.map((member) => (
               <MemberRow
@@ -214,42 +218,19 @@ export const MembersPage: React.FC<MembersPageProps> = ({
                 onRemind={onSendReminder}
                 onQuickPay={onQuickPay}
                 highlighted={recentPaymentId === member.id}
-                className={cn(viewMode === 'compact' && "py-2.5 sm:py-3")}
               />
             ))}
 
-            {totalPages > 1 && (
-              <div className="flex items-center justify-between py-6 border-t border-zinc-100 mt-6 text-sm">
-                <span className="text-zinc-500 hidden sm:inline-block">
-                  Showing {((currentPage - 1) * PAGE_SIZE) + 1}–{Math.min(currentPage * PAGE_SIZE, totalMembersCount)} of {totalMembersCount} members
-                </span>
-                <div className="flex items-center gap-2 w-full sm:w-auto justify-between sm:justify-end">
-                  <Button
-                    variant="outline"
-                    size="sm"
-                    onClick={() => setCurrentPage((p) => Math.max(1, p - 1))}
-                    disabled={currentPage === 1}
-                    leftIcon={<ChevronLeft className="w-4 h-4" />}
-                  >
-                    Previous
-                  </Button>
-                  <span className="px-3 font-semibold text-zinc-700 sm:hidden">
-                    {currentPage} / {totalPages}
-                  </span>
-                  <Button
-                    variant="outline"
-                    size="sm"
-                    onClick={() => setCurrentPage((p) => Math.min(totalPages, p + 1))}
-                    disabled={currentPage === totalPages}
-                    rightIcon={<ChevronRight className="w-4 h-4" />}
-                  >
-                    Next
-                  </Button>
-                </div>
-              </div>
+            {hasMore && (
+              <LoadMore
+                onLoadMore={handleLoadMore}
+                isLoading={isLoadingMore}
+                hasMore={hasMore}
+                className="mt-6"
+              />
             )}
-          </motion.div>
-        </AnimatePresence>
+          </ListSection>
+        </motion.div>
       )}
 
       {/* Mobile Sticky FAB */}

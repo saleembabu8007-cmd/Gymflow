@@ -3,9 +3,12 @@ import { Modal } from '../ui/Modal';
 import { SearchInput } from '../ui/SearchInput';
 import { StatusBadge } from '../ui/StatusBadge';
 import { Avatar } from '../ui/Avatar';
+import { SearchResultSkeleton } from '../ui/Skeleton';
 import { Member } from '../../types';
 import { useMembers } from '../../hooks/useMembers';
+import { useDelayedLoading } from '../../hooks/useDelayedLoading';
 import { formatCurrency } from '../../utils/currencyUtils';
+import { motion, AnimatePresence } from 'motion/react';
 import { useGymSettings } from '../../hooks/useGymSettings';
 import { CreditCard, Bell, ChevronRight, User } from 'lucide-react';
 
@@ -24,7 +27,8 @@ export const SearchModal: React.FC<SearchModalProps> = ({
   onQuickPay,
   onQuickRemind,
 }) => {
-  const { members } = useMembers();
+  const { members, loading } = useMembers();
+  const showLoading = useDelayedLoading(loading, 400);
   const { currencySymbol } = useGymSettings();
   const [query, setQuery] = useState('');
 
@@ -59,72 +63,105 @@ export const SearchModal: React.FC<SearchModalProps> = ({
         />
 
         <div className="max-h-72 overflow-y-auto space-y-1.5 divide-y divide-neutral-100">
-          {filteredMembers.length === 0 ? (
-            <div className="py-8 text-center text-xs text-neutral-500 space-y-2.5">
-              <p>No members found matching "{query}"</p>
-              <button
-                type="button"
-                onClick={() => setQuery('')}
-                className="px-3 py-1 bg-neutral-100 hover:bg-neutral-200 text-neutral-800 rounded-lg text-xs font-semibold transition-colors cursor-pointer"
+          <AnimatePresence mode="wait">
+            {showLoading ? (
+              <motion.div
+                key="loading"
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                exit={{ opacity: 0 }}
+                transition={{ duration: 0.15 }}
+                className="space-y-1.5"
               >
-                Clear Search
-              </button>
-            </div>
-          ) : (
-            filteredMembers.map((member) => (
-              <div
-                key={member.id}
-                className="pt-2 first:pt-0 flex items-center justify-between p-2.5 rounded-xl hover:bg-neutral-50 transition-colors group"
+                {[1, 2, 3, 4].map((i) => (
+                  <SearchResultSkeleton key={i} />
+                ))}
+              </motion.div>
+            ) : filteredMembers.length === 0 ? (
+              <motion.div
+                key="empty"
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                exit={{ opacity: 0 }}
+                transition={{ duration: 0.15 }}
+                className="py-8 text-center text-xs text-neutral-500 space-y-2.5"
               >
-                <div
-                  className="flex items-center gap-3 cursor-pointer flex-1 min-w-0"
-                  onClick={() => {
-                    onSelectMember(member);
-                    onClose();
-                  }}
+                <p>No members found matching "{query}"</p>
+                <button
+                  type="button"
+                  onClick={() => setQuery('')}
+                  className="px-3 py-1 bg-neutral-100 hover:bg-neutral-200 text-neutral-800 rounded-lg text-xs font-semibold transition-colors cursor-pointer"
                 >
-                  <Avatar name={member.name} size="sm" />
-                  <div className="min-w-0">
-                    <div className="flex items-center gap-2">
-                      <span className="text-sm font-semibold text-neutral-900 truncate">
-                        {member.name}
-                      </span>
-                      {member.calculatedStatus && (
-                        <StatusBadge status={member.calculatedStatus} size="sm" />
-                      )}
+                  Clear Search
+                </button>
+              </motion.div>
+            ) : (
+              <motion.div
+                key="results"
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                exit={{ opacity: 0 }}
+                transition={{ duration: 0.15 }}
+                className="space-y-1.5 divide-y divide-neutral-100"
+              >
+                {filteredMembers.map((member) => (
+                  <div
+                    key={member.id}
+                    className="pt-2 flex items-center justify-between p-2.5 rounded-xl hover:bg-neutral-50 transition-colors group"
+                  >
+                    <div
+                      className="flex items-center gap-3 cursor-pointer flex-1 min-w-0"
+                      onClick={() => {
+                        onSelectMember(member);
+                        onClose();
+                      }}
+                    >
+                      <Avatar name={member.name} size="sm" />
+                      <div className="min-w-0">
+                        <div className="flex items-center gap-2">
+                          <span className="text-sm font-semibold text-neutral-900 truncate">
+                            {member.name}
+                          </span>
+                          {member.calculatedStatus && (
+                            <StatusBadge status={member.calculatedStatus} size="sm" />
+                          )}
+                        </div>
+                        <p className="text-xs text-neutral-500 truncate">{member.phone} • {formatCurrency(member.monthlyFee, currencySymbol)}/mo</p>
+                      </div>
                     </div>
-                    <p className="text-xs text-neutral-500 truncate">{member.phone} • {formatCurrency(member.monthlyFee, currencySymbol)}/mo</p>
-                  </div>
-                </div>
 
-                <div className="flex items-center gap-1.5 shrink-0 opacity-90 group-hover:opacity-100">
-                  <button
-                    type="button"
-                    onClick={() => {
-                      onQuickPay(member);
-                      onClose();
-                    }}
-                    className="p-1.5 rounded-lg text-emerald-700 bg-emerald-50 hover:bg-emerald-100 text-xs font-medium flex items-center gap-1 transition-colors"
-                    title="Record Payment"
-                  >
-                    <CreditCard className="w-3.5 h-3.5" />
-                    <span className="hidden sm:inline">Pay</span>
-                  </button>
-                  <button
-                    type="button"
-                    onClick={() => {
-                      onQuickRemind(member);
-                      onClose();
-                    }}
-                    className="p-1.5 rounded-lg text-neutral-700 bg-neutral-100 hover:bg-neutral-200 text-xs font-medium flex items-center gap-1 transition-colors"
-                    title="Send Reminder"
-                  >
-                    <Bell className="w-3.5 h-3.5" />
-                  </button>
-                </div>
-              </div>
-            ))
-          )}
+                    <div className="flex items-center gap-1.5 shrink-0 opacity-90 group-hover:opacity-100">
+                      <button
+                        type="button"
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          onQuickPay(member);
+                          onClose();
+                        }}
+                        className="p-1.5 min-w-[44px] min-h-[44px] justify-center rounded-lg text-emerald-700 bg-emerald-50 hover:bg-emerald-100 text-xs font-medium flex items-center gap-1 transition-colors"
+                        title="Record Payment"
+                      >
+                        <CreditCard className="w-3.5 h-3.5" />
+                        <span className="hidden sm:inline">Pay</span>
+                      </button>
+                      <button
+                        type="button"
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          onQuickRemind(member);
+                          onClose();
+                        }}
+                        className="p-1.5 min-w-[44px] min-h-[44px] justify-center rounded-lg text-neutral-700 bg-neutral-100 hover:bg-neutral-200 text-xs font-medium flex items-center gap-1 transition-colors"
+                        title="Send Reminder"
+                      >
+                        <Bell className="w-3.5 h-3.5" />
+                      </button>
+                    </div>
+                  </div>
+                ))}
+              </motion.div>
+            )}
+          </AnimatePresence>
         </div>
       </div>
     </Modal>

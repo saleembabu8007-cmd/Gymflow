@@ -32,9 +32,9 @@ export const EmptyState: React.FC<EmptyStateProps> = ({
           {typeof Icon === 'function' ? <Icon className="w-8 h-8 stroke-[1.5]" /> : Icon}
         </div>
       )}
-      <h2 className="text-xl sm:text-2xl font-extrabold text-slate-900 tracking-tight">{title}</h2>
+      <h3 className="text-lg sm:text-xl font-bold text-slate-900 tracking-tight">{title}</h3>
       {description && (
-        <p className="text-[15px] font-medium text-slate-500 mt-3 max-w-md leading-relaxed">{description}</p>
+        <p className="text-sm sm:text-[15px] text-slate-600 mt-3 max-w-md leading-relaxed">{description}</p>
       )}
       {actionLabel && onAction && (
         <div className="mt-8">

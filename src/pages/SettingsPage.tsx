@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from 'react';
-import { PageHeader } from '../components/ui/PageHeader';
 import { Input } from '../components/ui/Input';
-import { Select } from '../components/ui/Select';
+import { Select, SegmentedControl } from '../components/ui';
 import { Button } from '../components/ui/Button';
 import { useGym } from '../hooks/useGym';
 import { useGymSettings } from '../hooks/useGymSettings';
@@ -159,25 +158,17 @@ export const SettingsPage: React.FC = () => {
 
   return (
     <div className="max-w-3xl space-y-8">
-      {/* Page Header */}
-      <div className="mb-8">
-        <PageHeader
-          title="Settings"
-          subtitle="Manage your gym profile, payment preferences, and account credentials"
-        />
-      </div>
-
       {/* ========================================================================= */}
       {/* SECTION 1: GYM PROFILE                                                    */}
       {/* ========================================================================= */}
       <div id="section-gym-profile" className="bg-white border border-slate-100 rounded-[20px] p-6 shadow-sm mb-6">
-        <div className="mb-6 flex items-start gap-4 border-b border-slate-100 pb-5">
-          <div className="w-10 h-10 rounded-xl bg-teal-50 text-teal-600 flex items-center justify-center shrink-0 border border-teal-100/50">
-            <Building2 className="w-5 h-5 text-teal-600" />
+        <div className="mb-6 flex items-center gap-3 border-b border-slate-100 pb-5">
+          <div className="w-8 h-8 rounded-full bg-teal-50 text-teal-600 flex items-center justify-center shrink-0 border border-teal-100/50">
+            <Building2 className="w-4 h-4 text-teal-600" />
           </div>
           <div>
             <h3 className="text-base font-bold text-slate-900">Gym Profile</h3>
-            <p className="text-xs text-slate-500 mt-0.5">Basic information about your fitness center</p>
+            <p className="text-xs text-slate-600 mt-0.5">Basic information about your fitness center</p>
           </div>
         </div>
         <div>
@@ -215,7 +206,7 @@ export const SettingsPage: React.FC = () => {
                 id="btn-save-gym-profile"
                 type="submit"
                 size="md"
-                variant="primary"
+                variant="secondary"
                 isLoading={isSavingGym}
                 className="px-6"
               >
@@ -230,13 +221,13 @@ export const SettingsPage: React.FC = () => {
       {/* SECTION 2: PAYMENT SETTINGS                                               */}
       {/* ========================================================================= */}
       <div id="section-payment-settings" className="bg-white border border-slate-100 rounded-[20px] p-6 shadow-sm mb-6">
-        <div className="mb-6 flex items-start gap-4 border-b border-slate-100 pb-5">
-          <div className="w-10 h-10 rounded-xl bg-purple-50 text-purple-600 flex items-center justify-center shrink-0 border border-purple-100/50">
-            <CreditCard className="w-5 h-5 text-purple-600" />
+        <div className="mb-6 flex items-center gap-3 border-b border-slate-100 pb-5">
+          <div className="w-8 h-8 rounded-full bg-purple-50 text-purple-600 flex items-center justify-center shrink-0 border border-purple-100/50">
+            <CreditCard className="w-4 h-4 text-purple-600" />
           </div>
           <div>
             <h3 className="text-base font-bold text-slate-900">Payment Settings</h3>
-            <p className="text-xs text-slate-500 mt-0.5">Default billing rules and automated reminder timing</p>
+            <p className="text-xs text-slate-600 mt-0.5">Default billing rules and automated reminder timing</p>
           </div>
         </div>
         <div>
@@ -247,7 +238,7 @@ export const SettingsPage: React.FC = () => {
                 id="select-currency"
                 label="Currency"
                 value={currency}
-                onChange={(e) => setCurrency(e.target.value)}
+                onChange={(val) => setCurrency(val)}
                 options={[
                   { value: '₹', label: '₹ (INR - Indian Rupee)' },
                   { value: '$', label: '$ (USD - US Dollar)' },
@@ -263,12 +254,12 @@ export const SettingsPage: React.FC = () => {
                 id="select-default-duration"
                 label="Default Membership Duration"
                 value={defaultDuration}
-                onChange={(e) => setDefaultDuration(e.target.value as MembershipDuration)}
+                onChange={(val) => setDefaultDuration(val as MembershipDuration)}
                 options={[
                   { value: '1_MONTH', label: '1 Month' },
                   { value: '3_MONTHS', label: '3 Months' },
                   { value: '6_MONTHS', label: '6 Months' },
-                  { value: '12_MONTHS', label: '12 Months (Annual)' },
+                  { value: '12_MONTHS', label: '12 Months' },
                 ]}
               />
 
@@ -277,7 +268,7 @@ export const SettingsPage: React.FC = () => {
                 id="select-reminder-timing"
                 label="Reminder Timing"
                 value={reminderTiming}
-                onChange={(e) => setReminderTiming(Number(e.target.value))}
+                onChange={(val) => setReminderTiming(Number(val))}
                 options={[
                   { value: 1, label: '1 day before due' },
                   { value: 2, label: '2 days before due' },
@@ -293,7 +284,7 @@ export const SettingsPage: React.FC = () => {
                 id="btn-save-payment-settings"
                 type="submit"
                 size="md"
-                variant="primary"
+                variant="secondary"
                 isLoading={isSavingPaymentSettings}
                 className="px-6"
               >
@@ -308,13 +299,13 @@ export const SettingsPage: React.FC = () => {
       {/* SECTION 3: ACCOUNT                                                        */}
       {/* ========================================================================= */}
       <div id="section-account-settings" className="bg-white border border-slate-100 rounded-[20px] p-6 shadow-sm mb-6">
-        <div className="mb-6 flex items-start gap-4 border-b border-slate-100 pb-5">
-          <div className="w-10 h-10 rounded-xl bg-amber-50 text-amber-600 flex items-center justify-center shrink-0 border border-amber-100/50">
-            <User className="w-5 h-5 text-amber-600" />
+        <div className="mb-6 flex items-center gap-3 border-b border-slate-100 pb-5">
+          <div className="w-8 h-8 rounded-full bg-amber-50 text-amber-600 flex items-center justify-center shrink-0 border border-amber-100/50">
+            <User className="w-4 h-4 text-amber-600" />
           </div>
           <div>
             <h3 className="text-base font-bold text-slate-900">Account</h3>
-            <p className="text-xs text-slate-500 mt-0.5">Owner credentials and login security</p>
+            <p className="text-xs text-slate-600 mt-0.5">Owner credentials and login security</p>
           </div>
         </div>
         <div>
@@ -371,7 +362,7 @@ export const SettingsPage: React.FC = () => {
                 id="btn-save-account"
                 type="submit"
                 size="md"
-                variant="primary"
+                variant="secondary"
                 isLoading={isSavingAccount}
                 className="px-6"
               >
@@ -386,7 +377,7 @@ export const SettingsPage: React.FC = () => {
       {/* LOGOUT (Clearly placed at bottom, simple and understated)                */}
       {/* ========================================================================= */}
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mt-8 pb-12">
-        <div className="text-sm text-slate-500 flex flex-col sm:flex-row sm:items-center gap-1 sm:gap-4">
+        <div className="text-sm text-slate-600 flex flex-col sm:flex-row sm:items-center gap-1 sm:gap-4">
           <span>Logged in as <span className="font-semibold text-slate-800">{user?.email || 'Owner'}</span></span>
           <span className="hidden sm:inline text-slate-300">•</span>
           <button
@@ -396,7 +387,7 @@ export const SettingsPage: React.FC = () => {
               localStorage.removeItem('gymflow_onboarding_completed');
               window.location.reload();
             }}
-            className="text-slate-500 hover:text-slate-900 underline transition-colors cursor-pointer text-sm text-left"
+            className="text-slate-600 hover:text-slate-900 underline transition-colors cursor-pointer text-sm text-left"
           >
             Restart First-Time Setup
           </button>
@@ -404,10 +395,10 @@ export const SettingsPage: React.FC = () => {
 
         <Button
           id="btn-settings-logout"
-          variant="ghost"
+          variant="tertiary"
           size="sm"
           onClick={handleLogout}
-          className="text-slate-500 hover:text-rose-600 hover:bg-rose-50"
+          className="text-slate-600 hover:text-rose-600 hover:bg-rose-50"
           leftIcon={<LogOut className="w-4 h-4" />}
         >
           Log out

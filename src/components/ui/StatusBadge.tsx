@@ -37,7 +37,7 @@ export const StatusBadge: React.FC<StatusBadgeProps> = ({
       case 'PAID':
         return <CheckCircle2 className="w-3 h-3 text-emerald-600 shrink-0" />;
       case 'EXPIRED':
-        return <XCircle className="w-3 h-3 text-zinc-500 shrink-0" />;
+        return <XCircle className="w-3 h-3 text-zinc-600 shrink-0" />;
       default:
         return <span className={cn('w-1.5 h-1.5 rounded-full shrink-0', config.dotClass)} />;
     }

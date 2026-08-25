@@ -148,7 +148,7 @@ export const EditMemberModal: React.FC<EditMemberModalProps> = ({
           <Select
             label="Membership Status"
             value={status}
-            onChange={(e) => setStatus(e.target.value as 'ACTIVE' | 'INACTIVE')}
+            onChange={(val) => setStatus(val as 'ACTIVE' | 'INACTIVE')}
             options={[
               { value: 'ACTIVE', label: 'Active Membership' },
               { value: 'INACTIVE', label: 'Inactive / Expired' },
@@ -162,7 +162,7 @@ export const EditMemberModal: React.FC<EditMemberModalProps> = ({
         </div>
 
         <div className="flex items-center justify-end gap-3 pt-4 border-t border-neutral-100 mt-6">
-          <Button type="button" variant="outline" onClick={onClose} disabled={loading}>
+          <Button type="button" variant="tertiary" onClick={onClose} disabled={loading}>
             Cancel
           </Button>
           <Button type="submit" isLoading={loading}>

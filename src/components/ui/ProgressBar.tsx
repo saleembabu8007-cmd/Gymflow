@@ -58,7 +58,7 @@ export const ProgressBar: React.FC<ProgressBarProps> = ({
         />
       </div>
       {showLabel && (
-        <div className="flex justify-end text-[11px] font-bold tracking-wider text-slate-500">
+        <div className="flex justify-end text-[11px] font-bold tracking-wider text-slate-600">
           <span>{Math.round(percentage)}%</span>
         </div>
       )}

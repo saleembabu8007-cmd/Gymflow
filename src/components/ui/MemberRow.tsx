@@ -8,6 +8,7 @@ import { formatCurrency } from '../../utils/currencyUtils';
 import { formatDate, getDifferenceInDays } from '../../utils/dateUtils';
 import { Clock, CheckCircle2, MessageSquare, MoreHorizontal, Calendar } from 'lucide-react';
 import { cn } from '../../utils/classNames';
+import { useMediaQuery } from '../../hooks/useMediaQuery';
 
 export interface MemberRowProps {
   member: Member;
@@ -32,6 +33,9 @@ export const MemberRow: React.FC<MemberRowProps> = ({
 }) => {
   const [showMobileActions, setShowMobileActions] = useState(false);
   const [isSuccessFlash, setIsSuccessFlash] = useState(false);
+  
+  // Collapse threshold: 640px (sm breakpoint)
+  const isDesktop = useMediaQuery('(min-width: 640px)');
   
   const diffDays = getDifferenceInDays(member.nextPaymentDate);
   const isOverdue = diffDays < 0;
@@ -83,8 +87,8 @@ export const MemberRow: React.FC<MemberRowProps> = ({
   return (
     <div
       className={cn(
-        'group relative flex flex-col sm:flex-row sm:items-center justify-between gap-4 p-4 sm:p-5 rounded-2xl bg-white border border-slate-100 transition-all duration-300 hover:shadow-[0_4px_20px_rgba(15,23,42,0.05)] cursor-pointer overflow-hidden',
-        isOverdue && !isSuccessFlash && 'border-l-4 border-l-rose-500 bg-rose-50/30 border-y-rose-100 border-r-rose-100',
+        'group relative flex flex-col sm:flex-row sm:items-center justify-between gap-4 p-4 sm:p-5 rounded-2xl bg-white border border-slate-200/80 transition-all duration-300 hover:shadow-[0_4px_20px_rgba(15,23,42,0.05)] cursor-pointer overflow-hidden',
+        isOverdue && !isSuccessFlash && 'border-l-4 border-l-rose-500 bg-rose-50/30 border-y-rose-200 border-r-rose-200',
         (highlighted || isSuccessFlash) && 'bg-emerald-50 border-emerald-200',
         isSuccessFlash && 'pointer-events-none shadow-none',
         className
@@ -102,117 +106,118 @@ export const MemberRow: React.FC<MemberRowProps> = ({
               {renderStatus()}
             </div>
           </div>
-          <div className="mt-1.5 flex items-center gap-3">
-            <span className="text-[13px] text-slate-500 font-mono tracking-tight">{member.phone}</span>
-            <span className="inline-flex items-center gap-1.5 px-2 py-0.5 rounded border border-slate-200 bg-slate-50 text-[11px] font-bold uppercase tracking-wider text-slate-500">
-              <Calendar className="w-3.5 h-3.5 text-slate-400" />
-              {formatDate(member.nextPaymentDate, { format: 'short' })}
-            </span>
+          <div className="mt-1.5 flex flex-wrap items-center gap-2">
+            <span className="text-[13px] text-slate-600 font-mono tracking-tight">{member.phone}</span>
+            <span className="text-[13px] text-slate-600">&middot;</span>
+            <span className="text-[13px] text-slate-600">{displayPlan}</span>
           </div>
         </div>
       </div>
 
       <div className="flex items-center justify-between sm:justify-end gap-4 border-t border-slate-100 sm:border-0 pt-3 sm:pt-0 shrink-0">
         <div className="flex flex-col items-start sm:items-end mr-auto sm:mr-4">
-          <span className="font-mono font-bold text-slate-900 tracking-tight text-[15px]">
+          <span className="tabular-nums font-bold text-slate-900 tracking-tight text-[15px]">
             {formatCurrency(displayFee, currencySymbol)}
           </span>
-          <span className="text-[11px] font-bold uppercase tracking-wider text-slate-400 mt-0.5">
-            {displayPlan}
+          <span className="inline-flex items-center gap-1 mt-1 text-[11px] font-bold uppercase tracking-wider text-slate-400">
+            <Calendar className="w-3.5 h-3.5" />
+            {formatDate(member.nextPaymentDate, { format: 'short' })}
           </span>
         </div>
 
         {isPending && (
-          <>
-            <div className="hidden sm:flex items-center gap-2">
-              <Button
-                variant={primaryAction === 'remind' ? 'primary' : 'outline'}
-                size="md"
-                onClick={(e) => {
-                  e.stopPropagation();
-                  onRemind?.(member);
-                }}
-                leftIcon={<MessageSquare className="w-4 h-4" />}
-              >
-                Remind
-              </Button>
-              <Button
-                variant={primaryAction === 'pay' ? 'primary' : 'outline'}
-                size="md"
-                onClick={(e) => {
-                  e.stopPropagation();
-                  setIsSuccessFlash(true);
-                  setTimeout(() => {
-                    onQuickPay?.(member);
-                  }, 800);
-                }}
-              >
-                Mark Paid
-              </Button>
-            </div>
-            
-            <div className="sm:hidden flex items-center gap-2 relative">
-              <Button
-                variant="primary"
-                size="sm"
-                onClick={(e) => {
-                  e.stopPropagation();
-                  if (primaryAction === 'pay') {
-                    setIsSuccessFlash(true);
-                    setTimeout(() => onQuickPay?.(member), 800);
-                  } else {
+          <div className="relative flex items-center gap-2">
+            {isDesktop ? (
+              <>
+                <Button
+                  variant={primaryAction === 'remind' ? 'secondary' : 'tertiary'}
+                  size="md"
+                  onClick={(e) => {
+                    e.stopPropagation();
                     onRemind?.(member);
-                  }
-                }}
-              >
-                {primaryAction === 'pay' ? 'Mark Paid' : 'Remind'}
-              </Button>
-              <IconButton
-                icon={<MoreHorizontal className="w-5 h-5" />}
-                aria-label="Actions"
-                variant="outline"
-                onClick={(e) => {
-                  e.stopPropagation();
-                  setShowMobileActions(!showMobileActions);
-                }}
-              />
-              {showMobileActions && (
-                <>
-                  <div className="fixed inset-0 z-40" onClick={(e) => { e.stopPropagation(); setShowMobileActions(false); }} />
-                  <div className="absolute right-0 top-12 w-48 bg-white border border-slate-200 rounded-xl shadow-lg z-50 overflow-hidden flex flex-col p-1">
-                    {primaryAction === 'pay' ? (
-                      <button
-                        type="button"
-                        className="flex items-center gap-3 px-3 py-2.5 text-sm font-medium text-slate-700 hover:bg-slate-50 rounded-lg text-left"
-                        onClick={(e) => {
-                          e.stopPropagation();
-                          setShowMobileActions(false);
-                          onRemind?.(member);
-                        }}
-                      >
-                        <MessageSquare className="w-4 h-4" />
-                        Send Reminder
-                      </button>
-                    ) : (
-                      <button
-                        type="button"
-                        className="flex items-center gap-3 px-3 py-2.5 text-sm font-medium text-emerald-700 hover:bg-emerald-50 rounded-lg text-left"
-                        onClick={(e) => {
-                          e.stopPropagation();
-                          setShowMobileActions(false);
-                          setIsSuccessFlash(true);
-                          setTimeout(() => onQuickPay?.(member), 800);
-                        }}
-                      >
-                        <CheckCircle2 className="w-4 h-4" />
-                        Mark as Paid
-                      </button>
-                    )}
-                  </div>
-                </>
-              )}
-            </div>
-          </>
+                  }}
+                  leftIcon={<MessageSquare className="w-4 h-4" />}
+                >
+                  Remind
+                </Button>
+                <Button
+                  variant={primaryAction === 'pay' ? 'secondary' : 'tertiary'}
+                  size="md"
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    setIsSuccessFlash(true);
+                    setTimeout(() => {
+                      onQuickPay?.(member);
+                    }, 800);
+                  }}
+                >
+                  Mark Paid
+                </Button>
+              </>
+            ) : (
+              <>
+                <Button
+                  variant="secondary"
+                  size="sm"
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    if (primaryAction === 'pay') {
+                      setIsSuccessFlash(true);
+                      setTimeout(() => onQuickPay?.(member), 800);
+                    } else {
+                      onRemind?.(member);
+                    }
+                  }}
+                >
+                  {primaryAction === 'pay' ? 'Mark Paid' : 'Remind'}
+                </Button>
+                <IconButton
+                  icon={<MoreHorizontal className="w-5 h-5" />}
+                  aria-label="Actions"
+                  variant="default"
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    setShowMobileActions(!showMobileActions);
+                  }}
+                />
+                {showMobileActions && (
+                  <>
+                    <div className="fixed inset-0 z-40" onClick={(e) => { e.stopPropagation(); setShowMobileActions(false); }} />
+                    <div className="absolute right-0 top-12 w-48 bg-white border border-slate-200 rounded-xl shadow-lg z-50 overflow-hidden flex flex-col p-1">
+                      {primaryAction === 'pay' ? (
+                        <button
+                          type="button"
+                          className="flex items-center gap-3 px-3 min-h-[44px] text-sm font-medium text-slate-700 hover:bg-slate-50 rounded-lg text-left"
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            setShowMobileActions(false);
+                            onRemind?.(member);
+                          }}
+                        >
+                          <MessageSquare className="w-4 h-4" />
+                          Send Reminder
+                        </button>
+                      ) : (
+                        <button
+                          type="button"
+                          className="flex items-center gap-3 px-3 min-h-[44px] text-sm font-medium text-emerald-700 hover:bg-emerald-50 rounded-lg text-left"
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            setShowMobileActions(false);
+                            setIsSuccessFlash(true);
+                            setTimeout(() => onQuickPay?.(member), 800);
+                          }}
+                        >
+                          <CheckCircle2 className="w-4 h-4" />
+                          Mark as Paid
+                        </button>
+                      )}
+                    </div>
+                  </>
+                )}
+              </>
+            )}
+          </div>
         )}
       </div>
     </div>

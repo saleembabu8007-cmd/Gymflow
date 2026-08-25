@@ -28,12 +28,12 @@ export const Header: React.FC<HeaderProps> = ({
       {/* Left: Page Title & Subtitle */}
       <div className="flex flex-col justify-center min-w-0 py-2">
         {title && (
-          <h1 className="text-xl sm:text-[22px] font-extrabold text-slate-900 tracking-tight leading-tight truncate">
+          <h1 className="text-xl sm:text-2xl font-extrabold tracking-tight text-zinc-950 leading-tight truncate">
             {title}
           </h1>
         )}
         {subtitle && (
-          <span className="text-[13px] text-slate-500 truncate leading-snug mt-0.5 hidden sm:block">
+          <span className="text-sm text-slate-600 truncate leading-snug mt-0.5 hidden sm:block">
             {subtitle}
           </span>
         )}
@@ -47,12 +47,12 @@ export const Header: React.FC<HeaderProps> = ({
             type="button"
             id="header-search-btn"
             onClick={onOpenSearch}
-            className="flex items-center justify-center sm:justify-start gap-2 w-10 h-10 sm:w-auto sm:px-4 sm:h-11 rounded-full bg-slate-100 hover:bg-slate-200 text-slate-500 hover:text-slate-700 transition-colors cursor-pointer"
+            className="flex items-center justify-center md:justify-start gap-2 w-10 h-10 md:w-auto md:px-4 md:h-11 rounded-full bg-teal-50 hover:bg-teal-100 text-teal-700 transition-colors cursor-pointer"
             title="Search members or transactions (⌘K)"
           >
             <Search className="w-[18px] h-[18px] text-teal-600 stroke-[2.5]" />
-            <span className="hidden sm:inline text-[15px] font-medium mr-2">Search...</span>
-            <kbd className="hidden lg:inline-block px-1.5 py-0.5 text-[10px] bg-white border border-slate-200 rounded text-slate-400 font-mono shadow-sm">
+            <span className="hidden md:inline text-[15px] font-medium mr-2">Search...</span>
+            <kbd className="hidden lg:inline-block px-1.5 py-0.5 text-[10px] bg-white border border-teal-200/50 rounded text-teal-600 font-mono shadow-sm">
               ⌘K
             </kbd>
           </button>
@@ -62,7 +62,7 @@ export const Header: React.FC<HeaderProps> = ({
         {onNavigateAdmin && (
           <Button
             id="header-admin-console-btn"
-            variant="outline"
+            variant="tertiary"
             size="md"
             onClick={onNavigateAdmin}
             leftIcon={<ShieldCheck className="w-5 h-5 text-rose-500" />}
@@ -86,22 +86,6 @@ export const Header: React.FC<HeaderProps> = ({
             <span className="sm:hidden text-sm">Add</span>
           </Button>
         )}
-
-        {/* Owner Profile preview */}
-        <button 
-          className="flex items-center gap-2 pl-2 sm:pl-4 sm:border-l border-slate-200 cursor-pointer group outline-none"
-        >
-          <Avatar name={user?.name || 'Owner'} size="md" />
-          <div className="hidden lg:flex flex-col text-left">
-            <span className="text-sm font-bold text-slate-900 leading-tight group-hover:text-teal-600 transition-colors">
-              {user?.name || 'Owner'}
-            </span>
-            <span className="text-[11px] font-medium text-slate-500 capitalize leading-tight">
-              {user?.role ? user.role.toLowerCase() : 'Owner'}
-            </span>
-          </div>
-          <ChevronDown className="w-4 h-4 text-slate-400 group-hover:text-teal-600 transition-colors hidden sm:block" />
-        </button>
       </div>
     </header>
   );

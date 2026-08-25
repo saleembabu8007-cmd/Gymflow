@@ -292,7 +292,7 @@ export const AddMemberModal: React.FC<AddMemberModalProps> = ({
           <div className="flex flex-col sm:flex-row items-center gap-3 pt-2">
             <Button
               id="btn-add-another-member"
-              variant="outline"
+              variant="tertiary"
               size="md"
               onClick={handleResetForAnother}
               className="w-full sm:flex-1 py-2.5 font-semibold"
@@ -319,8 +319,7 @@ export const AddMemberModal: React.FC<AddMemberModalProps> = ({
       ) : (
         /* --- ADD MEMBER FORM --- */
         <form onSubmit={handleSubmit} className="flex flex-col h-full">
-          <div className="space-y-6 flex-1 pb-6">
-            {/* 1. Personal Details Card */}
+          <div className="space-y-6 flex-1 p-4 sm:p-6">
             {/* 1. Personal Details Card */}
             <div className="bg-slate-50 p-4 sm:p-5 rounded-[20px] border border-slate-100 space-y-4">
               <h4 className="text-sm font-bold text-slate-900 flex items-center gap-2">
@@ -373,7 +372,6 @@ export const AddMemberModal: React.FC<AddMemberModalProps> = ({
             </div>
 
             {/* 2. Membership Card */}
-            {/* 2. Membership Card */}
             <div className="bg-slate-50 p-4 sm:p-5 rounded-[20px] border border-slate-100 space-y-4">
               <h4 className="text-sm font-bold text-slate-900 flex items-center gap-2">
                 <CreditCard className="w-4 h-4 text-purple-600" />
@@ -384,7 +382,7 @@ export const AddMemberModal: React.FC<AddMemberModalProps> = ({
                   id="member-plan-select"
                   label="Membership plan *"
                   value={selectedPlanId}
-                  onChange={(e) => handlePlanChange(e.target.value)}
+                  onChange={(value) => handlePlanChange(value)}
                   options={plans.map((p) => ({
                     value: p.id,
                     label: `${p.name} (${p.durationMonths} ${p.durationMonths === 1 ? 'month' : 'months'})`,
@@ -409,7 +407,6 @@ export const AddMemberModal: React.FC<AddMemberModalProps> = ({
               </div>
             </div>
 
-            {/* 3. Dates & Notes Card */}
             {/* 3. Dates & Notes Card */}
             <div className="bg-slate-50 p-4 sm:p-5 rounded-[20px] border border-slate-100 space-y-4">
               <h4 className="text-sm font-bold text-slate-900 flex items-center gap-2">
@@ -463,10 +460,10 @@ export const AddMemberModal: React.FC<AddMemberModalProps> = ({
           </div>
 
           {/* Form Actions - Sticky Footer */}
-          <div className="sticky bottom-0 bg-white border-t border-slate-100 p-4 sm:px-6 -mx-6 -mb-6 flex flex-col sm:flex-row items-center justify-end gap-3 z-10">
+          <div className="sticky bottom-0 bg-white border-t border-slate-100 p-4 sm:px-6 flex flex-col sm:flex-row items-center justify-end gap-3 z-10">
             <Button
               type="button"
-              variant="ghost"
+              variant="tertiary"
               size="md"
               onClick={onClose}
               disabled={isSubmitting}

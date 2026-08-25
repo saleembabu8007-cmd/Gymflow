@@ -70,7 +70,7 @@ export const ForgotPasswordPage: React.FC<ForgotPasswordPageProps> = ({
 
             <Button
               type="button"
-              variant="outline"
+              variant="tertiary"
               className="w-full"
               size="md"
               onClick={onNavigateToLogin}
@@ -127,13 +127,14 @@ export const ForgotPasswordPage: React.FC<ForgotPasswordPageProps> = ({
             {isSubmitting ? 'Sending link...' : 'Send reset link'}
           </Button>
 
-          <button
+          <Button
             type="button"
+            variant="tertiary"
             onClick={onNavigateToLogin}
-            className="w-full text-center text-xs font-medium text-zinc-600 hover:text-zinc-950 flex items-center justify-center py-1.5 transition-colors cursor-pointer"
+            className="w-full"
           >
-            <span>Back to Sign In</span>
-          </button>
+            Back to Sign In
+          </Button>
         </div>
       </form>
     </AuthLayout>

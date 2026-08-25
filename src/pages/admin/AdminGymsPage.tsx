@@ -12,6 +12,8 @@ import {
   Calendar,
 } from 'lucide-react';
 import { PlatformGymTenant } from '../../types';
+import { LoadingState } from '../../components/ui/LoadingState';
+import { FilterChips } from '../../components/ui/FilterChips';
 import { GymDetailModal } from '../../components/modals/GymDetailModal';
 import { formatDate } from '../../utils/dateUtils';
 import { cn } from '../../utils/classNames';
@@ -64,16 +66,15 @@ export const AdminGymsPage: React.FC<AdminGymsPageProps> = ({ gyms, onToggleStat
             />
           </div>
 
-          <select
-            id="select-filter-admin-gyms"
-            value={filterStatus}
-            onChange={(e) => setFilterStatus(e.target.value as any)}
-            className="px-3 py-2 bg-zinc-900 border border-zinc-800 rounded-xl text-xs text-zinc-300 focus:outline-none focus:border-rose-500 cursor-pointer"
-          >
-            <option value="ALL">All Statuses ({gyms.length})</option>
-            <option value="ACTIVE">Active ({gyms.filter((g) => g.status === 'ACTIVE').length})</option>
-            <option value="SUSPENDED">Suspended ({gyms.filter((g) => g.status === 'SUSPENDED').length})</option>
-          </select>
+          <FilterChips
+            options={[
+              { id: 'ALL', label: `All Statuses (${gyms.length})` },
+              { id: 'ACTIVE', label: `Active (${gyms.filter((g) => g.status === 'ACTIVE').length})` },
+              { id: 'SUSPENDED', label: `Suspended (${gyms.filter((g) => g.status === 'SUSPENDED').length})` }
+            ]}
+            activeId={filterStatus}
+            onChange={(val) => setFilterStatus(val as any)}
+          />
         </div>
       </div>
 

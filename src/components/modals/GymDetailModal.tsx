@@ -178,7 +178,7 @@ export const GymDetailModal: React.FC<GymDetailModalProps> = ({
               </div>
               <div className="flex items-center gap-2 shrink-0">
                 <Button
-                  variant="outline"
+                  variant="tertiary"
                   size="sm"
                   onClick={() => setShowConfirm(false)}
                   disabled={isUpdating}
@@ -197,7 +197,7 @@ export const GymDetailModal: React.FC<GymDetailModalProps> = ({
             </div>
           ) : (
             <Button
-              variant={isSuspended ? 'outline' : 'destructive'}
+              variant={isSuspended ? 'tertiary' : 'destructive'}
               size="sm"
               onClick={() => setShowConfirm(true)}
             >
@@ -205,7 +205,7 @@ export const GymDetailModal: React.FC<GymDetailModalProps> = ({
             </Button>
           )}
 
-          <Button variant="outline" size="sm" onClick={onClose}>
+          <Button variant="tertiary" size="sm" onClick={onClose}>
             Close
           </Button>
         </div>

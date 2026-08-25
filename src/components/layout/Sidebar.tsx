@@ -109,15 +109,15 @@ export const Sidebar: React.FC<SidebarProps> = ({
               className={cn(
                 'w-full flex items-center justify-between px-3 py-3 rounded-2xl text-[15px] font-medium transition-all group cursor-pointer text-left',
                 isActive
-                  ? 'bg-teal-50/80 text-teal-700 font-bold'
+                  ? 'bg-teal-50 text-teal-700 font-bold'
                   : 'text-slate-600 hover:bg-slate-50 hover:text-slate-900'
               )}
             >
               <div className="flex items-center gap-3.5 min-w-0">
                 <Icon
                   className={cn(
-                    'w-[22px] h-[22px] shrink-0 transition-colors',
-                    isActive ? 'text-teal-600 stroke-[2.5]' : 'text-slate-400 stroke-[2] group-hover:text-slate-600'
+                    'w-[22px] h-[22px] shrink-0 transition-colors stroke-[2]',
+                    isActive ? 'text-teal-600 fill-teal-100' : 'text-slate-400 group-hover:text-slate-600 fill-transparent'
                   )}
                 />
                 <span className="truncate">{item.label}</span>
@@ -160,13 +160,13 @@ export const Sidebar: React.FC<SidebarProps> = ({
 
         <div className="flex items-center gap-3 p-3 rounded-2xl bg-white border border-slate-200 shadow-sm transition-all hover:border-slate-300">
           <div className="w-8 h-8 rounded-full bg-slate-100 flex items-center justify-center shrink-0">
-            <Building2 className="w-4 h-4 text-slate-500" />
+            <Building2 className="w-4 h-4 text-slate-600" />
           </div>
           <div className="flex flex-col min-w-0 flex-1">
             <span className="text-sm font-bold truncate text-slate-900 leading-tight">
               {gymName}
             </span>
-            <span className="text-[11px] text-slate-500 font-medium flex items-center gap-1.5 leading-tight mt-0.5">
+            <span className="text-[11px] text-slate-600 font-medium flex items-center gap-1.5 leading-tight mt-0.5">
               <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 shrink-0" />
               Active Tenant
             </span>
@@ -180,7 +180,7 @@ export const Sidebar: React.FC<SidebarProps> = ({
               <span className="text-[13px] font-bold text-slate-900 truncate leading-tight">
                 {user?.name || 'Account'}
               </span>
-              <span className="text-[11px] text-slate-500 truncate leading-tight mt-0.5">
+              <span className="text-[11px] text-slate-600 truncate leading-tight mt-0.5">
                 {user?.email || 'Owner'}
               </span>
             </div>

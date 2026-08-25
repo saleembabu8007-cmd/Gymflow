@@ -7,11 +7,13 @@ import { Select } from '../components/ui/Select';
 import { SearchInput } from '../components/ui/SearchInput';
 import { StatusBadge } from '../components/ui/StatusBadge';
 import { Avatar } from '../components/ui/Avatar';
+import { Badge } from '../components/ui/Badge';
+import { Skeleton, SkeletonAvatar, MemberRowSkeleton, StatCardSkeleton, SkeletonText } from '../components/ui/Skeleton';
 import { EmptyState } from '../components/ui/EmptyState';
 import { LoadingState } from '../components/ui/LoadingState';
 import { ProgressBar } from '../components/ui/ProgressBar';
 import { ProgressRing } from '../components/ui/ProgressRing';
-import { MetricCard } from '../components/ui/MetricCard';
+import { StatCard } from '../components/ui/StatCard';
 import { useToast } from '../components/ui/Toast';
 import { colors, spacing, borderRadius, typography } from '../styles/tokens';
 import { PAYMENT_STATUS } from '../types';
@@ -23,11 +25,7 @@ export const DesignSystemPage: React.FC = () => {
   const [loadingState, setLoadingState] = useState(false);
 
   return (
-    <div className="space-y-10">
-      <PageHeader
-        title="Design System & Component Architecture"
-        subtitle="Foundation tokens, typography scale, responsive primitives, and domain UI components"
-      />
+    <div className="space-y-16 max-w-7xl mx-auto pb-20">
 
       {/* 1. Design Tokens: Colors & Semantic Palettes */}
       <section className="space-y-4">
@@ -120,10 +118,9 @@ export const DesignSystemPage: React.FC = () => {
               <div className="flex flex-wrap gap-3 items-center">
                 <Button variant="primary">Primary</Button>
                 <Button variant="secondary">Secondary</Button>
-                <Button variant="outline">Outline</Button>
-                <Button variant="ghost">Ghost</Button>
-                <Button variant="success" leftIcon={<Check className="w-4 h-4" />}>Success</Button>
+                <Button variant="tertiary">Tertiary</Button>
                 <Button variant="destructive" leftIcon={<AlertCircle className="w-4 h-4" />}>Destructive</Button>
+                <Button variant="destructive-ghost" leftIcon={<AlertCircle className="w-4 h-4" />}>Ghost Destructive</Button>
                 <Button variant="primary" isLoading>Loading</Button>
               </div>
             </div>
@@ -168,6 +165,8 @@ export const DesignSystemPage: React.FC = () => {
             <CardContent className="p-6 space-y-4">
               <Select
                 label="Select Dropdown"
+                value=""
+                onChange={(val) => {}}
                 options={[
                   { value: '1', label: '1 Month Membership' },
                   { value: '3', label: '3 Months Transformation' },
@@ -249,7 +248,7 @@ export const DesignSystemPage: React.FC = () => {
               <CardDescription>Accessible floating status banners</CardDescription>
             </CardHeader>
             <CardContent className="flex flex-wrap gap-2.5">
-              <Button size="sm" variant="success" onClick={() => success('Payment Saved', '₹1,500 recorded via UPI')}>
+              <Button size="sm" variant="primary" onClick={() => success('Payment Saved', '₹1,500 recorded via UPI')}>
                 Trigger Success Toast
               </Button>
               <Button size="sm" variant="destructive" onClick={() => error('Action Failed', 'Could not delete record')}>
@@ -258,7 +257,7 @@ export const DesignSystemPage: React.FC = () => {
               <Button size="sm" variant="secondary" onClick={() => warning('Due Soon Alert', 'Member fee is due tomorrow')}>
                 Trigger Warning
               </Button>
-              <Button size="sm" variant="outline" onClick={() => info('Information', 'Backup synced with storage')}>
+              <Button size="sm" variant="tertiary" onClick={() => info('Information', 'Backup synced with storage')}>
                 Trigger Info
               </Button>
             </CardContent>
@@ -316,9 +315,9 @@ export const DesignSystemPage: React.FC = () => {
 
       {/* 6. Hero Stat Cards */}
       <section className="space-y-4">
-        <h2 className="text-lg font-bold text-neutral-900">6. Hero Stat Cards (MetricCard)</h2>
+        <h2 className="text-lg font-bold text-neutral-900">6. Hero Stat Cards (StatCard)</h2>
         <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-          <MetricCard
+          <StatCard
             title="Collected This Month"
             value="₹1,24,500"
             trend={{ value: 12.5, isPositive: true }}
@@ -327,7 +326,7 @@ export const DesignSystemPage: React.FC = () => {
             onAction={() => success('Clicked', 'View ledger clicked')}
             actionLabel="View ledger"
           />
-          <MetricCard
+          <StatCard
             title="Security Status"
             progress={{ value: 92, variant: 'success' }}
             caption="All backups and data streams are healthy."
@@ -335,7 +334,7 @@ export const DesignSystemPage: React.FC = () => {
             onAction={() => success('Clicked', 'View security clicked')}
             actionLabel="View security"
           />
-          <MetricCard
+          <StatCard
             title="Fuel Meter"
             progress={{ value: 35, variant: 'warning' }}
             caption="Running low on operational bandwidth."
@@ -344,6 +343,69 @@ export const DesignSystemPage: React.FC = () => {
             actionLabel="View bandwidth"
           />
         </div>
+      </section>
+
+      {/* 7. New UI Atoms (Badge, Avatar, Skeleton) */}
+      <section className="space-y-4">
+        <h2 className="text-lg font-bold text-neutral-900">7. UI Atoms (Badge, Avatar, Skeleton)</h2>
+        
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+          <Card>
+            <CardHeader className="pb-3">
+              <CardTitle className="text-sm">Badge</CardTitle>
+              <CardDescription>Pill shaped, semantic background with solid text.</CardDescription>
+            </CardHeader>
+            <CardContent className="flex flex-wrap gap-3">
+              <Badge variant="success">Paid</Badge>
+              <Badge variant="warning">Due Soon</Badge>
+              <Badge variant="danger">Overdue</Badge>
+              <Badge variant="info">Upcoming</Badge>
+              <Badge variant="neutral">Neutral</Badge>
+            </CardContent>
+          </Card>
+
+          <Card>
+            <CardHeader className="pb-3">
+              <CardTitle className="text-sm">Avatar</CardTitle>
+              <CardDescription>Deterministic identity palettes & semantic sizes</CardDescription>
+            </CardHeader>
+            <CardContent className="flex items-center gap-4">
+              <Avatar name="xs (24px)" size="xs" status="paid" />
+              <Avatar name="sm (32px)" size="sm" status="overdue" />
+              <Avatar name="md (40px)" size="md" />
+              <Avatar name="lg (56px)" size="lg" />
+            </CardContent>
+          </Card>
+        </div>
+        
+        <Card>
+          <CardHeader className="pb-3">
+            <CardTitle className="text-sm">Skeleton Shimmer</CardTitle>
+            <CardDescription>Dimensions match real components to prevent layout shift.</CardDescription>
+          </CardHeader>
+          <CardContent className="space-y-6">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <div>
+                <h3 className="text-xs font-bold text-slate-600 mb-2 uppercase">Member Row Skeleton</h3>
+                <MemberRowSkeleton />
+                <div className="mt-4" />
+                <MemberRowSkeleton />
+              </div>
+              <div>
+                <h3 className="text-xs font-bold text-slate-600 mb-2 uppercase">Stat Card Skeleton</h3>
+                <StatCardSkeleton />
+              </div>
+            </div>
+            <div>
+              <h3 className="text-xs font-bold text-slate-600 mb-2 uppercase">Avatar Dimension Match Check</h3>
+              <div className="flex items-center gap-4">
+                <Avatar name="Match Test" size="md" />
+                <span className="text-sm text-slate-400">vs</span>
+                <SkeletonAvatar size="md" />
+              </div>
+            </div>
+          </CardContent>
+        </Card>
       </section>
     </div>
   );

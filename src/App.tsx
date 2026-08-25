@@ -362,24 +362,29 @@ const AppContent: React.FC = () => {
     const normalizedPath = pathname.startsWith('/app') ? pathname : `/app${pathname}`;
     const currentSubPath = (normalizedPath === '/app' || normalizedPath === '/app/') ? '/app/today' : normalizedPath;
 
-    const getPageTitle = () => {
+    const getPageInfo = () => {
       switch (currentSubPath) {
         case '/app/today':
-          return "Today's Collection";
+          return { 
+            title: `Good morning, ${user?.name?.split(' ')[0] || 'Owner'}! 👋`, 
+            subtitle: "Here's what's happening with your gym today." 
+          };
         case '/app/members':
-          return 'Members Directory';
+          return { title: 'Members', subtitle: "Manage your gym's active, overdue, and pending memberships." };
         case '/app/payments':
-          return 'Payment Ledger';
+          return { title: 'Payments', subtitle: 'Track and review all collected payments and upcoming dues.' };
         case '/app/reminders':
-          return 'WhatsApp Reminders';
+          return { title: 'Reminders', subtitle: 'Prompt due members with friendly payment notices and review dispatch history.' };
         case '/app/settings':
-          return 'Gym Settings';
+          return { title: 'Settings', subtitle: 'Manage your gym profile, subscription plans, and preferences.' };
         case '/app/design-system':
-          return 'UI System & Tokens';
+          return { title: 'Design System', subtitle: 'Reference for standard UI components and design tokens.' };
         default:
-          return undefined;
+          return { title: '', subtitle: '' };
       }
     };
+
+    const pageInfo = getPageInfo();
 
     return (
       <SubscriptionEntitlementGuard gymId={user.gymId} isPlatformAdmin={isPlatformAdmin}>
@@ -390,7 +395,8 @@ const AppContent: React.FC = () => {
           onLogout={() => setIsLogoutModalOpen(true)}
           onOpenQuickAdd={() => setIsAddMemberOpen(true)}
           onOpenSearch={() => setIsSearchOpen(true)}
-          pageTitle={getPageTitle()}
+          pageTitle={pageInfo.title}
+          pageSubtitle={pageInfo.subtitle}
         >
           {currentSubPath === '/app/today' && (
             <TodayPage
@@ -400,6 +406,9 @@ const AppContent: React.FC = () => {
               onSelectMember={(m) => setDetailMember(m)}
               onViewAllPayments={() => navigate('/app/payments')}
               onOpenRecordPayment={() => setIsSearchOpen(true)}
+              onViewAllMembers={() => navigate('/app/members')}
+              onNavigateSettings={() => navigate('/app/settings')}
+              onNavigateReminders={() => navigate('/app/reminders')}
             />
           )}
 

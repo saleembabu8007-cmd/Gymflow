@@ -70,7 +70,7 @@ export const LogoutConfirmationModal: React.FC<LogoutConfirmationModalProps> = (
         <div className="flex items-center justify-end gap-2.5 pt-3 border-t border-neutral-100">
           <Button
             type="button"
-            variant="outline"
+            variant="tertiary"
             size="sm"
             onClick={onClose}
             disabled={isLoggingOut}

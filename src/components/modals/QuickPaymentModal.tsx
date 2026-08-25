@@ -3,6 +3,7 @@ import { Modal } from '../ui/Modal';
 import { Button } from '../ui/Button';
 import { Input } from '../ui/Input';
 import { Select } from '../ui/Select';
+import { SegmentedControl } from '../ui/SegmentedControl';
 import { Avatar } from '../ui/Avatar';
 import { Member, PaymentMethod } from '../../types';
 import { useGymSettings } from '../../hooks/useGymSettings';
@@ -142,167 +143,165 @@ export const QuickPaymentModal: React.FC<QuickPaymentModalProps> = ({
       description={`Record payment for ${member.name}`}
       maxWidth="md"
     >
-      <form onSubmit={handleFormSubmit} className="space-y-4">
-        {/* Error notification banner with retry */}
-        {errorMessage && (
-          <div className="p-3.5 rounded-xl bg-rose-50 border border-rose-200 text-rose-950 flex items-center justify-between gap-3 text-xs">
-            <div className="flex items-center gap-2">
-              <AlertCircle className="w-4 h-4 text-rose-600 shrink-0" />
-              <span>{errorMessage}</span>
+      <form onSubmit={handleFormSubmit} className="flex flex-col h-full">
+        <div className="space-y-6 flex-1 p-4 sm:p-6 overflow-y-auto">
+          {/* Error notification banner with retry */}
+          {errorMessage && (
+            <div className="p-3.5 rounded-xl bg-rose-50 border border-rose-200 text-rose-950 flex items-center justify-between gap-3 text-xs">
+              <div className="flex items-center gap-2">
+                <AlertCircle className="w-4 h-4 text-rose-600 shrink-0" />
+                <span>{errorMessage}</span>
+              </div>
+              <Button
+                type="button"
+                variant="tertiary"
+                size="sm"
+                onClick={() => handleFormSubmit()}
+                disabled={isSubmitting}
+                className="text-xs shrink-0 bg-white hover:bg-rose-100/50 text-rose-900 border-rose-200"
+                leftIcon={<RefreshCw className="w-3 h-3" />}
+              >
+                Retry
+              </Button>
             </div>
-            <Button
-              type="button"
-              variant="outline"
-              size="sm"
-              onClick={() => handleFormSubmit()}
-              disabled={isSubmitting}
-              className="text-xs shrink-0 bg-white hover:bg-rose-100/50 text-rose-900 border-rose-200"
-              leftIcon={<RefreshCw className="w-3 h-3" />}
-            >
-              Retry
-            </Button>
-          </div>
-        )}
+          )}
 
-        {/* Member Context Summary */}
-        <div className="p-3.5 rounded-2xl bg-neutral-50/90 border border-neutral-200/80 flex items-center justify-between text-xs">
-          <div className="flex items-center gap-3 min-w-0">
-            <Avatar name={member.name} size="sm" />
-            <div className="min-w-0">
-              <span className="font-bold text-neutral-950 block text-sm truncate">
-                {member.name}
-              </span>
-              <span className="text-neutral-500 font-mono">{member.phone}</span>
-            </div>
-          </div>
+          {/* Section 1: Member Context */}
+          <div className="bg-slate-50 p-4 sm:p-5 rounded-[20px] border border-slate-100">
+            <div className="flex items-center justify-between text-xs">
+              <div className="flex items-center gap-3 min-w-0">
+                <Avatar name={member.name} size="sm" />
+                <div className="min-w-0">
+                  <span className="font-bold text-neutral-950 block text-sm truncate">
+                    {member.name}
+                  </span>
+                  <span className="text-neutral-500 font-mono">{member.phone}</span>
+                </div>
+              </div>
 
-          <div className="text-right shrink-0">
-            <span className="text-[10px] uppercase font-bold text-neutral-400 block">
-              Current Plan
-            </span>
-            <span className="font-semibold text-neutral-800 text-xs">
-              {member.planName}
-            </span>
-          </div>
-        </div>
-
-        {/* Amount & Payment Date (Grid) */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-          <Input
-            id="payment-amount-input"
-            label={`Amount (${currencySymbol}) *`}
-            type="number"
-            min="1"
-            value={amount}
-            onChange={(e) => {
-              setAmount(e.target.value);
-              if (errorMessage) setErrorMessage(null);
-            }}
-            prefixText={currencySymbol}
-            required
-            autoFocus
-          />
-
-          <Input
-            id="payment-date-input"
-            label="Payment date *"
-            type="date"
-            value={paymentDate}
-            onChange={(e) => {
-              setPaymentDate(e.target.value);
-              if (errorMessage) setErrorMessage(null);
-            }}
-            required
-          />
-        </div>
-
-        {/* Payment Method Quick Selector */}
-        <div className="space-y-1.5">
-          <label className="text-xs font-semibold text-neutral-700 block">
-            Payment method *
-          </label>
-          <div className="grid grid-cols-2 sm:grid-cols-4 gap-2">
-            {PAYMENT_METHODS.map((item) => {
-              const Icon = item.icon;
-              const isSelected = paymentMethod === item.id;
-              return (
-                <button
-                  key={item.id}
-                  type="button"
-                  id={`btn-method-${item.id.toLowerCase()}`}
-                  onClick={() => setPaymentMethod(item.id)}
-                  className={cn(
-                    'h-11 px-3 rounded-xl border text-xs font-semibold flex items-center justify-center gap-2 transition-all cursor-pointer',
-                    isSelected
-                      ? 'bg-neutral-950 text-white border-neutral-950 shadow-2xs ring-2 ring-neutral-950/10'
-                      : 'bg-white border-neutral-200 text-neutral-700 hover:bg-neutral-50 hover:border-neutral-300'
-                  )}
-                >
-                  <Icon className={cn('w-4 h-4', isSelected ? 'text-white' : 'text-neutral-500')} />
-                  <span>{item.label}</span>
-                </button>
-              );
-            })}
-          </div>
-        </div>
-
-        {/* Extension Duration & Scheduled Next Due Date */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-          <Select
-            id="payment-duration-select"
-            label="Membership renewal extension"
-            value={durationMonths}
-            onChange={(e) => {
-              const val = Number(e.target.value);
-              setDurationMonths(val);
-              // Pro-rate or update amount if standard multiple
-              const basePlanMonths = member.durationMonths || 1;
-              const baseRate = member.monthlyFee || 1500;
-              setAmount(String(Math.round((baseRate / basePlanMonths) * val)));
-            }}
-            options={[
-              { value: 1, label: '1 Month (+30 days)' },
-              { value: 2, label: '2 Months (+60 days)' },
-              { value: 3, label: '3 Months (Quarterly)' },
-              { value: 6, label: '6 Months (Half-Yearly)' },
-              { value: 12, label: '12 Months (Annual)' },
-            ]}
-          />
-
-          <div>
-            <label className="text-xs font-semibold text-neutral-700 block mb-1.5">
-              Next payment due date
-            </label>
-            <div className="h-10 px-3.5 rounded-xl bg-emerald-50/70 border border-emerald-200 flex items-center justify-between text-xs font-semibold text-emerald-950">
-              <span className="flex items-center gap-1.5">
-                <Clock className="w-3.5 h-3.5 text-emerald-600" />
-                {formatDate(calculatedNextDueDate, { format: 'medium' })}
-              </span>
-              <span className="text-[10px] uppercase font-bold text-emerald-700">
-                Scheduled
-              </span>
+              <div className="text-right shrink-0">
+                <span className="text-[10px] uppercase font-bold text-neutral-400 block">
+                  Current Plan
+                </span>
+                <span className="font-semibold text-neutral-800 text-xs">
+                  {member.planName}
+                </span>
+              </div>
             </div>
           </div>
-        </div>
 
-        {/* Optional Note */}
-        <Input
-          id="payment-notes-input"
-          label="Optional note"
-          placeholder="e.g. UPI Ref #482910, received by counter staff"
-          value={notes}
-          onChange={(e) => setNotes(e.target.value)}
-          helperText="Transaction reference or custom remarks"
-        />
+          {/* Section 2: Payment Details */}
+          <div className="bg-slate-50 p-4 sm:p-5 rounded-[20px] border border-slate-100 space-y-4">
+            <h4 className="text-sm font-bold text-slate-900 flex items-center gap-2">
+              <Banknote className="w-4 h-4 text-emerald-600" />
+              Payment Details
+            </h4>
+            
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+              <Input
+                id="payment-amount-input"
+                label={`Amount (${currencySymbol}) *`}
+                type="number"
+                min="1"
+                value={amount}
+                onChange={(e) => {
+                  setAmount(e.target.value);
+                  if (errorMessage) setErrorMessage(null);
+                }}
+                prefixText={currencySymbol}
+                required
+                autoFocus
+              />
+
+              <Input
+                id="payment-date-input"
+                label="Payment date *"
+                type="date"
+                value={paymentDate}
+                onChange={(e) => {
+                  setPaymentDate(e.target.value);
+                  if (errorMessage) setErrorMessage(null);
+                }}
+                required
+              />
+            </div>
+
+            <SegmentedControl
+              id="payment-method-control"
+              label="Payment method *"
+              value={paymentMethod}
+              onChange={(val) => setPaymentMethod(val as PaymentMethod)}
+              options={PAYMENT_METHODS.map(m => ({ value: m.id, label: m.label }))}
+            />
+          </div>
+
+          {/* Section 3: Renewal & Notes */}
+          <div className="bg-slate-50 p-4 sm:p-5 rounded-[20px] border border-slate-100 space-y-4">
+            <h4 className="text-sm font-bold text-slate-900 flex items-center gap-2">
+              <Calendar className="w-4 h-4 text-sky-600" />
+              Renewal & Notes
+            </h4>
+            
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+              <Select
+                id="payment-duration-select"
+                label="Membership renewal extension"
+                value={durationMonths}
+                onChange={(val) => {
+                  const numVal = Number(val);
+                  setDurationMonths(numVal);
+                  // Pro-rate or update amount if standard multiple
+                  const basePlanMonths = member.durationMonths || 1;
+                  const baseRate = member.monthlyFee || 1500;
+                  setAmount(String(Math.round((baseRate / basePlanMonths) * numVal)));
+                }}
+                options={[
+                  { value: 1, label: '1 Month (+30 days)' },
+                  { value: 2, label: '2 Months (+60 days)' },
+                  { value: 3, label: '3 Months (Quarterly)' },
+                  { value: 6, label: '6 Months (Half-Yearly)' },
+                  { value: 12, label: '12 Months (Annual)' },
+                ]}
+              />
+
+              <div>
+                <label className="text-xs font-semibold text-neutral-700 block mb-1.5">
+                  Next payment due date
+                </label>
+                <div className="h-10 px-3.5 rounded-xl bg-emerald-50/70 border border-emerald-200 flex items-center justify-between text-xs font-semibold text-emerald-950">
+                  <span className="flex items-center gap-1.5">
+                    <Clock className="w-3.5 h-3.5 text-emerald-600" />
+                    {formatDate(calculatedNextDueDate, { format: 'medium' })}
+                  </span>
+                  <span className="text-[10px] uppercase font-bold text-emerald-700">
+                    Scheduled
+                  </span>
+                </div>
+              </div>
+            </div>
+
+            <div className="pt-2">
+              <Input
+                id="payment-notes-input"
+                label="Optional note"
+                placeholder="e.g. UPI Ref #482910"
+                value={notes}
+                onChange={(e) => setNotes(e.target.value)}
+                helperText="Transaction reference or remarks"
+              />
+            </div>
+          </div>
+        </div>
 
         {/* Modal Action Footer */}
-        <div className="flex items-center justify-end gap-3 pt-4 border-t border-neutral-100 mt-6">
+        <div className="sticky bottom-0 bg-white border-t border-slate-100 p-4 sm:px-6 flex flex-col sm:flex-row items-center justify-end gap-3 z-10 shrink-0">
           <Button
             type="button"
-            variant="outline"
+            variant="tertiary"
             size="md"
             onClick={onClose}
             disabled={isSubmitting}
+            className="w-full sm:w-auto"
           >
             Cancel
           </Button>
@@ -312,7 +311,7 @@ export const QuickPaymentModal: React.FC<QuickPaymentModalProps> = ({
             type="submit"
             size="md"
             isLoading={isSubmitting}
-            className="bg-neutral-900 text-white hover:bg-neutral-800 font-semibold px-6"
+            className="w-full sm:w-auto bg-neutral-900 text-white hover:bg-neutral-800 font-semibold px-6"
           >
             {isSubmitting ? 'Saving payment...' : 'Mark as Paid'}
           </Button>

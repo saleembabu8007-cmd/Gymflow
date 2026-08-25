@@ -1,5 +1,5 @@
 import React from 'react';
-import { Activity } from 'lucide-react';
+import { Logo } from '../components/ui';
 
 interface AuthLayoutProps {
   children: React.ReactNode;
@@ -13,17 +13,24 @@ export const AuthLayout: React.FC<AuthLayoutProps> = ({
   subtitle,
 }) => {
   return (
-    <div className="min-h-screen bg-gradient-to-br from-teal-50 via-white to-teal-50/50 flex flex-col justify-center py-12 px-4 sm:px-6 lg:px-8 select-none relative overflow-hidden">
-      {/* Decorative background shapes */}
-      <div className="absolute top-0 left-1/2 -translate-x-1/2 w-full h-[60vh] bg-teal-100/30 rounded-b-[100%] blur-[120px] pointer-events-none" aria-hidden="true" />
+    <div className="min-h-screen bg-slate-50 flex flex-col justify-center py-12 px-4 sm:px-6 lg:px-8 select-none relative overflow-hidden">
+      {/* HUD Schematic Grid Background */}
+      <div className="absolute inset-0 pointer-events-none" aria-hidden="true">
+        <svg className="absolute inset-0 w-full h-full stroke-slate-200/60 [mask-image:radial-gradient(100%_100%_at_top_center,white,transparent)]">
+          <defs>
+            <pattern id="auth-grid-pattern" width="32" height="32" patternUnits="userSpaceOnUse">
+              <path d="M0 32V.5H32" fill="none" />
+            </pattern>
+          </defs>
+          <rect width="100%" height="100%" strokeWidth="0" fill="url(#auth-grid-pattern)" />
+        </svg>
+      </div>
       
       <div className="sm:mx-auto sm:w-full sm:max-w-md relative z-10">
         {/* GymFlow Minimal Brand Mark */}
         <div className="flex flex-col items-center text-center">
-          <div className="w-12 h-12 rounded-[18px] bg-gradient-to-tr from-teal-600 to-teal-400 text-white flex items-center justify-center shadow-lg shadow-teal-500/30">
-            <Activity className="w-6 h-6 stroke-[2.5]" />
-          </div>
-          <span className="mt-4 font-extrabold text-slate-900 text-xl sm:text-2xl tracking-tight">
+          <Logo size="lg" />
+          <span className="mt-5 font-extrabold text-slate-900 text-xl sm:text-2xl tracking-tight">
             GymFlow
           </span>
 
@@ -35,7 +42,7 @@ export const AuthLayout: React.FC<AuthLayoutProps> = ({
           {subtitle && (
             <div className="mt-3 w-full flex justify-center">
               {typeof subtitle === 'string' ? (
-                <p className="text-[15px] font-medium text-slate-500 max-w-sm mx-auto">
+                <p className="text-[15px] font-medium text-slate-600 max-w-sm mx-auto">
                   {subtitle}
                 </p>
               ) : (

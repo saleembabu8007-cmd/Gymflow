@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { Modal } from '../ui/Modal';
 import { Button } from '../ui/Button';
 import { Avatar } from '../ui/Avatar';
+import { SegmentedControl } from '../ui/SegmentedControl';
 import { Member, ReminderChannel } from '../../types';
 import { useGymSettings } from '../../hooks/useGymSettings';
 import { useReminders } from '../../hooks/useReminders';
@@ -137,144 +138,138 @@ export const SendReminderModal: React.FC<SendReminderModalProps> = ({
       description={`Send a quick payment reminder to ${member.name}`}
       maxWidth="md"
     >
-      <div className="space-y-4">
-        {/* Error notification banner with Retry */}
-        {sendError && (
-          <div className="p-3.5 rounded-xl bg-rose-50 border border-rose-200 text-rose-950 flex items-center justify-between gap-3 text-xs">
-            <div className="flex items-center gap-2">
-              <AlertCircle className="w-4 h-4 text-rose-600 shrink-0" />
-              <span>{sendError}</span>
-            </div>
-            <Button
-              type="button"
-              variant="outline"
-              size="sm"
-              onClick={handleSend}
-              disabled={isSending}
-              className="text-xs shrink-0 bg-white hover:bg-rose-100/50 text-rose-900 border-rose-200"
-              leftIcon={<RotateCcw className="w-3 h-3" />}
-            >
-              Retry
-            </Button>
-          </div>
-        )}
-
-        {/* Member Context Summary Card */}
-        <div className="p-3.5 rounded-2xl bg-neutral-50 border border-neutral-200/80 flex items-center justify-between text-xs">
-          <div className="flex items-center gap-3 min-w-0">
-            <Avatar name={member.name} size="sm" />
-            <div className="min-w-0">
-              <span className="font-bold text-neutral-950 block text-sm truncate">
-                {member.name}
-              </span>
-              <span className="text-neutral-500 font-mono">{member.phone}</span>
-            </div>
-          </div>
-
-          <div className="text-right shrink-0">
-            <span className="font-bold text-neutral-950 text-sm block">
-              {formatCurrency(member.monthlyFee, currencySymbol)}
-            </span>
-            <div className="flex items-center gap-1 justify-end mt-0.5">
-              {isOverdue ? (
-                <span className="text-[10px] font-bold text-rose-700 bg-rose-100/90 px-1.5 py-0.5 rounded">
-                  Overdue · {Math.abs(diffDays)}d
-                </span>
-              ) : isToday ? (
-                <span className="text-[10px] font-bold text-amber-900 bg-amber-100/90 px-1.5 py-0.5 rounded">
-                  Due today
-                </span>
-              ) : (
-                <span className="text-[10px] font-medium text-neutral-600 bg-neutral-200/80 px-1.5 py-0.5 rounded">
-                  Due {formatDate(member.nextPaymentDate, { format: 'medium' })}
-                </span>
-              )}
-            </div>
-          </div>
-        </div>
-
-        {/* Delivery Channel Selector */}
-        <div className="space-y-1.5">
-          <label className="text-xs font-semibold text-neutral-700 block">
-            Channel
-          </label>
-          <div className="grid grid-cols-3 gap-2">
-            {CHANNELS.map((item) => {
-              const Icon = item.icon;
-              const isSelected = channel === item.id;
-              return (
-                <button
-                  key={item.id}
-                  type="button"
-                  id={`btn-channel-${item.id.toLowerCase()}`}
-                  onClick={() => setChannel(item.id)}
-                  className={cn(
-                    'h-10 px-3 rounded-xl border text-xs font-semibold flex items-center justify-center gap-2 transition-all cursor-pointer',
-                    isSelected
-                      ? 'bg-neutral-950 text-white border-neutral-950 shadow-2xs'
-                      : 'bg-white border-neutral-200 text-neutral-700 hover:bg-neutral-50 hover:border-neutral-300'
-                  )}
-                >
-                  <Icon className={cn('w-3.5 h-3.5', isSelected ? 'text-white' : 'text-neutral-500')} />
-                  <span>{item.label}</span>
-                </button>
-              );
-            })}
-          </div>
-        </div>
-
-        {/* Suggested Message Section */}
-        <div className="space-y-1.5">
-          <div className="flex items-center justify-between">
-            <label className="text-xs font-semibold text-neutral-700">
-              Suggested message
-            </label>
-            {!isEditing ? (
-              <button
+      <div className="flex flex-col h-full">
+        <div className="space-y-6 flex-1 p-4 sm:p-6 overflow-y-auto">
+          {/* Error notification banner with Retry */}
+          {sendError && (
+            <div className="p-3.5 rounded-xl bg-rose-50 border border-rose-200 text-rose-950 flex items-center justify-between gap-3 text-xs">
+              <div className="flex items-center gap-2">
+                <AlertCircle className="w-4 h-4 text-rose-600 shrink-0" />
+                <span>{sendError}</span>
+              </div>
+              <Button
                 type="button"
-                id="btn-toggle-edit-message"
-                onClick={() => setIsEditing(true)}
-                className="text-[11px] font-semibold text-neutral-600 hover:text-neutral-950 flex items-center gap-1 cursor-pointer transition-colors"
+                variant="tertiary"
+                size="sm"
+                onClick={handleSend}
+                disabled={isSending}
+                className="text-xs shrink-0 bg-white hover:bg-rose-100/50 text-rose-900 border-rose-200"
+                leftIcon={<RotateCcw className="w-3 h-3" />}
               >
-                <Edit2 className="w-3 h-3" />
-                <span>Edit Message</span>
-              </button>
-            ) : (
-              <button
-                type="button"
-                onClick={handleResetMessage}
-                className="text-[11px] font-semibold text-neutral-500 hover:text-neutral-900 flex items-center gap-1 cursor-pointer transition-colors"
-              >
-                <RotateCcw className="w-3 h-3" />
-                <span>Reset to default</span>
-              </button>
-            )}
-          </div>
-
-          {isEditing ? (
-            <textarea
-              id="reminder-message-textarea"
-              value={message}
-              onChange={(e) => setMessage(e.target.value)}
-              rows={4}
-              className="w-full rounded-xl bg-white border border-neutral-300 p-3 text-xs sm:text-sm text-neutral-900 focus:outline-none focus:border-neutral-900 focus:ring-1 focus:ring-neutral-900 leading-relaxed font-sans shadow-2xs"
-              autoFocus
-            />
-          ) : (
-            <div className="p-3.5 rounded-xl bg-neutral-50/80 border border-neutral-200/80 text-xs sm:text-sm text-neutral-800 leading-relaxed">
-              "{message}"
+                Retry
+              </Button>
             </div>
           )}
+
+          {/* Section 1: Member Context Summary Card */}
+          <div className="bg-slate-50 p-4 sm:p-5 rounded-[20px] border border-slate-100">
+            <div className="flex items-center justify-between text-xs">
+              <div className="flex items-center gap-3 min-w-0">
+                <Avatar name={member.name} size="sm" />
+                <div className="min-w-0">
+                  <span className="font-bold text-neutral-950 block text-sm truncate">
+                    {member.name}
+                  </span>
+                  <span className="text-neutral-500 font-mono">{member.phone}</span>
+                </div>
+              </div>
+
+              <div className="text-right shrink-0">
+                <span className="font-bold text-neutral-950 text-sm block">
+                  {formatCurrency(member.monthlyFee, currencySymbol)}
+                </span>
+                <div className="flex items-center gap-1 justify-end mt-0.5">
+                  {isOverdue ? (
+                    <span className="text-[10px] font-bold text-rose-700 bg-rose-100/90 px-1.5 py-0.5 rounded">
+                      Overdue · {Math.abs(diffDays)}d
+                    </span>
+                  ) : isToday ? (
+                    <span className="text-[10px] font-bold text-amber-900 bg-amber-100/90 px-1.5 py-0.5 rounded">
+                      Due today
+                    </span>
+                  ) : (
+                    <span className="text-[10px] font-medium text-neutral-600 bg-neutral-200/80 px-1.5 py-0.5 rounded">
+                      Due {formatDate(member.nextPaymentDate, { format: 'medium' })}
+                    </span>
+                  )}
+                </div>
+              </div>
+            </div>
+          </div>
+
+          {/* Section 2: Delivery Channel Selector */}
+          <div className="bg-slate-50 p-4 sm:p-5 rounded-[20px] border border-slate-100 space-y-4">
+            <h4 className="text-sm font-bold text-slate-900 flex items-center gap-2">
+              <Smartphone className="w-4 h-4 text-purple-600" />
+              Delivery Channel
+            </h4>
+            
+            <SegmentedControl
+              options={[
+                { value: 'WHATSAPP', label: 'WhatsApp' },
+                { value: 'SMS', label: 'SMS' },
+                { value: 'EMAIL', label: 'Email' }
+              ]}
+              value={channel}
+              onChange={(val) => setChannel(val as ReminderChannel)}
+            />
+          </div>
+
+          {/* Section 3: Message Content */}
+          <div className="bg-slate-50 p-4 sm:p-5 rounded-[20px] border border-slate-100 space-y-4">
+            <div className="flex items-center justify-between">
+              <h4 className="text-sm font-bold text-slate-900 flex items-center gap-2">
+                <MessageSquare className="w-4 h-4 text-sky-600" />
+                Message Content
+              </h4>
+              {!isEditing ? (
+                <button
+                  type="button"
+                  id="btn-toggle-edit-message"
+                  onClick={() => setIsEditing(true)}
+                  className="text-[11px] font-semibold text-neutral-600 hover:text-neutral-950 flex items-center gap-1 cursor-pointer transition-colors"
+                >
+                  <Edit2 className="w-3 h-3" />
+                  <span>Edit Message</span>
+                </button>
+              ) : (
+                <button
+                  type="button"
+                  onClick={handleResetMessage}
+                  className="text-[11px] font-semibold text-neutral-500 hover:text-neutral-900 flex items-center gap-1 cursor-pointer transition-colors"
+                >
+                  <RotateCcw className="w-3 h-3" />
+                  <span>Reset to default</span>
+                </button>
+              )}
+            </div>
+
+            {isEditing ? (
+              <textarea
+                id="reminder-message-textarea"
+                value={message}
+                onChange={(e) => setMessage(e.target.value)}
+                rows={4}
+                className="w-full rounded-xl bg-white border border-neutral-300 p-3 text-xs sm:text-sm text-neutral-900 focus:outline-none focus:border-neutral-900 focus:ring-1 focus:ring-neutral-900 leading-relaxed font-sans shadow-2xs"
+                autoFocus
+              />
+            ) : (
+              <div className="p-3.5 rounded-xl bg-white border border-neutral-200 text-xs sm:text-sm text-neutral-800 leading-relaxed">
+                "{message}"
+              </div>
+            )}
+          </div>
         </div>
 
-        {/* Modal Action Buttons */}
-        <div className="flex items-center justify-end gap-3 pt-4 border-t border-neutral-100 mt-6">
+        {/* Modal Action Footer */}
+        <div className="sticky bottom-0 bg-white border-t border-slate-100 p-4 sm:px-6 flex flex-col sm:flex-row items-center justify-end gap-3 z-10 shrink-0">
           <Button
             type="button"
-            variant="outline"
+            variant="tertiary"
             size="md"
             onClick={onClose}
             disabled={isSending}
+            className="w-full sm:w-auto"
           >
             Cancel
           </Button>
@@ -285,7 +280,7 @@ export const SendReminderModal: React.FC<SendReminderModalProps> = ({
             size="md"
             onClick={handleSend}
             isLoading={isSending}
-            className="bg-neutral-900 text-white hover:bg-neutral-800 font-semibold px-5 shadow-2xs"
+            className="w-full sm:w-auto bg-neutral-900 text-white hover:bg-neutral-800 font-semibold px-5 shadow-2xs"
           >
             {isSending
               ? 'Opening...'
