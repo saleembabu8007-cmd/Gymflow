@@ -156,7 +156,7 @@ export const OnboardingModal: React.FC<OnboardingModalProps> = ({
       maxWidth="md"
       showCloseButton={false}
     >
-      <div className="space-y-6">
+      <div className="space-y-6 p-4 sm:p-6">
         {/* Step Indicator */}
         <div className="flex items-center justify-between pb-2 border-b border-neutral-100">
           <div className="flex items-center gap-1.5">

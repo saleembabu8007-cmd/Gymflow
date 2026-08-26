@@ -46,9 +46,9 @@ export const AdminLayout: React.FC<AdminLayoutProps> = ({
   };
 
   return (
-    <div className="min-h-screen bg-zinc-950 text-zinc-100 flex flex-col font-sans selection:bg-rose-500 selection:text-white">
+    <div className="h-screen bg-zinc-950 text-zinc-100 flex flex-col font-sans selection:bg-rose-500 selection:text-white overflow-hidden">
       {/* Top Navbar */}
-      <header className="border-b border-zinc-800 bg-zinc-900/80 sticky top-0 z-40 backdrop-blur-md">
+      <header className="border-b border-zinc-800 bg-zinc-900/80 z-40 shrink-0">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
           <div className="flex items-center gap-3">
             <div className="w-8 h-8 rounded-lg bg-rose-600 text-white flex items-center justify-center font-bold">
@@ -82,7 +82,7 @@ export const AdminLayout: React.FC<AdminLayoutProps> = ({
       </header>
 
       {/* Admin Horizontal Nav Bar */}
-      <div className="border-b border-zinc-800 bg-zinc-900/40">
+      <div className="border-b border-zinc-800 bg-zinc-900/40 shrink-0">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex items-center gap-1 overflow-x-auto scrollbar-none py-2">
           {NAV_ITEMS.map((item) => {
             const Icon = item.icon;
@@ -109,9 +109,11 @@ export const AdminLayout: React.FC<AdminLayoutProps> = ({
       </div>
 
       {/* Main Admin Content Body */}
-      <main className="flex-1 max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-8">
-        {children}
-      </main>
+      <div className="flex-1 overflow-y-auto">
+        <main className="max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-8">
+          {children}
+        </main>
+      </div>
     </div>
   );
 };

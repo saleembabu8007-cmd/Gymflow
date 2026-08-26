@@ -122,7 +122,7 @@ export const MemberDetailModal: React.FC<MemberDetailModalProps> = ({
       title=""
       maxWidth="lg"
     >
-      <div className="space-y-6 pb-2">
+      <div className="space-y-6 p-4 sm:p-6">
         {/* 1. HEADER */}
         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 p-4 sm:p-5 rounded-2xl bg-neutral-50/80 border border-neutral-200/80">
           {/* Member Identity */}

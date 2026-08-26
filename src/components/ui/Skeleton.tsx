@@ -71,7 +71,7 @@ export const ListSectionSkeleton: React.FC<{ itemsCount?: number; className?: st
   className 
 }) => (
   <section className={cn("relative", className)}>
-    <div className="sticky top-[72px] z-10 -mx-4 px-4 py-3 sm:-mx-6 sm:px-6 bg-white/95 backdrop-blur-md border-b border-slate-100 flex items-center justify-between shadow-[0_4px_12px_rgba(255,255,255,1)]">
+    <div className="sticky top-[72px] z-10 py-3 bg-zinc-50/95 backdrop-blur-md flex items-center justify-between">
       <SkeletonText className="w-24 h-4" />
       <Skeleton className="w-6 h-4 rounded-full shrink-0" />
     </div>

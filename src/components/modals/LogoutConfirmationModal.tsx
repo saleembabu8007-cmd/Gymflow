@@ -41,7 +41,7 @@ export const LogoutConfirmationModal: React.FC<LogoutConfirmationModalProps> = (
       title="Sign Out of GymFlow"
       maxWidth="sm"
     >
-      <div className="space-y-4">
+      <div className="space-y-4 p-4 sm:p-6">
         {error && (
           <div className="p-3 bg-rose-50 border border-rose-200 text-rose-700 text-xs font-semibold rounded-xl flex items-center gap-2">
             <AlertCircle className="w-4 h-4 shrink-0 text-rose-600" />

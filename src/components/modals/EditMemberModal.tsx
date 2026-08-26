@@ -95,7 +95,7 @@ export const EditMemberModal: React.FC<EditMemberModalProps> = ({
       description={`Update profile and membership settings for ${member.name}`}
       maxWidth="md"
     >
-      <form onSubmit={handleSubmit} className="space-y-4">
+      <form onSubmit={handleSubmit} className="space-y-4 p-4 sm:p-6">
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
           <Input
             label="Full Name *"

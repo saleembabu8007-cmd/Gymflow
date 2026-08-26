@@ -54,7 +54,7 @@ export const SearchModal: React.FC<SearchModalProps> = ({
       description="Quickly look up members, record payments or send reminders"
       maxWidth="lg"
     >
-      <div className="space-y-4">
+      <div className="space-y-4 p-4 sm:p-6">
         <SearchInput
           value={query}
           onSearchChange={setQuery}

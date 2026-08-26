@@ -58,7 +58,7 @@ export const GymDetailModal: React.FC<GymDetailModalProps> = ({
       description={`Operational tenant details for ${gym.name}`}
       maxWidth="lg"
     >
-      <div className="space-y-5 text-neutral-900 font-sans">
+      <div className="space-y-5 text-neutral-900 font-sans p-4 sm:p-6">
         {/* Header Summary Card */}
         <div className="p-4 rounded-2xl bg-neutral-50 border border-neutral-200/80 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
           <div className="flex items-center gap-3.5 min-w-0">

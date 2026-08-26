@@ -37,6 +37,7 @@ import { useSubscription } from './hooks/useSubscription';
 import { useServices } from './services/provider';
 import { PlatformGymTenant, PlatformStats, Member } from './types';
 import { LoadingState } from './components/ui/LoadingState';
+import { AppPreloader } from './components/ui/AppPreloader';
 import { ErrorBoundary } from './components/common/ErrorBoundary';
 import { NetworkStatusBanner } from './components/common/NetworkStatusBanner';
 
@@ -188,11 +189,7 @@ const AppContent: React.FC = () => {
 
   // 1. Initial Session Verification Loading
   if (authLoading || (isAuthenticated && user?.gymId && subLoading)) {
-    return (
-      <div className="min-h-screen bg-neutral-950 flex items-center justify-center text-white">
-        <LoadingState message="Verifying session and security entitlements..." />
-      </div>
-    );
+    return <AppPreloader />;
   }
 
   // 2. PLATFORM ADMIN ROUTE BRANCH (/admin, /admin/login, /admin/forgot-password, /admin/reset-password, /admin/gyms, /admin/users, /admin/subscriptions, /admin/audit, /admin/settings)

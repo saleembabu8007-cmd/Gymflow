@@ -38,7 +38,7 @@ export const DashboardLayout: React.FC<DashboardLayoutProps> = ({
   const gymName = gym?.name || 'GymFlow Tenant';
 
   return (
-    <div className="min-h-screen bg-zinc-50 flex overflow-x-hidden">
+    <div className="h-screen bg-zinc-50 flex overflow-hidden">
       {/* Desktop Sidebar */}
       <Sidebar
         currentPath={currentPath}
@@ -51,7 +51,7 @@ export const DashboardLayout: React.FC<DashboardLayoutProps> = ({
       />
 
       {/* Main Content Area */}
-      <div className="flex-1 flex flex-col min-w-0 pb-20 md:pb-10 overflow-x-hidden">
+      <div className="flex-1 flex flex-col min-w-0 overflow-hidden">
         <Header
           user={user}
           gymName={gymName}
@@ -62,9 +62,11 @@ export const DashboardLayout: React.FC<DashboardLayoutProps> = ({
           subtitle={pageSubtitle}
         />
 
-        <main className="flex-1 p-4 sm:p-6 lg:p-8 max-w-7xl w-full mx-auto">
-          {children}
-        </main>
+        <div className="flex-1 overflow-y-auto pb-20 md:pb-10">
+          <main className="p-4 sm:p-6 lg:p-8 max-w-7xl w-full mx-auto">
+            {children}
+          </main>
+        </div>
       </div>
 
       {/* Mobile Intentional Bottom Navigation */}

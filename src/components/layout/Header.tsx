@@ -24,68 +24,70 @@ export const Header: React.FC<HeaderProps> = ({
   subtitle,
 }) => {
   return (
-    <header className="h-[72px] border-b border-slate-200/80 bg-white/90 backdrop-blur-md sticky top-0 z-20 px-4 sm:px-6 lg:px-8 flex items-center justify-between gap-4 select-none shrink-0">
-      {/* Left: Page Title & Subtitle */}
-      <div className="flex flex-col justify-center min-w-0 py-2">
-        {title && (
-          <h1 className="text-xl sm:text-2xl font-extrabold tracking-tight text-zinc-950 leading-tight truncate">
-            {title}
-          </h1>
-        )}
-        {subtitle && (
-          <span className="text-sm text-slate-600 truncate leading-snug mt-0.5 hidden sm:block">
-            {subtitle}
-          </span>
-        )}
-      </div>
+    <header className="h-[72px] border-b border-slate-200/80 bg-white/90 backdrop-blur-md sticky top-0 z-20 px-4 sm:px-6 lg:px-8 flex items-center justify-center shrink-0">
+      <div className="max-w-7xl w-full mx-auto flex items-center justify-between gap-4 select-none">
+        {/* Left: Page Title & Subtitle */}
+        <div className="flex flex-col justify-center min-w-0 py-2">
+          {title && (
+            <h1 className="text-xl sm:text-2xl font-extrabold tracking-tight text-zinc-950 leading-tight truncate">
+              {title}
+            </h1>
+          )}
+          {subtitle && (
+            <span className="text-sm text-slate-600 truncate leading-snug mt-0.5 hidden sm:block">
+              {subtitle}
+            </span>
+          )}
+        </div>
 
-      {/* Right: Quick Search, Primary Action, Avatar */}
-      <div className="flex items-center gap-2 sm:gap-4 shrink-0">
-        {/* Quick Search Shortcut Button */}
-        {onOpenSearch && (
-          <button
-            type="button"
-            id="header-search-btn"
-            onClick={onOpenSearch}
-            className="flex items-center justify-center md:justify-start gap-2 w-10 h-10 md:w-auto md:px-4 md:h-11 rounded-full bg-teal-50 hover:bg-teal-100 text-teal-700 transition-colors cursor-pointer"
-            title="Search members or transactions (⌘K)"
-          >
-            <Search className="w-[18px] h-[18px] text-teal-600 stroke-[2.5]" />
-            <span className="hidden md:inline text-[15px] font-medium mr-2">Search...</span>
-            <kbd className="hidden lg:inline-block px-1.5 py-0.5 text-[10px] bg-white border border-teal-200/50 rounded text-teal-600 font-mono shadow-sm">
-              ⌘K
-            </kbd>
-          </button>
-        )}
+        {/* Right: Quick Search, Primary Action, Avatar */}
+        <div className="flex items-center gap-2 sm:gap-4 shrink-0">
+          {/* Quick Search Shortcut Button */}
+          {onOpenSearch && (
+            <button
+              type="button"
+              id="header-search-btn"
+              onClick={onOpenSearch}
+              className="flex items-center justify-center md:justify-start gap-2 w-10 h-10 md:w-auto md:px-4 md:h-11 rounded-full bg-teal-50 hover:bg-teal-100 text-teal-700 transition-colors cursor-pointer"
+              title="Search members or transactions (⌘K)"
+            >
+              <Search className="w-[18px] h-[18px] text-teal-600 stroke-[2.5]" />
+              <span className="hidden md:inline text-[15px] font-medium mr-2">Search...</span>
+              <kbd className="hidden lg:inline-block px-1.5 py-0.5 text-[10px] bg-white border border-teal-200/50 rounded text-teal-600 font-mono shadow-sm">
+                ⌘K
+              </kbd>
+            </button>
+          )}
 
-        {/* Platform Admin Console Navigation Trigger */}
-        {onNavigateAdmin && (
-          <Button
-            id="header-admin-console-btn"
-            variant="tertiary"
-            size="md"
-            onClick={onNavigateAdmin}
-            leftIcon={<ShieldCheck className="w-5 h-5 text-rose-500" />}
-            className="hidden lg:flex border-slate-300 hover:bg-slate-100 font-semibold rounded-full px-5"
-          >
-            Admin Console
-          </Button>
-        )}
+          {/* Platform Admin Console Navigation Trigger */}
+          {onNavigateAdmin && (
+            <Button
+              id="header-admin-console-btn"
+              variant="tertiary"
+              size="md"
+              onClick={onNavigateAdmin}
+              leftIcon={<ShieldCheck className="w-5 h-5 text-rose-500" />}
+              className="hidden lg:flex border-slate-300 hover:bg-slate-100 font-semibold rounded-full px-5"
+            >
+              Admin Console
+            </Button>
+          )}
 
-        {/* Quick Add Member button */}
-        {onOpenQuickAdd && (
-          <Button
-            id="header-quick-add-btn"
-            variant="primary"
-            size="md"
-            onClick={onOpenQuickAdd}
-            leftIcon={<Plus className="w-5 h-5" />}
-            className="rounded-full shadow-sm sm:px-5"
-          >
-            <span className="hidden sm:inline">Add Member</span>
-            <span className="sm:hidden text-sm">Add</span>
-          </Button>
-        )}
+          {/* Quick Add Member button */}
+          {onOpenQuickAdd && (
+            <Button
+              id="header-quick-add-btn"
+              variant="primary"
+              size="md"
+              onClick={onOpenQuickAdd}
+              leftIcon={<Plus className="w-5 h-5" />}
+              className="rounded-full shadow-sm sm:px-5"
+            >
+              <span className="hidden sm:inline">Add Member</span>
+              <span className="sm:hidden text-sm">Add</span>
+            </Button>
+          )}
+        </div>
       </div>
     </header>
   );
