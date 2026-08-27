@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { ShieldCheck, AlertCircle } from 'lucide-react';
-import { Button, Input, Select, StepProgress } from '../../components/ui';
+import { Button, Input, Select, StepProgress, Card, Badge } from '../../components/ui';
 import { AuthLayout } from '../../layouts/AuthLayout';
 import { useAuth } from '../../hooks/useAuth';
 
@@ -60,15 +60,15 @@ export const GymSetupPage: React.FC<GymSetupPageProps> = ({ onComplete }) => {
             labels={['Account Registration', 'Workspace Setup']}
             className="mt-2 mb-2"
           />
-          <p className="text-[14px] text-slate-600 mt-2 max-w-sm mx-auto text-center leading-relaxed">
-            Welcome, <span className="font-semibold text-slate-900">{user?.name || 'Gym Owner'}</span>! Enter your gym details to configure your workspace.
+          <p className="text-[length:var(--text-body-size)] text-neutral-600 mt-2 max-w-sm mx-auto text-center leading-relaxed">
+            Welcome, <span className="font-semibold text-neutral-900">{user?.name || 'Gym Owner'}</span>! Enter your gym details to configure your workspace.
           </p>
         </div>
       }
     >
       {errorMessage && (
-        <div className="mb-6 p-3.5 bg-rose-50 border border-rose-200 text-rose-700 text-xs font-semibold rounded-xl flex items-center gap-2.5">
-          <AlertCircle className="w-4 h-4 shrink-0 text-rose-600" />
+        <div className="mb-6 p-3.5 bg-[var(--color-danger-50)] border border-[var(--color-danger-200)] text-[var(--color-danger-700)] text-[length:var(--text-caption-size)] font-semibold rounded-[var(--radius-lg)] flex items-center gap-2.5">
+          <AlertCircle className="w-4 h-4 shrink-0 text-[var(--color-danger-600)]" />
           <span>{errorMessage}</span>
         </div>
       )}
@@ -125,18 +125,18 @@ export const GymSetupPage: React.FC<GymSetupPageProps> = ({ onComplete }) => {
         </div>
 
         {/* Workspace Setup Summary */}
-        <div className="p-4 rounded-xl bg-slate-50 border border-slate-200 space-y-1.5">
-          <div className="flex items-center justify-between text-xs font-semibold text-slate-900">
-            <span className="flex items-center gap-1.5">
-              <ShieldCheck className="w-4 h-4 text-emerald-600" />
+        <Card className="p-4 border border-[var(--color-success-200)] bg-[var(--color-success-50)] shadow-none">
+          <div className="flex items-center justify-between">
+            <span className="flex items-center gap-1.5 text-sm font-semibold text-[var(--color-success-900)]">
+              <ShieldCheck className="w-4 h-4 text-[var(--color-success-600)]" />
               GymFlow Workspace Setup
             </span>
-            <span className="text-emerald-700 font-bold text-[11px] bg-emerald-100 px-2 py-0.5 rounded uppercase tracking-wider">Ready</span>
+            <Badge variant="success" icon={<ShieldCheck className="w-3 h-3" />}>Ready</Badge>
           </div>
-          <p className="text-[13px] text-slate-600 leading-relaxed">
+          <p className="text-[13px] text-[var(--color-success-700)] leading-relaxed mt-1.5">
             Includes member management, WhatsApp payment reminders, and payment collection ledgers.
           </p>
-        </div>
+        </Card>
 
         <div className="pt-2">
           <Button

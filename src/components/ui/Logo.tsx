@@ -17,7 +17,7 @@ export const Logo: React.FC<LogoProps> = ({ className, size = 'lg' }) => {
   return (
     <div
       className={cn(
-        'relative bg-gradient-to-tr from-teal-600 to-teal-400 text-white flex items-center justify-center shadow-lg shadow-teal-500/30 overflow-hidden shrink-0',
+        'relative bg-neutral-900 flex items-center justify-center shadow-lg overflow-hidden shrink-0',
         sizeClasses[size],
         className
       )}
@@ -32,12 +32,12 @@ export const Logo: React.FC<LogoProps> = ({ className, size = 'lg' }) => {
         <path
           d="M12 4C7.58172 4 4 7.58172 4 12C4 16.4183 7.58172 20 12 20C16.4183 20 20 16.4183 20 12H13V14.5H17.25C16.3 16.6 14.3 18 12 18C8.68629 18 6 15.3137 6 12C6 8.68629 8.68629 6 12 6C13.4 6 14.6 6.5 15.6 7.3L17.1 5.8C15.8 4.6 14 4 12 4Z"
           fill="currentColor"
-          className="opacity-90"
+          className="opacity-100 text-white"
         />
         <path
           d="M20 12L15 7V11H13V13H15V17L20 12Z"
           fill="currentColor"
-          className="opacity-100"
+          className="opacity-100 text-[var(--color-brand-500)]"
         />
       </svg>
       

@@ -48,12 +48,12 @@ export const Header: React.FC<HeaderProps> = ({
               type="button"
               id="header-search-btn"
               onClick={onOpenSearch}
-              className="flex items-center justify-center md:justify-start gap-2 w-10 h-10 md:w-auto md:px-4 md:h-11 rounded-full bg-teal-50 hover:bg-teal-100 text-teal-700 transition-colors cursor-pointer"
+              className="flex items-center justify-center md:justify-start gap-2 w-10 h-10 md:w-auto md:px-4 md:h-11 rounded-full bg-neutral-100 hover:bg-neutral-200 text-neutral-700 transition-colors cursor-pointer"
               title="Search members or transactions (⌘K)"
             >
-              <Search className="w-[18px] h-[18px] text-teal-600 stroke-[2.5]" />
+              <Search className="w-[18px] h-[18px] text-neutral-600 stroke-[2.5]" />
               <span className="hidden md:inline text-[15px] font-medium mr-2">Search...</span>
-              <kbd className="hidden lg:inline-block px-1.5 py-0.5 text-[10px] bg-white border border-teal-200/50 rounded text-teal-600 font-mono shadow-sm">
+              <kbd className="hidden lg:inline-block px-1.5 py-0.5 text-[10px] bg-white border border-neutral-300 rounded text-neutral-600 font-mono shadow-sm">
                 ⌘K
               </kbd>
             </button>

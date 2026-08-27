@@ -75,7 +75,7 @@ export const BottomNav: React.FC<BottomNavProps> = ({
       {/* Intentional Bottom Navigation Bar */}
       <nav
         aria-label="Mobile Bottom Navigation"
-        className="md:hidden fixed bottom-0 left-0 right-0 z-40 bg-white/95 backdrop-blur-md border-t border-neutral-200/80 px-2 py-1 flex items-center justify-around select-none shadow-lg"
+        className="md:hidden fixed bottom-0 left-0 right-0 z-40 bg-white/95 backdrop-blur-md border-t border-neutral-200/80 px-2 pt-1 pb-[calc(0.25rem+env(safe-area-inset-bottom))] flex items-center justify-around select-none shadow-lg"
       >
         {primaryTabs.map((item) => {
           const Icon = item.icon;
@@ -89,16 +89,17 @@ export const BottomNav: React.FC<BottomNavProps> = ({
               type="button"
               id={`bottom-nav-${item.id.replace('/', '') || 'today'}`}
               onClick={() => onNavigate(item.id)}
+              aria-current={isActive ? 'page' : undefined}
               className={cn(
-                'relative flex flex-col items-center justify-center min-h-[48px] py-1.5 px-3 rounded-2xl text-[11px] font-medium transition-colors min-w-[64px] touch-manipulation',
-                isActive ? 'bg-teal-50 text-teal-700 font-bold' : 'text-slate-400 hover:text-slate-600 bg-transparent'
+                'relative flex flex-col items-center justify-center min-h-[48px] py-1.5 px-3 rounded-[var(--radius-lg)] text-[11px] font-medium transition-colors min-w-[64px] touch-manipulation',
+                isActive ? 'bg-[var(--color-brand-50)] text-[var(--color-brand-600)] font-bold' : 'text-neutral-400 hover:text-neutral-600 bg-transparent'
               )}
             >
               <div className="relative flex items-center justify-center mb-0.5">
                 <Icon
                   className={cn(
                     'w-[22px] h-[22px] transition-transform stroke-[2]',
-                    isActive ? 'text-teal-600 fill-teal-100' : 'text-slate-400 fill-transparent'
+                    isActive ? 'text-[var(--color-brand-500)] fill-[var(--color-brand-100)]' : 'text-neutral-400 fill-transparent'
                   )}
                 />
                 {item.badge !== undefined && (
@@ -117,11 +118,12 @@ export const BottomNav: React.FC<BottomNavProps> = ({
           type="button"
           id="bottom-nav-more"
           onClick={() => setIsMoreOpen(true)}
+          aria-current={isSecondaryActive || isMoreOpen ? 'page' : undefined}
           className={cn(
-            'relative flex flex-col items-center justify-center min-h-[48px] py-1.5 px-3 rounded-2xl text-[11px] font-medium transition-colors min-w-[64px] touch-manipulation',
+            'relative flex flex-col items-center justify-center min-h-[48px] py-1.5 px-3 rounded-[var(--radius-lg)] text-[11px] font-medium transition-colors min-w-[64px] touch-manipulation',
             isSecondaryActive || isMoreOpen
-              ? 'bg-teal-50 text-teal-700 font-bold'
-              : 'text-slate-400 hover:text-slate-600 bg-transparent'
+              ? 'bg-[var(--color-brand-50)] text-[var(--color-brand-600)] font-bold'
+              : 'text-neutral-400 hover:text-neutral-600 bg-transparent'
           )}
         >
           <div className="relative flex items-center justify-center mb-0.5">
@@ -129,13 +131,10 @@ export const BottomNav: React.FC<BottomNavProps> = ({
               className={cn(
                 'w-[22px] h-[22px] transition-transform stroke-[2]',
                 isSecondaryActive || isMoreOpen
-                  ? 'text-teal-600 fill-teal-100'
-                  : 'text-slate-400 fill-transparent'
+                  ? 'text-[var(--color-brand-500)] fill-[var(--color-brand-100)]'
+                  : 'text-neutral-400 fill-transparent'
               )}
             />
-            {isSecondaryActive && (
-              <span className="absolute -top-0.5 -right-0.5 w-2 h-2 bg-rose-500 rounded-full ring-2 ring-white" />
-            )}
           </div>
           <span className="truncate">More</span>
         </button>
@@ -176,7 +175,7 @@ export const BottomNav: React.FC<BottomNavProps> = ({
                   setIsMoreOpen(false);
                   onLogout();
                 }}
-                className="px-2.5 py-1.5 text-xs font-semibold text-rose-600 bg-rose-50 hover:bg-rose-100 rounded-xl transition-colors shrink-0 flex items-center gap-1"
+                className="px-2.5 py-1.5 min-h-[44px] text-xs font-semibold text-rose-600 bg-rose-50 hover:bg-rose-100 rounded-xl transition-colors shrink-0 flex items-center gap-1"
               >
                 <LogOut className="w-3.5 h-3.5" />
                 <span>Logout</span>
@@ -193,7 +192,7 @@ export const BottomNav: React.FC<BottomNavProps> = ({
                   setIsMoreOpen(false);
                   onOpenQuickAdd();
                 }}
-                className="flex items-center justify-center gap-2 p-3 rounded-xl bg-neutral-900 text-white font-medium text-xs hover:bg-neutral-800 transition-colors shadow-2xs"
+                className="flex items-center justify-center min-h-[44px] gap-2 p-3 rounded-xl bg-neutral-900 text-white font-medium text-xs hover:bg-neutral-800 transition-colors shadow-2xs"
               >
                 <Plus className="w-4 h-4" />
                 <span>Add Member</span>
@@ -207,7 +206,7 @@ export const BottomNav: React.FC<BottomNavProps> = ({
                   setIsMoreOpen(false);
                   onOpenSearch();
                 }}
-                className="flex items-center justify-center gap-2 p-3 rounded-xl bg-white border border-neutral-200 text-neutral-800 font-medium text-xs hover:bg-neutral-50 transition-colors shadow-2xs"
+                className="flex items-center justify-center min-h-[44px] gap-2 p-3 rounded-xl bg-white border border-neutral-200 text-neutral-800 font-medium text-xs hover:bg-neutral-50 transition-colors shadow-2xs"
               >
                 <Search className="w-4 h-4 text-neutral-400" />
                 <span>Search (⌘K)</span>

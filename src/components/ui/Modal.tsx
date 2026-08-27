@@ -117,7 +117,7 @@ export const Modal: React.FC<ModalProps> = ({
             exit={{ opacity: 0 }}
             transition={{ duration: 0.15 }}
             onClick={onClose}
-            className="fixed inset-0 bg-zinc-950/40 backdrop-blur-sm"
+            className="fixed inset-0 bg-neutral-900/40 backdrop-blur-sm"
             aria-hidden="true"
           />
 
@@ -130,7 +130,7 @@ export const Modal: React.FC<ModalProps> = ({
             exit={{ opacity: 0, y: 100, scale: 1 }}
             transition={{ duration: 0.3, ease: [0.16, 1, 0.3, 1] }}
             className={cn(
-              'relative w-full bg-white sm:rounded-[24px] rounded-t-[24px] overflow-hidden sm:border border-slate-200 z-10 flex flex-col focus:outline-none shadow-[0_0_40px_-10px_rgba(13,148,136,0.15)] sm:shadow-[0_20px_40px_-15px_rgba(13,148,136,0.15)]',
+              'relative w-full bg-white sm:rounded-[var(--radius-xl)] rounded-t-[var(--radius-xl)] overflow-hidden sm:border border-neutral-200 z-10 flex flex-col focus:outline-none shadow-[var(--shadow-overlay)]',
               'mt-auto sm:mt-0', // Push to bottom on mobile, centered on desktop
               'max-h-[90vh] sm:max-h-[85vh]', // Max height handling
               maxWidthClasses[maxWidth]
@@ -142,19 +142,19 @@ export const Modal: React.FC<ModalProps> = ({
           >
             {/* Mobile Drag Handle */}
             <div className="sm:hidden flex justify-center pt-3 pb-1">
-              <div className="w-10 h-1.5 bg-slate-200 rounded-full" />
+              <div className="w-10 h-1.5 bg-neutral-200 rounded-full" />
             </div>
 
             {(title || showCloseButton) && (
-              <div className="flex items-center justify-between px-6 pb-4 sm:py-4 border-b border-slate-100 shrink-0">
+              <div className="flex items-center justify-between px-6 pb-4 sm:py-4 border-b border-neutral-100 shrink-0">
                 <div>
                   {title && (
-                    <h3 id={titleId} className="text-sm sm:text-base font-bold text-zinc-950 tracking-tight">
+                    <h3 id={titleId} className="text-[length:var(--text-body-size)] sm:text-[length:var(--text-heading-size)] font-bold text-neutral-900 tracking-tight">
                       {title}
                     </h3>
                   )}
                   {description && (
-                    <p id={descriptionId} className="text-xs font-medium text-zinc-600 mt-0.5">
+                    <p id={descriptionId} className="text-[length:var(--text-caption-size)] font-medium text-neutral-600 mt-0.5">
                       {description}
                     </p>
                   )}
@@ -163,7 +163,7 @@ export const Modal: React.FC<ModalProps> = ({
                   <button
                     type="button"
                     onClick={onClose}
-                    className="text-slate-400 hover:text-slate-600 flex items-center justify-center min-w-[44px] min-h-[44px] rounded-full hover:bg-slate-100 transition-colors focus-visible:ring-2 focus-visible:ring-teal-600"
+                    className="text-neutral-400 hover:text-neutral-600 flex items-center justify-center min-w-[44px] min-h-[44px] rounded-full hover:bg-neutral-100 transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-500"
                   >
                     <X className="w-5 h-5" />
                   </button>

@@ -87,9 +87,9 @@ export const MemberRow: React.FC<MemberRowProps> = ({
   return (
     <div
       className={cn(
-        'group relative flex flex-col sm:flex-row sm:items-center justify-between gap-4 p-4 sm:p-5 rounded-2xl bg-white border border-slate-200/80 transition-all duration-300 hover:shadow-[0_4px_20px_rgba(15,23,42,0.05)] cursor-pointer overflow-hidden',
-        isOverdue && !isSuccessFlash && 'border-l-4 border-l-rose-500 bg-rose-50/30 border-y-rose-200 border-r-rose-200',
-        (highlighted || isSuccessFlash) && 'bg-emerald-50 border-emerald-200',
+        'group relative flex flex-col sm:flex-row sm:items-center justify-between gap-4 p-4 sm:p-5 rounded-[var(--radius-xl)] bg-white border border-neutral-200 transition-all duration-300 hover:shadow-[0_4px_20px_rgba(15,23,42,0.05)] cursor-pointer overflow-hidden',
+        isOverdue && !isSuccessFlash && 'border-l-4 border-l-[var(--color-danger-500)] bg-[var(--color-danger-50)] border-y-[var(--color-danger-200)] border-r-[var(--color-danger-200)]',
+        (highlighted || isSuccessFlash) && 'bg-[var(--color-success-50)] border-[var(--color-success-200)]',
         isSuccessFlash && 'pointer-events-none shadow-none',
         className
       )}
@@ -99,7 +99,7 @@ export const MemberRow: React.FC<MemberRowProps> = ({
         <Avatar name={displayName} size="md" />
         <div className="flex-1 min-w-0">
           <div className="flex flex-col sm:flex-row sm:items-center gap-1 sm:gap-3">
-            <span className="font-semibold text-[15px] sm:text-base text-slate-900 truncate">
+            <span className="font-bold text-[length:var(--text-body-size)] text-neutral-900 truncate">
               {displayName}
             </span>
             <div className="mt-1 sm:mt-0">
@@ -107,19 +107,19 @@ export const MemberRow: React.FC<MemberRowProps> = ({
             </div>
           </div>
           <div className="mt-1.5 flex flex-wrap items-center gap-2">
-            <span className="text-[13px] text-slate-600 font-mono tracking-tight">{member.phone}</span>
-            <span className="text-[13px] text-slate-600">&middot;</span>
-            <span className="text-[13px] text-slate-600">{displayPlan}</span>
+            <span className="text-[length:var(--text-caption-size)] text-neutral-600 font-mono tracking-tight">{member.phone}</span>
+            <span className="text-[length:var(--text-caption-size)] text-neutral-600">&middot;</span>
+            <span className="text-[length:var(--text-caption-size)] text-neutral-600 font-medium">{displayPlan}</span>
           </div>
         </div>
       </div>
 
-      <div className="flex items-center justify-between sm:justify-end gap-4 border-t border-slate-100 sm:border-0 pt-3 sm:pt-0 shrink-0">
+      <div className="flex items-center justify-between sm:justify-end gap-4 border-t border-neutral-100 sm:border-0 pt-3 sm:pt-0 shrink-0">
         <div className="flex flex-col items-start sm:items-end mr-auto sm:mr-4">
-          <span className="tabular-nums font-bold text-slate-900 tracking-tight text-[15px]">
+          <span className="tabular-nums font-bold text-neutral-900 tracking-tight text-[length:var(--text-subtitle-size)] leading-none">
             {formatCurrency(displayFee, currencySymbol)}
           </span>
-          <span className="inline-flex items-center gap-1 mt-1 text-[11px] font-bold uppercase tracking-wider text-slate-400">
+          <span className="inline-flex items-center gap-1 mt-1 text-[11px] font-bold uppercase tracking-wider text-neutral-400">
             <Calendar className="w-3.5 h-3.5" />
             {formatDate(member.nextPaymentDate, { format: 'short' })}
           </span>
@@ -183,35 +183,35 @@ export const MemberRow: React.FC<MemberRowProps> = ({
                 {showMobileActions && (
                   <>
                     <div className="fixed inset-0 z-40" onClick={(e) => { e.stopPropagation(); setShowMobileActions(false); }} />
-                    <div className="absolute right-0 top-12 w-48 bg-white border border-slate-200 rounded-xl shadow-lg z-50 overflow-hidden flex flex-col p-1">
-                      {primaryAction === 'pay' ? (
-                        <button
-                          type="button"
-                          className="flex items-center gap-3 px-3 min-h-[44px] text-sm font-medium text-slate-700 hover:bg-slate-50 rounded-lg text-left"
-                          onClick={(e) => {
-                            e.stopPropagation();
-                            setShowMobileActions(false);
-                            onRemind?.(member);
-                          }}
-                        >
-                          <MessageSquare className="w-4 h-4" />
-                          Send Reminder
-                        </button>
-                      ) : (
-                        <button
-                          type="button"
-                          className="flex items-center gap-3 px-3 min-h-[44px] text-sm font-medium text-emerald-700 hover:bg-emerald-50 rounded-lg text-left"
-                          onClick={(e) => {
-                            e.stopPropagation();
-                            setShowMobileActions(false);
-                            setIsSuccessFlash(true);
-                            setTimeout(() => onQuickPay?.(member), 800);
-                          }}
-                        >
-                          <CheckCircle2 className="w-4 h-4" />
-                          Mark as Paid
-                        </button>
-                      )}
+                    <div className="absolute right-0 top-12 w-48 bg-white border border-neutral-200 rounded-[var(--radius-xl)] shadow-lg z-50 overflow-hidden flex flex-col p-1">
+                      {/* Remind Action */}
+                      <button
+                        type="button"
+                        className="flex items-center gap-3 px-3 min-h-[44px] text-[length:var(--text-body-size)] font-medium text-neutral-700 hover:bg-neutral-50 rounded-[var(--radius-lg)] text-left"
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          setShowMobileActions(false);
+                          onRemind?.(member);
+                        }}
+                      >
+                        <MessageSquare className="w-4 h-4 text-neutral-500" />
+                        Send Reminder
+                      </button>
+
+                      {/* Mark Paid Action */}
+                      <button
+                        type="button"
+                        className="flex items-center gap-3 px-3 min-h-[44px] text-[length:var(--text-body-size)] font-bold text-[var(--color-success-700)] hover:bg-[var(--color-success-50)] rounded-[var(--radius-lg)] text-left"
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          setShowMobileActions(false);
+                          setIsSuccessFlash(true);
+                          setTimeout(() => onQuickPay?.(member), 800);
+                        }}
+                      >
+                        <CheckCircle2 className="w-4 h-4 text-[var(--color-success-600)]" />
+                        Mark as Paid
+                      </button>
                     </div>
                   </>
                 )}

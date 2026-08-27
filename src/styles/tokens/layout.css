@@ -1,0 +1,55 @@
+/* 
+  GymFlow Master Design Foundation: Layout System (Spacing, Density, Radius, Borders, Shadows)
+  Generated per PROMPT 01.03
+
+  ---------------------------------------------------------
+  1. BORDER VS SHADOW RULE (ELEVATION SYSTEM)
+  ---------------------------------------------------------
+  - RESTING STATIC CONTAINERS: Use a 1px border (`border-neutral-200`) as the primary visual delimiter. Do NOT use shadows on resting cards or list sections. Mixing border + shadow on static elements creates redundant depth signaling and visual noise.
+  - INTERACTIVE/ELEVATED CONTAINERS: Shadows are strictly reserved for:
+      a) Interactive elevation states (e.g., card hover/raised states).
+      b) Structural z-index overlays (modals, bottom sheets, tooltips, dropdowns).
+
+  ---------------------------------------------------------
+  2. DENSITY MODES (PROVISIONAL MAP)
+  ---------------------------------------------------------
+  - COMPACT (High Density):
+      * Target Screens: Payments Ledger, Admin Data Tables.
+      * Multipliers: Row padding 12px (`p-3`), gap 8px (`gap-2`).
+      * Accessibility Constraint: Any interactive row in compact mode MUST maintain a min-height of 44px to preserve touch targets.
+  - COMFORTABLE (Default / Medium Density):
+      * Target Screens: Today Dashboard, Members, Reminders.
+      * Multipliers: Container padding 16px to 24px (`p-4 sm:p-6`), row padding 16px (`p-4`), gap 16px (`gap-4`).
+  - SPACIOUS (Low Density):
+      * Target Screens: Auth, Onboarding, Empty States, Marketing sections.
+      * Multipliers: Container padding 32px+ (`p-8+`), gap 24px+ (`gap-6+`).
+
+  RESPONSIVE DENSITY BEHAVIOR:
+  Density modes can and should dynamically shift at breakpoints. For example, a screen that is Comfortable on desktop (e.g., Settings forms) may collapse into Compact mode on narrow mobile viewports to maximize visible information without excessive scrolling.
+
+  ---------------------------------------------------------
+  3. SPACING SCALE
+  ---------------------------------------------------------
+  Formalized to strictly use the 8px baseline ramp. Intermediate or odd values (like 10px or 14px) are disallowed for structural layout.
+  Allowed values: 4, 8, 12, 16, 24, 32, 48, 64px.
+*/
+
+@theme {
+  /* 
+    RADIUS SCALE 
+    Explicitly reduced from a uniform `2xl/3xl` default. This varied, role-based scale prevents the UI from looking like a generic, overly soft "blobby" template and establishes mature component hierarchy.
+  */
+  --radius-sm: 6px;       /* Small controls: checkboxes, badges, toggles, tooltips */
+  --radius-md: 10px;      /* Standard controls: buttons, inputs, selects */
+  --radius-lg: 16px;      /* Structural cards, ListSections (deliberately reduced from 24px) */
+  --radius-xl: 24px;      /* Modals, bottom sheets, dialogs */
+  --radius-full: 9999px;  /* Avatars, status pills, radio buttons */
+
+  /* 
+    SHADOW SCALE 
+    Restricted to 3 definitive tiers based on the Border vs Shadow rule above.
+  */
+  --shadow-resting: 0 1px 2px rgba(9, 9, 11, 0.04);              /* Only used if borders are impossible (rare) */
+  --shadow-raised: 0 4px 20px rgba(9, 9, 11, 0.08);              /* Interactive hover states */
+  --shadow-overlay: 0 20px 40px -15px rgba(9, 9, 11, 0.15);      /* Modals, popovers, floating menus */
+}

@@ -19,15 +19,15 @@ export const StepProgress: React.FC<StepProgressProps> = ({ currentStep, totalSt
           const isCompleted = stepNumber < currentStep;
 
           return (
-            <div key={index} className="flex-1 h-1.5 rounded-full bg-slate-100 overflow-hidden relative">
+            <div key={index} className="flex-1 h-1.5 rounded-full bg-neutral-100 overflow-hidden relative">
               <motion.div
                 initial={false}
                 animate={{
                   width: isCompleted ? '100%' : isActive ? '50%' : '0%',
-                  backgroundColor: isCompleted || isActive ? 'var(--color-teal-500)' : 'transparent'
+                  backgroundColor: isCompleted || isActive ? 'var(--color-brand-500)' : 'transparent'
                 }}
                 transition={{ type: 'spring', stiffness: 300, damping: 30 }}
-                className="absolute left-0 top-0 bottom-0 rounded-full bg-teal-500"
+                className="absolute left-0 top-0 bottom-0 rounded-full bg-[var(--color-brand-500)]"
               />
             </div>
           );
@@ -35,10 +35,10 @@ export const StepProgress: React.FC<StepProgressProps> = ({ currentStep, totalSt
       </div>
       {labels && labels.length === totalSteps && (
          <div className="flex justify-between items-center px-1">
-           <span className="text-[11px] font-bold uppercase tracking-widest text-teal-700">
+           <span className="text-[11px] font-bold uppercase tracking-widest text-[var(--color-brand-700)]">
              {labels[currentStep - 1]}
            </span>
-           <span className="text-[11px] font-bold font-mono text-slate-400 tracking-wider">
+           <span className="text-[11px] font-bold font-mono text-neutral-400 tracking-wider">
              STEP {currentStep} OF {totalSteps}
            </span>
          </div>

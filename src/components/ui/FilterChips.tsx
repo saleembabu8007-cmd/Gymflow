@@ -28,10 +28,10 @@ export function FilterChips<T extends string>({
         const isActive = activeId === option.id;
         
         const badgeColors = {
-          neutral: 'bg-slate-200 text-slate-700',
-          danger: 'bg-rose-100 text-rose-700',
-          warning: 'bg-amber-100 text-amber-800',
-          success: 'bg-emerald-100 text-emerald-800',
+          neutral: 'bg-neutral-200 text-neutral-700',
+          danger: 'bg-danger-100 text-danger-700',
+          warning: 'bg-warning-100 text-warning-800',
+          success: 'bg-success-100 text-success-800',
         };
         const badgeVariant = option.badgeVariant || 'neutral';
         
@@ -41,10 +41,10 @@ export function FilterChips<T extends string>({
             type="button"
             onClick={() => onChange(option.id)}
             className={cn(
-              'flex items-center justify-center gap-2 px-4 h-[40px] rounded-full text-[14px] font-semibold whitespace-nowrap transition-all cursor-pointer border shrink-0',
+              'flex items-center justify-center gap-2 px-4 h-[44px] rounded-full text-[length:var(--text-button-size)] font-semibold whitespace-nowrap transition-all cursor-pointer border shrink-0 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-500',
               isActive
-                ? 'bg-teal-600 border-teal-600 text-white shadow-sm'
-                : 'bg-white border-slate-200 text-slate-600 hover:bg-slate-50 hover:border-slate-300 hover:text-slate-900 shadow-sm'
+                ? 'bg-[var(--color-brand-500)] border-[var(--color-brand-500)] text-[var(--color-brand-foreground)] shadow-[var(--shadow-raised)]'
+                : 'bg-white border-neutral-200 text-neutral-600 hover:bg-neutral-50 hover:border-neutral-300 hover:text-neutral-900 shadow-sm'
             )}
           >
             {option.icon && <span className="mr-1">{option.icon}</span>}
@@ -55,7 +55,7 @@ export function FilterChips<T extends string>({
                 className={cn(
                   "flex items-center justify-center min-w-[20px] h-[20px] px-1.5 rounded-full text-[11px] font-bold",
                   isActive 
-                    ? "bg-white/20 text-white" 
+                    ? "bg-black/10 text-current" 
                     : badgeColors[badgeVariant]
                 )}
               >

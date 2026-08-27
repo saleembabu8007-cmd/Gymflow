@@ -54,7 +54,7 @@ export const SearchInput: React.FC<SearchInputProps> = ({
 
   return (
     <div className={cn('relative flex items-center w-full group shrink-0', className)}>
-      <div className="absolute left-3.5 text-teal-600 pointer-events-none flex items-center justify-center transition-colors">
+      <div className="absolute left-3.5 text-[var(--color-brand-500)] pointer-events-none flex items-center justify-center transition-colors">
         {isLoading ? <Loader2 className="w-4 h-4 animate-spin" /> : <Search className="w-4 h-4 stroke-[2.5]" />}
       </div>
       <input
@@ -62,14 +62,14 @@ export const SearchInput: React.FC<SearchInputProps> = ({
         value={internalValue}
         onChange={(e) => setInternalValue(e.target.value)}
         placeholder={placeholder}
-        className="w-full h-[40px] pl-[38px] pr-9 rounded-full bg-white border border-slate-200 text-[14px] font-medium text-slate-900 placeholder:text-slate-400 placeholder:font-normal transition-all focus:outline-none focus:border-teal-500 focus:ring-4 focus:ring-teal-500/10 hover:border-slate-300 shadow-sm"
+        className="w-full h-11 pl-[38px] pr-9 rounded-full bg-neutral-100 border-2 border-transparent text-[length:var(--text-body-size)] font-medium text-neutral-900 placeholder:text-neutral-500 placeholder:font-normal transition-all focus:outline-none focus:bg-white focus:border-[var(--color-brand-500)] focus:ring-4 focus:ring-[var(--color-brand-500)]/10 hover:bg-neutral-200"
         {...props}
       />
       {internalValue && (
         <button
           type="button"
           onClick={handleClear}
-          className="absolute right-3 p-1.5 rounded-full bg-slate-200 text-slate-600 hover:text-slate-700 hover:bg-slate-300 focus:outline-none transition-colors cursor-pointer"
+          className="absolute right-3 p-1.5 rounded-full bg-neutral-200 text-neutral-600 hover:text-neutral-700 hover:bg-neutral-300 focus:outline-none transition-colors cursor-pointer"
           title="Clear search"
         >
           <X className="w-3.5 h-3.5 stroke-[3]" />

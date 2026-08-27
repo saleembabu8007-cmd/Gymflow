@@ -54,11 +54,11 @@ export const ResetPasswordPage: React.FC<ResetPasswordPageProps> = ({
         subtitle="Your password has been changed successfully"
       >
         <div className="space-y-4 text-center">
-          <div className="w-12 h-12 rounded-2xl bg-emerald-50 text-emerald-600 flex items-center justify-center mx-auto">
+          <div className="w-12 h-12 rounded-[var(--radius-xl)] bg-[var(--color-success-50)] text-[var(--color-success-600)] flex items-center justify-center mx-auto">
             <CheckCircle2 className="w-6 h-6" />
           </div>
 
-          <p className="text-xs font-medium text-zinc-600 leading-relaxed">
+          <p className="text-[length:var(--text-caption-size)] font-medium text-neutral-600 leading-relaxed">
             Your new password has been saved. You can now use it to sign in to GymFlow.
           </p>
 
@@ -90,9 +90,9 @@ export const ResetPasswordPage: React.FC<ResetPasswordPageProps> = ({
         {errorMessage && (
           <div
             role="alert"
-            className="p-3 bg-rose-50 border border-rose-200/90 text-rose-700 text-xs font-semibold rounded-xl flex items-center gap-2"
+            className="p-3 bg-[var(--color-danger-50)] border border-[var(--color-danger-200)] text-[var(--color-danger-700)] text-[length:var(--text-caption-size)] font-semibold rounded-[var(--radius-lg)] flex items-center gap-2"
           >
-            <AlertCircle className="w-4 h-4 shrink-0 text-rose-600" />
+            <AlertCircle className="w-4 h-4 shrink-0 text-[var(--color-danger-600)]" />
             <span>{errorMessage}</span>
           </div>
         )}
@@ -141,13 +141,14 @@ export const ResetPasswordPage: React.FC<ResetPasswordPageProps> = ({
             {isSubmitting ? 'Updating password...' : 'Update password'}
           </Button>
 
-          <button
+          <Button
             type="button"
+            variant="tertiary"
             onClick={onNavigateToLogin}
-            className="w-full text-center text-xs font-medium text-zinc-600 hover:text-zinc-950 flex items-center justify-center gap-1.5 py-1.5 transition-colors cursor-pointer"
+            className="w-full"
           >
-            <span>Cancel and return to Sign In</span>
-          </button>
+            Cancel and return to Sign In
+          </Button>
         </div>
       </form>
     </AuthLayout>

@@ -61,32 +61,33 @@ export const ToastProvider: React.FC<{ children: React.ReactNode }> = ({ childre
       >
         <AnimatePresence>
           {toasts.map((toast) => {
+            const isError = toast.type === 'error';
             const icons = {
-              success: <CheckCircle2 className="w-5 h-5 text-emerald-500 shrink-0" />,
-              error: <AlertCircle className="w-5 h-5 text-rose-500 shrink-0" />,
-              warning: <AlertTriangle className="w-5 h-5 text-amber-500 shrink-0" />,
-              info: <Info className="w-5 h-5 text-sky-500 shrink-0" />,
+              success: <CheckCircle2 className="w-5 h-5 text-[var(--color-success-500)] shrink-0" />,
+              error: <AlertCircle className="w-5 h-5 text-[var(--color-danger-500)] shrink-0" />,
+              warning: <AlertTriangle className="w-5 h-5 text-[var(--color-warning-500)] shrink-0" />,
+              info: <Info className="w-5 h-5 text-[var(--color-info-500)] shrink-0" />,
             };
 
             const bgBorders = {
-              success: 'bg-emerald-50 border-emerald-100/50 shadow-[0_8px_30px_rgb(0,0,0,0.04)]',
-              error: 'bg-rose-50 border-rose-100/50 shadow-[0_8px_30px_rgb(0,0,0,0.04)]',
-              warning: 'bg-amber-50 border-amber-100/50 shadow-[0_8px_30px_rgb(0,0,0,0.04)]',
-              info: 'bg-sky-50 border-sky-100/50 shadow-[0_8px_30px_rgb(0,0,0,0.04)]',
+              success: 'bg-[var(--color-success-50)] border-[var(--color-success-200)] shadow-[var(--shadow-overlay)]',
+              error: 'bg-[var(--color-danger-50)] border-[var(--color-danger-200)] shadow-[var(--shadow-overlay)]',
+              warning: 'bg-[var(--color-warning-50)] border-[var(--color-warning-200)] shadow-[var(--shadow-overlay)]',
+              info: 'bg-[var(--color-info-50)] border-[var(--color-info-200)] shadow-[var(--shadow-overlay)]',
             };
 
             const textColors = {
-              success: 'text-emerald-900',
-              error: 'text-rose-900',
-              warning: 'text-amber-900',
-              info: 'text-sky-900',
+              success: 'text-[var(--color-success-900)]',
+              error: 'text-[var(--color-danger-900)]',
+              warning: 'text-[var(--color-warning-900)]',
+              info: 'text-[var(--color-info-900)]',
             };
             
             const messageColors = {
-              success: 'text-emerald-700',
-              error: 'text-rose-700',
-              warning: 'text-amber-700',
-              info: 'text-sky-700',
+              success: 'text-[var(--color-success-700)]',
+              error: 'text-[var(--color-danger-700)]',
+              warning: 'text-[var(--color-warning-700)]',
+              info: 'text-[var(--color-info-700)]',
             };
 
             return (
@@ -97,18 +98,20 @@ export const ToastProvider: React.FC<{ children: React.ReactNode }> = ({ childre
                 exit={{ opacity: 0, y: 15, scale: 0.95 }}
                 transition={{ duration: 0.3, type: 'spring', bounce: 0.25 }}
                 id={`toast-${toast.id}`}
+                role="status"
+                aria-live={isError ? 'assertive' : 'polite'}
                 className={cn(
-                  'pointer-events-auto p-4 rounded-[16px] border flex items-start gap-3 transition-all w-full',
+                  'pointer-events-auto p-4 rounded-[var(--radius-lg)] border flex items-start gap-3 w-full motion-reduce:transition-none motion-reduce:animate-none',
                   bgBorders[toast.type]
                 )}
               >
                 {icons[toast.type]}
                 <div className="flex-1 min-w-0 pt-0.5">
-                  <h4 className={cn("text-[15px] font-bold leading-tight tracking-tight", textColors[toast.type])}>
+                  <h4 className={cn("text-[length:var(--text-body-size)] font-bold leading-tight tracking-tight", textColors[toast.type])}>
                     {toast.title}
                   </h4>
                   {toast.message && (
-                    <p className={cn("text-[13px] font-medium mt-1 leading-relaxed", messageColors[toast.type])}>
+                    <p className={cn("text-[length:var(--text-caption-size)] font-medium mt-1 leading-relaxed", messageColors[toast.type])}>
                       {toast.message}
                     </p>
                   )}

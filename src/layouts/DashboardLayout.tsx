@@ -62,7 +62,7 @@ export const DashboardLayout: React.FC<DashboardLayoutProps> = ({
           subtitle={pageSubtitle}
         />
 
-        <div className="flex-1 overflow-y-auto pb-20 md:pb-10">
+        <div className="flex-1 overflow-y-auto pb-[calc(5.5rem+env(safe-area-inset-bottom))] md:pb-10">
           <main className="p-4 sm:p-6 lg:p-8 max-w-7xl w-full mx-auto">
             {children}
           </main>

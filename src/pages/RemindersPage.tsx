@@ -11,6 +11,7 @@ import { FilterChips } from '../components/ui/FilterChips';
 import { SegmentedControl } from '../components/ui/SegmentedControl';
 import { MemberRow } from '../components/ui/MemberRow';
 import { ListSection } from '../components/ui/ListSection';
+import { Badge } from '../components/ui/Badge';
 import { Member, Reminder, ReminderChannel, ReminderStatus } from '../types';
 import { useMembers } from '../hooks/useMembers';
 import { useReminders } from '../hooks/useReminders';
@@ -102,58 +103,24 @@ export const RemindersPage: React.FC<RemindersPageProps> = ({
   const getChannelBadge = (channel: ReminderChannel) => {
     switch (channel) {
       case 'WHATSAPP':
-        return (
-          <span className="px-2 py-0.5 rounded-md text-[10px] font-semibold bg-emerald-50 text-emerald-700 border border-emerald-200/60 flex items-center gap-1">
-            <MessageSquare className="w-3 h-3 text-emerald-600" />
-            <span>WhatsApp</span>
-          </span>
-        );
+        return <Badge variant="success" icon={<MessageSquare className="w-3 h-3" />}>WhatsApp</Badge>;
       case 'SMS':
-        return (
-          <span className="px-2 py-0.5 rounded-md text-[10px] font-semibold bg-sky-50 text-sky-700 border border-sky-200/60 flex items-center gap-1">
-            <Smartphone className="w-3 h-3 text-sky-600" />
-            <span>SMS</span>
-          </span>
-        );
+        return <Badge variant="info" icon={<Smartphone className="w-3 h-3" />}>SMS</Badge>;
       case 'EMAIL':
-        return (
-          <span className="px-2 py-0.5 rounded-md text-[10px] font-semibold bg-purple-50 text-purple-700 border border-purple-200/60 flex items-center gap-1">
-            <Mail className="w-3 h-3 text-purple-600" />
-            <span>Email</span>
-          </span>
-        );
+        return <Badge variant="neutral" icon={<Mail className="w-3 h-3" />}>Email</Badge>;
       default:
-        return (
-          <span className="px-2 py-0.5 rounded-md text-[10px] font-semibold bg-neutral-100 text-neutral-600">
-            {channel}
-          </span>
-        );
+        return <Badge variant="neutral">{channel}</Badge>;
     }
   };
 
   const getStatusBadge = (status: ReminderStatus) => {
     switch (status) {
       case 'SENT':
-        return (
-          <span className="px-2 py-0.5 text-[10px] font-bold bg-emerald-100 text-emerald-800 rounded-full flex items-center gap-1">
-            <CheckCircle2 className="w-3 h-3 text-emerald-600" />
-            Confirmed Sent
-          </span>
-        );
+        return <Badge variant="success" icon={<CheckCircle2 className="w-3 h-3" />}>Confirmed Sent</Badge>;
       case 'FAILED':
-        return (
-          <span className="px-2 py-0.5 text-[10px] font-bold bg-rose-100 text-rose-800 rounded-full flex items-center gap-1">
-            <AlertCircle className="w-3 h-3 text-rose-600" />
-            Failed
-          </span>
-        );
+        return <Badge variant="danger" icon={<AlertCircle className="w-3 h-3" />}>Failed</Badge>;
       default:
-        return (
-          <span className="px-2 py-0.5 text-[10px] font-bold bg-amber-100 text-amber-900 rounded-full flex items-center gap-1">
-            <Clock className="w-3 h-3 text-amber-600" />
-            WhatsApp Opened
-          </span>
-        );
+        return <Badge variant="warning" icon={<Clock className="w-3 h-3" />}>WhatsApp Opened</Badge>;
     }
   };
 
@@ -246,15 +213,16 @@ export const RemindersPage: React.FC<RemindersPageProps> = ({
 
         {/* Minimal Channel Filters */}
         <div className="pt-2 pb-1">
-          <SegmentedControl
+          <FilterChips
             options={[
-              { value: 'ALL', label: 'All Channels' },
-              { value: 'WHATSAPP', label: 'WhatsApp' },
-              { value: 'SMS', label: 'SMS' },
-              { value: 'EMAIL', label: 'Email' },
+              { id: 'ALL', label: 'All Channels' },
+              { id: 'WHATSAPP', label: 'WhatsApp' },
+              { id: 'SMS', label: 'SMS' },
+              { id: 'EMAIL', label: 'Email' },
             ]}
-            value={channelFilter}
+            activeId={channelFilter}
             onChange={(id) => setChannelFilter(id)}
+            className="pb-0"
           />
         </div>
 

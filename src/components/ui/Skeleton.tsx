@@ -8,15 +8,21 @@ export interface SkeletonProps extends React.HTMLAttributes<HTMLDivElement> {
 export const Skeleton: React.FC<SkeletonProps> = ({ className, ...props }) => {
   return (
     <div
-      className={cn('animate-shimmer rounded bg-slate-100', className)}
+      className={cn('animate-shimmer rounded bg-neutral-100', className)}
       {...props}
     />
   );
 };
 
-export const SkeletonText: React.FC<{ className?: string }> = ({ className }) => (
-  <Skeleton className={cn('h-4 w-3/4 rounded-md', className)} />
-);
+export const SkeletonText: React.FC<{ variant?: 'title' | 'heading' | 'body' | 'caption'; className?: string }> = ({ variant = 'body', className }) => {
+  const heights = {
+    title: 'h-8', // 32px matching --text-title-height
+    heading: 'h-6', // 24px matching --text-heading-height
+    body: 'h-5', // 20px matching --text-body-height
+    caption: 'h-4', // 16px matching --text-caption-height
+  };
+  return <Skeleton className={cn(heights[variant], 'w-3/4 rounded-[var(--radius-sm)]', className)} />;
+};
 
 export const SkeletonAvatar: React.FC<{ size?: 'xs' | 'sm' | 'md' | 'lg'; className?: string }> = ({
   size = 'md',

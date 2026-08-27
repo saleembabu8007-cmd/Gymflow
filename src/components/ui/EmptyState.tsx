@@ -23,22 +23,22 @@ export const EmptyState: React.FC<EmptyStateProps> = ({
   return (
     <div
       className={cn(
-        'flex flex-col items-center justify-center text-center p-8 sm:p-12 rounded-[24px] bg-slate-50/50',
+        'flex flex-col items-center justify-center text-center p-8 sm:p-12 rounded-[var(--radius-xl)] bg-neutral-50/50',
         className
       )}
     >
       {Icon && (
-        <div className="w-16 h-16 rounded-full bg-teal-50 flex items-center justify-center text-teal-600 mb-6 shadow-sm border border-teal-100/50">
+        <div className="w-16 h-16 rounded-full bg-neutral-100 flex items-center justify-center text-neutral-600 mb-6 shadow-[var(--shadow-resting)] border border-neutral-200">
           {typeof Icon === 'function' ? <Icon className="w-8 h-8 stroke-[1.5]" /> : Icon}
         </div>
       )}
-      <h3 className="text-lg sm:text-xl font-bold text-slate-900 tracking-tight">{title}</h3>
+      <h3 className="text-lg sm:text-xl font-bold text-neutral-900 tracking-tight">{title}</h3>
       {description && (
-        <p className="text-sm sm:text-[15px] text-slate-600 mt-3 max-w-md leading-relaxed">{description}</p>
+        <p className="text-sm sm:text-[length:var(--text-body-size)] text-neutral-600 mt-3 max-w-md leading-relaxed">{description}</p>
       )}
       {actionLabel && onAction && (
         <div className="mt-8">
-          <Button onClick={onAction} size="lg" className="px-8 shadow-sm">
+          <Button onClick={onAction} size="lg" className="px-8 shadow-sm" variant="primary">
             {actionLabel}
           </Button>
         </div>

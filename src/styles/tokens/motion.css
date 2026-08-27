@@ -1,0 +1,39 @@
+/* 
+  GymFlow Master Design Foundation: Iconography & Motion
+  Generated per PROMPT 01.04
+
+  ---------------------------------------------------------
+  1. ICONOGRAPHY SIZING TOKENS (LUCIDE)
+  ---------------------------------------------------------
+  Standardized sizing across the application. Only Lucide is permitted.
+  - Secondary / Inline: `w-4 h-4` (16px)
+  - Standard / Default: `w-5 h-5` (20px)
+  - Large / Hero: `w-6 h-6` (24px) - For empty states or primary modal headers
+
+  ---------------------------------------------------------
+  2. REDUCED MOTION FALLBACK PROTOCOL
+  ---------------------------------------------------------
+  MANDATORY: All motion must respect OS-level accessibility preferences.
+  - CSS Transitions: Handled automatically by the base tailwind `@media (prefers-reduced-motion: reduce)` block which forces 0.01ms durations.
+  - JS Animations (`motion/react`): Currently MISSING a global `<MotionConfig reducedMotion="user">` wrapper. This means React-driven page transitions currently IGNORE accessibility preferences. 
+  - ACTION: Flagged for mandatory fix in Phase 07/08 structural rebuilds.
+
+*/
+
+@theme {
+  /* 
+    DURATION SCALE 
+  */
+  --duration-micro: 100ms;       /* Micro-interactions: toggles, immediate hover feedback */
+  --duration-standard: 200ms;    /* Standard UI: dropdowns, color fades, toasts */
+  --duration-entrance: 300ms;    /* Structural: modals entering, page fades */
+  --duration-exit: 250ms;        /* Structural: modals exiting (slightly faster than entrance) */
+
+  /* 
+    EASING CURVES
+    Replacing generic 'smooth' or 'ease' with explicit cubic-bezier coordinates.
+  */
+  --ease-swift: cubic-bezier(0.4, 0, 0.2, 1);            /* Standard functional UI movement (tailwind default ease-in-out) */
+  --ease-spring: cubic-bezier(0.34, 1.56, 0.64, 1);      /* Playful pop/entrance for success states or badges */
+  --ease-glide: cubic-bezier(0.16, 1, 0.3, 1);           /* Smooth, friction-heavy slide-in for sheets/modals */
+}

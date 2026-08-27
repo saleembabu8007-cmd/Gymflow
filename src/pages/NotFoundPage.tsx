@@ -14,7 +14,7 @@ export const NotFoundPage: React.FC<NotFoundPageProps> = ({ onNavigateHome }) =>
           <FileQuestion className="w-7 h-7" />
         </div>
         <div>
-          <h1 className="text-2xl font-bold text-white tracking-tight">Page Not Found</h1>
+          <h1 className="text-[length:var(--text-heading-size)] font-bold text-white tracking-tight">Page Not Found</h1>
           <p className="text-xs text-neutral-400 mt-2 leading-relaxed">
             The page or route you requested does not exist or has been moved.
           </p>

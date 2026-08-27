@@ -120,7 +120,7 @@ export const DesignSystemPage: React.FC = () => {
                 <Button variant="secondary">Secondary</Button>
                 <Button variant="tertiary">Tertiary</Button>
                 <Button variant="destructive" leftIcon={<AlertCircle className="w-4 h-4" />}>Destructive</Button>
-                <Button variant="destructive-ghost" leftIcon={<AlertCircle className="w-4 h-4" />}>Ghost Destructive</Button>
+                <Button variant="tertiary" leftIcon={<AlertCircle className="w-4 h-4" />}>Ghost Destructive (Removed)</Button>
                 <Button variant="primary" isLoading>Loading</Button>
               </div>
             </div>
@@ -322,7 +322,7 @@ export const DesignSystemPage: React.FC = () => {
             value="₹1,24,500"
             trend={{ value: 12.5, isPositive: true }}
             caption="Total revenue collected so far this month."
-            variant="brand"
+            variant="neutral"
             onAction={() => success('Clicked', 'View ledger clicked')}
             actionLabel="View ledger"
           />
@@ -356,7 +356,7 @@ export const DesignSystemPage: React.FC = () => {
               <CardDescription>Pill shaped, semantic background with solid text.</CardDescription>
             </CardHeader>
             <CardContent className="flex flex-wrap gap-3">
-              <Badge variant="success">Paid</Badge>
+              <Badge variant="success">Brand</Badge>
               <Badge variant="warning">Due Soon</Badge>
               <Badge variant="danger">Overdue</Badge>
               <Badge variant="info">Upcoming</Badge>

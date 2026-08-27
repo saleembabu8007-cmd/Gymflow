@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { AlertCircle, CheckCircle2 } from 'lucide-react';
+import { AlertCircle, CheckCircle2, Eye, EyeOff } from 'lucide-react';
 import { SignUpDTO } from '../../services/interfaces';
 import { Button, Input, StepProgress } from '../../components/ui';
 import { AuthLayout } from '../../layouts/AuthLayout';
@@ -19,6 +19,8 @@ export const RegisterPage: React.FC<RegisterPageProps> = ({
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
+  const [showPassword, setShowPassword] = useState(false);
+  const [showConfirmPassword, setShowConfirmPassword] = useState(false);
 
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -78,15 +80,15 @@ export const RegisterPage: React.FC<RegisterPageProps> = ({
       }
     >
       {infoMessage && (
-        <div className="mb-6 p-3.5 bg-emerald-50 border border-emerald-200 text-emerald-800 text-xs font-semibold rounded-xl flex items-center gap-2.5">
-          <CheckCircle2 className="w-4 h-4 shrink-0 text-emerald-600" />
+        <div className="mb-6 p-3.5 bg-[var(--color-success-50)] border border-[var(--color-success-200)] text-[var(--color-success-800)] text-[length:var(--text-caption-size)] font-semibold rounded-[var(--radius-lg)] flex items-center gap-2.5">
+          <CheckCircle2 className="w-4 h-4 shrink-0 text-[var(--color-success-600)]" />
           <span>{infoMessage}</span>
         </div>
       )}
 
       {error && (
-        <div className="mb-6 p-3.5 bg-rose-50 border border-rose-200 text-rose-700 text-xs font-semibold rounded-xl flex items-center gap-2.5">
-          <AlertCircle className="w-4 h-4 shrink-0 text-rose-600" />
+        <div className="mb-6 p-3.5 bg-[var(--color-danger-50)] border border-[var(--color-danger-200)] text-[var(--color-danger-700)] text-[length:var(--text-caption-size)] font-semibold rounded-[var(--radius-lg)] flex items-center gap-2.5">
+          <AlertCircle className="w-4 h-4 shrink-0 text-[var(--color-danger-600)]" />
           <span>{error}</span>
         </div>
       )}
@@ -115,24 +117,46 @@ export const RegisterPage: React.FC<RegisterPageProps> = ({
 
         <div>
           <Input
-            type="password"
+            type={showPassword ? 'text' : 'password'}
             label="Password"
             placeholder="••••••••"
             value={password}
             onChange={(e) => setPassword(e.target.value)}
             required
             helperText="Must be at least 6 characters"
+            rightIcon={
+              <button
+                type="button"
+                onClick={() => setShowPassword(!showPassword)}
+                className="text-neutral-400 hover:text-neutral-700 focus:outline-none cursor-pointer"
+                tabIndex={-1}
+                aria-label={showPassword ? 'Hide password' : 'Show password'}
+              >
+                {showPassword ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
+              </button>
+            }
           />
         </div>
 
         <div>
           <Input
-            type="password"
+            type={showConfirmPassword ? 'text' : 'password'}
             label="Confirm Password"
             placeholder="••••••••"
             value={confirmPassword}
             onChange={(e) => setConfirmPassword(e.target.value)}
             required
+            rightIcon={
+              <button
+                type="button"
+                onClick={() => setShowConfirmPassword(!showConfirmPassword)}
+                className="text-neutral-400 hover:text-neutral-700 focus:outline-none cursor-pointer"
+                tabIndex={-1}
+                aria-label={showConfirmPassword ? 'Hide password' : 'Show password'}
+              >
+                {showConfirmPassword ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
+              </button>
+            }
           />
         </div>
 
@@ -149,12 +173,12 @@ export const RegisterPage: React.FC<RegisterPageProps> = ({
         </div>
       </form>
 
-      <div className="mt-6 pt-5 border-t border-slate-100 text-center">
-        <span className="text-sm text-slate-600">Already have a gym account? </span>
+      <div className="mt-6 pt-5 border-t border-neutral-200 text-center">
+        <span className="text-[length:var(--text-caption-size)] text-neutral-600">Already have a gym account? </span>
         <button
           type="button"
           onClick={onNavigateToLogin}
-          className="text-sm font-bold text-slate-900 hover:text-teal-600 transition-colors cursor-pointer"
+          className="text-[length:var(--text-caption-size)] font-bold text-neutral-900 hover:text-[var(--color-brand-600)] transition-colors cursor-pointer"
         >
           Sign In
         </button>

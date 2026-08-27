@@ -107,7 +107,7 @@ export const SearchModal: React.FC<SearchModalProps> = ({
                 {filteredMembers.map((member) => (
                   <div
                     key={member.id}
-                    className="pt-2 flex items-center justify-between p-2.5 rounded-xl hover:bg-neutral-50 transition-colors group"
+                    className="pt-2 flex items-center justify-between p-2.5 rounded-[var(--radius-lg)] hover:bg-neutral-50 transition-colors group"
                   >
                     <div
                       className="flex items-center gap-3 cursor-pointer flex-1 min-w-0"
@@ -119,14 +119,14 @@ export const SearchModal: React.FC<SearchModalProps> = ({
                       <Avatar name={member.name} size="sm" />
                       <div className="min-w-0">
                         <div className="flex items-center gap-2">
-                          <span className="text-sm font-semibold text-neutral-900 truncate">
+                          <span className="text-[length:var(--text-body-size)] font-semibold text-neutral-900 truncate">
                             {member.name}
                           </span>
                           {member.calculatedStatus && (
                             <StatusBadge status={member.calculatedStatus} size="sm" />
                           )}
                         </div>
-                        <p className="text-xs text-neutral-500 truncate">{member.phone} • {formatCurrency(member.monthlyFee, currencySymbol)}/mo</p>
+                        <p className="text-[length:var(--text-caption-size)] text-neutral-500 truncate">{member.phone} • {formatCurrency(member.monthlyFee, currencySymbol)}/mo</p>
                       </div>
                     </div>
 
@@ -138,10 +138,10 @@ export const SearchModal: React.FC<SearchModalProps> = ({
                           onQuickPay(member);
                           onClose();
                         }}
-                        className="p-1.5 min-w-[44px] min-h-[44px] justify-center rounded-lg text-emerald-700 bg-emerald-50 hover:bg-emerald-100 text-xs font-medium flex items-center gap-1 transition-colors"
+                        className="p-1.5 min-w-[44px] min-h-[44px] justify-center rounded-[var(--radius-sm)] text-[var(--color-success-700)] bg-[var(--color-success-50)] hover:bg-[var(--color-success-100)] text-xs font-medium flex items-center gap-1 transition-colors"
                         title="Record Payment"
                       >
-                        <CreditCard className="w-3.5 h-3.5" />
+                        <CreditCard className="w-4 h-4" />
                         <span className="hidden sm:inline">Pay</span>
                       </button>
                       <button
@@ -151,10 +151,10 @@ export const SearchModal: React.FC<SearchModalProps> = ({
                           onQuickRemind(member);
                           onClose();
                         }}
-                        className="p-1.5 min-w-[44px] min-h-[44px] justify-center rounded-lg text-neutral-700 bg-neutral-100 hover:bg-neutral-200 text-xs font-medium flex items-center gap-1 transition-colors"
+                        className="p-1.5 min-w-[44px] min-h-[44px] justify-center rounded-[var(--radius-sm)] text-[var(--color-brand-700)] bg-[var(--color-brand-50)] hover:bg-[var(--color-brand-100)] text-xs font-medium flex items-center gap-1 transition-colors"
                         title="Send Reminder"
                       >
-                        <Bell className="w-3.5 h-3.5" />
+                        <Bell className="w-4 h-4" />
                       </button>
                     </div>
                   </div>

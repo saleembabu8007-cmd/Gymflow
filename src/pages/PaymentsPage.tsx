@@ -271,7 +271,7 @@ export const PaymentsPage: React.FC<PaymentsPageProps> = ({
         {onRecordPayment && (
           <Button
             id="btn-payments-record-payment"
-            variant="secondary"
+            variant="primary"
             size="md"
             onClick={onRecordPayment}
           >
@@ -306,7 +306,7 @@ export const PaymentsPage: React.FC<PaymentsPageProps> = ({
           />
         </div>
         
-        <div className="w-px h-6 bg-slate-200 shrink-0 mx-1" />
+        <div className="w-px h-6 bg-neutral-200 shrink-0 mx-1" />
 
         {activeTab === 'pending' && (
           <FilterChips
@@ -485,7 +485,7 @@ export const PaymentsPage: React.FC<PaymentsPageProps> = ({
                       key={item.id}
                       id={`payment-paid-row-${item.id}`}
                       onClick={() => handlePaidRecordClick(item)}
-                      className="group relative flex flex-col sm:flex-row sm:items-center justify-between gap-4 p-4 sm:p-5 rounded-2xl bg-white border border-slate-100 transition-all duration-200 hover:shadow-[0_4px_20px_rgba(15,23,42,0.05)] cursor-pointer overflow-hidden"
+                      className="group relative flex flex-col sm:flex-row sm:items-center justify-between gap-4 p-4 sm:p-5 rounded-[var(--radius-xl)] bg-white border border-neutral-100 transition-all duration-200 hover:shadow-[0_4px_20px_rgba(15,23,42,0.05)] cursor-pointer overflow-hidden"
                     >
                       {/* Left: Member info, paid date, method */}
                       <div className="flex items-center gap-4 flex-1 min-w-0">
@@ -493,10 +493,10 @@ export const PaymentsPage: React.FC<PaymentsPageProps> = ({
 
                         <div className="flex-1 min-w-0">
                           <div className="flex items-center gap-2 flex-wrap">
-                            <span className="font-semibold text-[15px] sm:text-base text-slate-900 truncate">
+                            <span className="font-bold text-[length:var(--text-body-size)] text-neutral-900 truncate">
                               {itemMemberName}
                             </span>
-                            <span className="px-2 py-0.5 text-[10px] font-bold uppercase tracking-wider rounded border border-slate-200 bg-slate-50 text-slate-600 shrink-0">
+                            <span className="px-2 py-0.5 text-[10px] font-bold uppercase tracking-wider rounded-[var(--radius-sm)] border border-neutral-200 bg-neutral-50 text-neutral-600 shrink-0">
                               {item.paymentMethod === 'BANK_TRANSFER'
                                 ? 'Bank Transfer'
                                 : item.paymentMethod || 'Cash'}
@@ -505,10 +505,10 @@ export const PaymentsPage: React.FC<PaymentsPageProps> = ({
 
                           <div className="mt-1.5 flex items-center gap-3">
                             {item.memberPhone && (
-                              <span className="text-[13px] text-slate-600 font-mono tracking-tight">{item.memberPhone}</span>
+                              <span className="text-[length:var(--text-caption-size)] text-neutral-600 font-mono tracking-tight">{item.memberPhone}</span>
                             )}
-                            <span className="inline-flex items-center gap-1.5 px-2 py-0.5 rounded border border-emerald-200 bg-emerald-50 text-[11px] font-bold uppercase tracking-wider text-emerald-600">
-                              <CheckCircle2 className="w-3.5 h-3.5 text-emerald-500" />
+                            <span className="inline-flex items-center gap-1.5 px-2 py-0.5 rounded-[var(--radius-sm)] border border-[var(--color-success-200)] bg-[var(--color-success-50)] text-[11px] font-bold uppercase tracking-wider text-[var(--color-success-700)]">
+                              <CheckCircle2 className="w-3.5 h-3.5 text-[var(--color-success-600)]" />
                               Paid {formatDate(item.paymentDate, { format: 'short' })}
                             </span>
                           </div>
@@ -518,15 +518,15 @@ export const PaymentsPage: React.FC<PaymentsPageProps> = ({
                       {/* Right: Received Amount */}
                       <div className="flex items-center gap-2.5 text-right shrink-0">
                         <div className="text-right mr-2">
-                          <span className="text-[15px] sm:text-base font-mono font-bold text-slate-900 block tracking-tight">
+                          <span className="text-[length:var(--text-subtitle-size)] tabular-nums font-mono font-bold text-[var(--color-success-700)] block tracking-tight">
                             +{formatCurrency(itemAmount, currencySymbol)}
                           </span>
-                          <span className="text-[11px] font-bold uppercase tracking-wider text-slate-400 mt-0.5 block">
+                          <span className="text-[11px] font-bold uppercase tracking-wider text-neutral-400 mt-0.5 block">
                             Received
                           </span>
                         </div>
-                        <div className="w-8 h-8 rounded-full bg-slate-50 flex items-center justify-center border border-slate-100 group-hover:bg-slate-100 transition-colors hidden sm:flex">
-                          <ChevronRight className="w-4 h-4 text-slate-400" />
+                        <div className="w-8 h-8 rounded-full bg-neutral-50 flex items-center justify-center border border-neutral-100 group-hover:bg-neutral-100 transition-colors hidden sm:flex">
+                          <ChevronRight className="w-4 h-4 text-neutral-400" />
                         </div>
                       </div>
                     </div>

@@ -142,9 +142,9 @@ export const SendReminderModal: React.FC<SendReminderModalProps> = ({
         <div className="space-y-6 flex-1 p-4 sm:p-6 overflow-y-auto">
           {/* Error notification banner with Retry */}
           {sendError && (
-            <div className="p-3.5 rounded-xl bg-rose-50 border border-rose-200 text-rose-950 flex items-center justify-between gap-3 text-xs">
+            <div className="p-3.5 rounded-[var(--radius-xl)] bg-[var(--color-danger-50)] border border-[var(--color-danger-200)] text-[var(--color-danger-900)] flex items-center justify-between gap-3 text-xs">
               <div className="flex items-center gap-2">
-                <AlertCircle className="w-4 h-4 text-rose-600 shrink-0" />
+                <AlertCircle className="w-4 h-4 text-[var(--color-danger-600)] shrink-0" />
                 <span>{sendError}</span>
               </div>
               <Button
@@ -153,7 +153,7 @@ export const SendReminderModal: React.FC<SendReminderModalProps> = ({
                 size="sm"
                 onClick={handleSend}
                 disabled={isSending}
-                className="text-xs shrink-0 bg-white hover:bg-rose-100/50 text-rose-900 border-rose-200"
+                className="text-xs shrink-0 bg-white hover:bg-[var(--color-danger-100)] text-[var(--color-danger-900)] border-[var(--color-danger-200)]"
                 leftIcon={<RotateCcw className="w-3 h-3" />}
               >
                 Retry
@@ -162,7 +162,7 @@ export const SendReminderModal: React.FC<SendReminderModalProps> = ({
           )}
 
           {/* Section 1: Member Context Summary Card */}
-          <div className="bg-slate-50 p-4 sm:p-5 rounded-[20px] border border-slate-100">
+          <div className="bg-neutral-50 p-4 sm:p-5 rounded-[var(--radius-2xl)] border border-neutral-100">
             <div className="flex items-center justify-between text-xs">
               <div className="flex items-center gap-3 min-w-0">
                 <Avatar name={member.name} size="sm" />
@@ -180,15 +180,15 @@ export const SendReminderModal: React.FC<SendReminderModalProps> = ({
                 </span>
                 <div className="flex items-center gap-1 justify-end mt-0.5">
                   {isOverdue ? (
-                    <span className="text-[10px] font-bold text-rose-700 bg-rose-100/90 px-1.5 py-0.5 rounded">
+                    <span className="text-[10px] font-bold text-[var(--color-danger-700)] bg-[var(--color-danger-50)] px-1.5 py-0.5 rounded-[var(--radius-sm)]">
                       Overdue · {Math.abs(diffDays)}d
                     </span>
                   ) : isToday ? (
-                    <span className="text-[10px] font-bold text-amber-900 bg-amber-100/90 px-1.5 py-0.5 rounded">
+                    <span className="text-[10px] font-bold text-[var(--color-warning-700)] bg-[var(--color-warning-50)] px-1.5 py-0.5 rounded-[var(--radius-sm)]">
                       Due today
                     </span>
                   ) : (
-                    <span className="text-[10px] font-medium text-neutral-600 bg-neutral-200/80 px-1.5 py-0.5 rounded">
+                    <span className="text-[10px] font-medium text-neutral-600 bg-neutral-100 px-1.5 py-0.5 rounded-[var(--radius-sm)]">
                       Due {formatDate(member.nextPaymentDate, { format: 'medium' })}
                     </span>
                   )}
@@ -198,8 +198,8 @@ export const SendReminderModal: React.FC<SendReminderModalProps> = ({
           </div>
 
           {/* Section 2: Delivery Channel Selector */}
-          <div className="bg-slate-50 p-4 sm:p-5 rounded-[20px] border border-slate-100 space-y-4">
-            <h4 className="text-sm font-bold text-slate-900 flex items-center gap-2">
+          <div className="bg-neutral-50 p-4 sm:p-5 rounded-[var(--radius-2xl)] border border-neutral-100 space-y-4">
+            <h4 className="text-sm font-bold text-neutral-900 flex items-center gap-2">
               <Smartphone className="w-4 h-4 text-purple-600" />
               Delivery Channel
             </h4>
@@ -216,9 +216,9 @@ export const SendReminderModal: React.FC<SendReminderModalProps> = ({
           </div>
 
           {/* Section 3: Message Content */}
-          <div className="bg-slate-50 p-4 sm:p-5 rounded-[20px] border border-slate-100 space-y-4">
+          <div className="bg-neutral-50 p-4 sm:p-5 rounded-[var(--radius-2xl)] border border-neutral-100 space-y-4">
             <div className="flex items-center justify-between">
-              <h4 className="text-sm font-bold text-slate-900 flex items-center gap-2">
+              <h4 className="text-sm font-bold text-neutral-900 flex items-center gap-2">
                 <MessageSquare className="w-4 h-4 text-sky-600" />
                 Message Content
               </h4>
@@ -262,7 +262,7 @@ export const SendReminderModal: React.FC<SendReminderModalProps> = ({
         </div>
 
         {/* Modal Action Footer */}
-        <div className="sticky bottom-0 bg-white border-t border-slate-100 p-4 sm:px-6 flex flex-col sm:flex-row items-center justify-end gap-3 z-10 shrink-0">
+        <div className="sticky bottom-0 bg-white border-t border-neutral-100 p-4 sm:px-6 flex flex-col sm:flex-row items-center justify-end gap-3 z-10 shrink-0">
           <Button
             type="button"
             variant="tertiary"
@@ -277,10 +277,11 @@ export const SendReminderModal: React.FC<SendReminderModalProps> = ({
           <Button
             id="btn-submit-send-reminder"
             type="button"
+            variant="primary"
             size="md"
             onClick={handleSend}
             isLoading={isSending}
-            className="w-full sm:w-auto bg-neutral-900 text-white hover:bg-neutral-800 font-semibold px-5 shadow-2xs"
+            className="w-full sm:w-auto font-semibold px-5"
           >
             {isSending
               ? 'Opening...'

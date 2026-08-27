@@ -16,11 +16,11 @@ export const Badge: React.FC<BadgeProps> = ({
   className,
 }) => {
   const variantClasses = {
-    neutral: 'bg-slate-100 text-slate-700',
-    success: 'bg-emerald-50 text-emerald-700',
-    warning: 'bg-amber-50 text-amber-700',
-    danger: 'bg-rose-50 text-rose-700',
-    info: 'bg-sky-50 text-sky-700',
+    neutral: 'bg-neutral-100 text-neutral-700',
+    success: 'bg-[var(--color-success-50)] text-[var(--color-success-700)]',
+    warning: 'bg-[var(--color-warning-50)] text-[var(--color-warning-700)]',
+    danger: 'bg-[var(--color-danger-50)] text-[var(--color-danger-700)]',
+    info: 'bg-[var(--color-info-50)] text-[var(--color-info-700)]',
   };
 
   const getDefaultIcon = () => {

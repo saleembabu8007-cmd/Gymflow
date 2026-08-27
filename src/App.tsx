@@ -534,12 +534,16 @@ const AppContent: React.FC = () => {
   );
 };
 
+import { MotionConfig } from 'motion/react';
+
 export default function App() {
   return (
     <RootLayout>
       <NetworkStatusBanner />
       <ErrorBoundary>
-        <AppContent />
+        <MotionConfig reducedMotion="user">
+          <AppContent />
+        </MotionConfig>
       </ErrorBoundary>
     </RootLayout>
   );

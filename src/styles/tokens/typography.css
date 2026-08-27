@@ -1,0 +1,102 @@
+/* 
+  GymFlow Master Design Foundation: Typography System
+  Generated per PROMPT 01.02
+
+  FONT FAMILIES:
+  - Display / Headings / Numerals: 'Plus Jakarta Sans' (Geometric, modern, highly legible for numbers)
+  - Body / UI Text: 'Inter' (Neo-grotesque, perfectly suited for dense UI components)
+
+  H2 DISCREPANCY RESOLUTION:
+  - The previous inconsistency between 'text-lg font-bold' (inline headers) and 'text-[12px] uppercase' (ListSection) is resolved.
+  - H2 (Section Header) is officially set to 16px (1rem), Plus Jakarta Sans, Bold, Sentence Case.
+  - The 'text-[12px] uppercase' style is re-classified as 'Micro/Overline' and should ONLY be used for taxonomy labels, never for primary section headings.
+
+  TABULAR NUMERALS RULE:
+  - Tabular numerals (`tabular-nums`) are MANDATORY for all currency, phone numbers, dates, and metrics to ensure stable column alignment.
+*/
+
+@theme {
+  /* Font Family Tokens */
+  --font-display: 'Plus Jakarta Sans', system-ui, sans-serif;
+  --font-body: 'Inter', system-ui, sans-serif;
+  --font-mono: 'JetBrains Mono', monospace;
+
+  /* 
+    TYPE SCALE DEFINITIONS 
+    Values defined as custom variables for explicit mapping.
+  */
+  
+  /* 1. Display (Hero Numbers, e.g. StatCards) */
+  --text-display-mobile-size: 1.875rem; /* 30px */
+  --text-display-desktop-size: 2.25rem; /* 36px */
+  --text-display-line-height: 1.1;
+  --text-display-weight: 800; /* Extrabold */
+  --text-display-tracking: -0.02em;
+
+  /* 2. H1 (Page Title) */
+  --text-h1-mobile-size: 1.25rem; /* 20px */
+  --text-h1-desktop-size: 1.5rem; /* 24px */
+  --text-h1-line-height: 1.2;
+  --text-h1-weight: 700; /* Bold */
+  --text-h1-tracking: -0.01em;
+
+  /* 3. H2 (Section Header) */
+  --text-h2-size: 1rem; /* 16px */
+  --text-h2-line-height: 1.4;
+  --text-h2-weight: 700; /* Bold */
+  --text-h2-tracking: 0em;
+
+  /* 4. H3 (Card / Subsection Title) */
+  --text-h3-size: 0.875rem; /* 14px */
+  --text-h3-line-height: 1.4;
+  --text-h3-weight: 600; /* Semibold */
+  --text-h3-tracking: 0em;
+
+  /* 5. Body-Large */
+  --text-body-lg-size: 1rem; /* 16px */
+  --text-body-lg-line-height: 1.5;
+  --text-body-lg-weight: 400; /* Regular */
+  --text-body-lg-tracking: 0em;
+
+  /* 6. Body (Default) */
+  --text-body-size: 0.875rem; /* 14px */
+  --text-body-line-height: 1.5;
+  --text-body-weight: 400; /* Regular */
+  --text-body-tracking: 0em;
+
+  /* 7. Body-Small */
+  --text-body-sm-size: 0.8125rem; /* 13px */
+  --text-body-sm-line-height: 1.5;
+  --text-body-sm-weight: 400; /* Regular */
+  --text-body-sm-tracking: 0em;
+
+  /* 8. Caption (Metadata) - WCAG minimum legible size */
+  --text-caption-size: 0.75rem; /* 12px */
+  --text-caption-line-height: 1.4;
+  --text-caption-weight: 500; /* Medium */
+  --text-caption-tracking: 0em;
+
+  /* 9. Micro/Overline (Badges, Labels, ListSection headers) */
+  --text-micro-size: 0.6875rem; /* 11px */
+  --text-micro-line-height: 1.2;
+  --text-micro-weight: 700; /* Bold */
+  --text-micro-tracking: 0.05em;
+
+  /* 10. Button Label */
+  --text-button-size: 0.875rem; /* 14px */
+  --text-button-line-height: 1;
+  --text-button-weight: 600; /* Semibold */
+  --text-button-tracking: 0em;
+
+  /* 11. Table / Numeric (Tabular) */
+  --text-numeric-size: 0.875rem; /* 14px */
+  --text-numeric-line-height: 1.5;
+  --text-numeric-weight: 500; /* Medium */
+  --text-numeric-tracking: 0em;
+}
+
+@layer utilities {
+  .text-tabular {
+    font-variant-numeric: tabular-nums;
+  }
+}

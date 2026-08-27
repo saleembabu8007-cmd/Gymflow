@@ -2,8 +2,8 @@ import React from 'react';
 import { Loader2 } from 'lucide-react';
 import { cn } from '../../utils/classNames';
 
-export type ButtonVariant = 'primary' | 'secondary' | 'tertiary' | 'destructive' | 'destructive-ghost';
-export type ButtonSize = 'sm' | 'md' | 'lg';
+export type ButtonVariant = 'primary' | 'secondary' | 'tertiary' | 'destructive' | 'icon';
+export type ButtonSize = 'sm' | 'md' | 'lg' | 'icon';
 
 export interface ButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
   variant?: ButtonVariant;
@@ -31,26 +31,29 @@ export const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
     ref
   ) => {
     const baseStyles =
-      'inline-flex items-center justify-center font-medium rounded-xl transition-all duration-100 focus:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 disabled:opacity-50 disabled:cursor-not-allowed select-none active:scale-[0.97] active:shadow-none min-h-[44px] text-[14px]';
+      'inline-flex items-center justify-center font-semibold rounded-[var(--radius-md)] transition-all duration-[var(--duration-micro)] ease-[var(--ease-swift)] focus:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 disabled:opacity-50 disabled:cursor-not-allowed select-none active:scale-[0.97] active:shadow-none min-h-[44px] text-[length:var(--text-button-size)] leading-[var(--text-button-line-height)]';
 
     const sizeStyles = {
-      sm: 'px-4 py-2 gap-1.5',
-      md: 'px-5 py-2 gap-2',
+      sm: 'px-3 py-2 gap-1.5',
+      md: 'px-4 py-2 gap-2',
       lg: 'text-[16px] px-6 py-3 gap-2.5',
+      icon: 'w-[44px] h-[44px] p-0 rounded-full shrink-0',
     };
 
     const variantStyles = {
       primary:
-        'bg-orange-500 text-white hover:bg-orange-600 active:bg-orange-700 focus-visible:ring-orange-500 shadow-sm hover:shadow-md',
+        'bg-[var(--color-brand-500)] text-[var(--color-brand-foreground)] hover:bg-[var(--color-brand-400)] active:bg-[var(--color-brand-600)] focus-visible:ring-[var(--color-brand-500)] shadow-[var(--shadow-raised)]',
       secondary:
-        'bg-orange-100 text-orange-700 hover:bg-orange-200 active:bg-orange-300 focus-visible:ring-orange-500',
+        'bg-[var(--color-brand-100)] text-[var(--color-brand-700)] hover:bg-[var(--color-brand-200)] active:bg-[var(--color-brand-300)] focus-visible:ring-[var(--color-brand-500)]',
       tertiary:
-        'bg-transparent text-orange-700 hover:bg-orange-50 active:bg-orange-100 focus-visible:ring-orange-500',
+        'bg-transparent text-[var(--color-neutral-600)] hover:bg-[var(--color-neutral-100)] active:bg-[var(--color-neutral-200)] focus-visible:ring-[var(--color-neutral-500)]',
       destructive:
-        'bg-rose-500 text-white hover:bg-rose-600 active:bg-rose-700 focus-visible:ring-rose-500 shadow-sm hover:shadow-md',
-      'destructive-ghost':
-        'bg-transparent text-rose-700 hover:bg-rose-50 active:bg-rose-100 focus-visible:ring-rose-500',
+        'bg-[var(--color-danger-500)] text-white hover:bg-[var(--color-danger-600)] active:bg-[var(--color-danger-700)] focus-visible:ring-[var(--color-danger-500)] shadow-[var(--shadow-raised)]',
+      icon:
+        'bg-[var(--color-neutral-100)] text-[var(--color-neutral-700)] hover:bg-[var(--color-brand-100)] hover:text-[var(--color-brand-700)] active:bg-[var(--color-brand-200)] focus-visible:ring-[var(--color-brand-500)]',
     };
+
+    const actualSize = variant === 'icon' ? 'icon' : size;
 
     return (
       <button
@@ -58,7 +61,7 @@ export const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
         disabled={disabled || isLoading}
         className={cn(
           baseStyles,
-          sizeStyles[size],
+          sizeStyles[actualSize],
           variantStyles[variant],
           fullWidth && 'w-full',
           className
@@ -70,7 +73,7 @@ export const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
         ) : (
           leftIcon && <span className="shrink-0">{leftIcon}</span>
         )}
-        <span className="truncate">{children}</span>
+        {variant !== 'icon' && <span className="truncate">{children}</span>}
         {!isLoading && rightIcon && <span className="shrink-0">{rightIcon}</span>}
       </button>
     );

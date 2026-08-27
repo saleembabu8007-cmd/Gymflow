@@ -242,8 +242,8 @@ export const AddMemberModal: React.FC<AddMemberModalProps> = ({
         <div className="py-3 text-center space-y-6">
           {/* Green Check Icon & Heading */}
           <div className="flex flex-col items-center justify-center space-y-2">
-            <div className="w-14 h-14 rounded-full bg-emerald-50 text-emerald-600 flex items-center justify-center border border-emerald-200/80 shadow-2xs">
-              <CheckCircle2 className="w-8 h-8 text-emerald-600" />
+            <div className="w-14 h-14 rounded-full bg-[var(--color-success-50)] text-[var(--color-success-600)] flex items-center justify-center border border-[var(--color-success-200)] shadow-sm">
+              <CheckCircle2 className="w-8 h-8 text-[var(--color-success-600)]" />
             </div>
             <h3 className="text-xl font-bold text-neutral-950 tracking-tight">
               Member added.
@@ -302,6 +302,7 @@ export const AddMemberModal: React.FC<AddMemberModalProps> = ({
 
             <Button
               id="btn-view-new-member"
+              variant="primary"
               size="md"
               onClick={() => {
                 if (onViewMember) {
@@ -310,7 +311,7 @@ export const AddMemberModal: React.FC<AddMemberModalProps> = ({
                   onClose();
                 }
               }}
-              className="w-full sm:flex-1 py-2.5 font-semibold bg-neutral-900 text-white hover:bg-neutral-800"
+              className="w-full sm:flex-1 py-2.5 font-semibold"
             >
               View Member
             </Button>
@@ -321,9 +322,9 @@ export const AddMemberModal: React.FC<AddMemberModalProps> = ({
         <form onSubmit={handleSubmit} className="flex flex-col h-full">
           <div className="space-y-6 flex-1 p-4 sm:p-6">
             {/* 1. Personal Details Card */}
-            <div className="bg-slate-50 p-4 sm:p-5 rounded-[20px] border border-slate-100 space-y-4">
-              <h4 className="text-sm font-bold text-slate-900 flex items-center gap-2">
-                <User className="w-4 h-4 text-teal-600" />
+            <div className="bg-neutral-50 p-4 sm:p-5 rounded-[var(--radius-xl)] border border-neutral-200 space-y-4">
+              <h4 className="text-[length:var(--text-body-size)] font-bold text-neutral-900 flex items-center gap-2">
+                <User className="w-4 h-4 text-[var(--color-brand-600)]" />
                 Who's joining?
               </h4>
               <Input
@@ -372,9 +373,9 @@ export const AddMemberModal: React.FC<AddMemberModalProps> = ({
             </div>
 
             {/* 2. Membership Card */}
-            <div className="bg-slate-50 p-4 sm:p-5 rounded-[20px] border border-slate-100 space-y-4">
-              <h4 className="text-sm font-bold text-slate-900 flex items-center gap-2">
-                <CreditCard className="w-4 h-4 text-purple-600" />
+            <div className="bg-neutral-50 p-4 sm:p-5 rounded-[var(--radius-xl)] border border-neutral-200 space-y-4">
+              <h4 className="text-[length:var(--text-body-size)] font-bold text-neutral-900 flex items-center gap-2">
+                <CreditCard className="w-4 h-4 text-neutral-600" />
                 Membership
               </h4>
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
@@ -408,9 +409,9 @@ export const AddMemberModal: React.FC<AddMemberModalProps> = ({
             </div>
 
             {/* 3. Dates & Notes Card */}
-            <div className="bg-slate-50 p-4 sm:p-5 rounded-[20px] border border-slate-100 space-y-4">
-              <h4 className="text-sm font-bold text-slate-900 flex items-center gap-2">
-                <Calendar className="w-4 h-4 text-sky-600" />
+            <div className="bg-neutral-50 p-4 sm:p-5 rounded-[var(--radius-xl)] border border-neutral-200 space-y-4">
+              <h4 className="text-[length:var(--text-body-size)] font-bold text-neutral-900 flex items-center gap-2">
+                <Calendar className="w-4 h-4 text-neutral-600" />
                 Schedule
               </h4>
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
@@ -438,7 +439,7 @@ export const AddMemberModal: React.FC<AddMemberModalProps> = ({
                     required
                   />
                   {!errors.nextPaymentDate && (
-                    <div className="inline-flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg bg-sky-50 border border-sky-100/50 text-[10px] font-semibold text-sky-700 w-fit">
+                    <div className="inline-flex items-center gap-1.5 px-2.5 py-1.5 rounded-[var(--radius-md)] bg-[var(--color-info-50)] border border-[var(--color-info-200)] text-[10px] font-semibold text-[var(--color-info-700)] w-fit">
                       <Calendar className="w-3 h-3" />
                       Suggested based on {durationMonths} mo plan
                     </div>

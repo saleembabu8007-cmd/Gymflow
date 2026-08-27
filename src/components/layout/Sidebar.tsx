@@ -90,7 +90,7 @@ export const Sidebar: React.FC<SidebarProps> = ({
 
       {/* 2. Primary Navigation */}
       <nav className="flex-1 px-4 py-6 space-y-2 overflow-y-auto">
-        <div className="px-2 pb-3 text-[11px] font-bold uppercase tracking-widest text-slate-400">
+        <div className="px-2 pb-3 text-[11px] font-bold uppercase tracking-widest text-neutral-400">
           Gym Workspace
         </div>
 
@@ -106,18 +106,19 @@ export const Sidebar: React.FC<SidebarProps> = ({
               type="button"
               id={`sidebar-nav-${item.id.replace('/', '') || 'today'}`}
               onClick={() => onNavigate(item.id)}
+              aria-current={isActive ? 'page' : undefined}
               className={cn(
-                'w-full flex items-center justify-between px-3 py-3 rounded-2xl text-[15px] font-medium transition-all group cursor-pointer text-left',
+                'w-full flex items-center justify-between px-3 py-3 rounded-[var(--radius-lg)] text-[15px] font-medium transition-all group cursor-pointer text-left',
                 isActive
-                  ? 'bg-teal-50 text-teal-700 font-bold'
-                  : 'text-slate-600 hover:bg-slate-50 hover:text-slate-900'
+                  ? 'bg-[var(--color-brand-50)] text-[var(--color-brand-600)] font-bold'
+                  : 'text-neutral-600 hover:bg-neutral-50 hover:text-neutral-900'
               )}
             >
               <div className="flex items-center gap-3.5 min-w-0">
                 <Icon
                   className={cn(
                     'w-[22px] h-[22px] shrink-0 transition-colors stroke-[2]',
-                    isActive ? 'text-teal-600 fill-teal-100' : 'text-slate-400 group-hover:text-slate-600 fill-transparent'
+                    isActive ? 'text-[var(--color-brand-500)] fill-[var(--color-brand-100)]' : 'text-neutral-400 group-hover:text-neutral-600 fill-transparent'
                   )}
                 />
                 <span className="truncate">{item.label}</span>

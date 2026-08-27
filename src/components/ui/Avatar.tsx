@@ -10,14 +10,14 @@ export interface AvatarProps {
 }
 
 const identityPalettes = [
-  'bg-purple-100 text-purple-800',  // Grape
-  'bg-pink-100 text-pink-800',      // Flamingo
-  'bg-indigo-100 text-indigo-800',  // Indigo
-  'bg-emerald-100 text-emerald-800',// Mint
-  'bg-rose-100 text-rose-800',      // Rose
-  'bg-lime-100 text-lime-800',      // Lime
-  'bg-slate-100 text-slate-800',    // Granite
-  'bg-cyan-100 text-cyan-800',      // Cyan
+  'bg-purple-100 text-purple-800',   // Grape
+  'bg-pink-100 text-pink-800',       // Flamingo
+  'bg-indigo-100 text-indigo-800',   // Indigo
+  'bg-sky-100 text-sky-800',         // Sky
+  'bg-violet-100 text-violet-800',   // Violet
+  'bg-fuchsia-100 text-fuchsia-800', // Fuchsia
+  'bg-teal-100 text-teal-800',       // Teal
+  'bg-orange-100 text-orange-800',   // Orange
 ];
 
 function getInitials(name: string): string {
@@ -28,6 +28,7 @@ function getInitials(name: string): string {
 }
 
 function getDeterministicColor(str: string): string {
+  if (!str) return identityPalettes[0];
   let hash = 0;
   for (let i = 0; i < str.length; i++) {
     hash = str.charCodeAt(i) + ((hash << 5) - hash);
@@ -48,9 +49,9 @@ export const Avatar: React.FC<AvatarProps> = ({
 
   const sizeClasses = {
     xs: 'w-6 h-6 text-[10px]', // 24px
-    sm: 'w-8 h-8 text-xs',     // 32px
-    md: 'w-10 h-10 text-sm',   // 40px
-    lg: 'w-14 h-14 text-lg',   // 56px
+    sm: 'w-8 h-8 text-[12px]', // 32px
+    md: 'w-10 h-10 text-[14px]',// 40px
+    lg: 'w-14 h-14 text-[18px]',// 56px
   };
 
   const statusDotSizes = {
@@ -67,7 +68,7 @@ export const Avatar: React.FC<AvatarProps> = ({
         className={cn(
           "absolute bottom-0 right-0 rounded-full ring-2 ring-white shadow-sm",
           statusDotSizes[size],
-          status === 'paid' ? 'bg-emerald-500' : 'bg-rose-500'
+          status === 'paid' ? 'bg-[var(--color-success-500)]' : 'bg-[var(--color-danger-500)]'
         )}
       />
     );

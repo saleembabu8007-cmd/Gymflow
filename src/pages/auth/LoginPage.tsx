@@ -4,7 +4,7 @@ import { Button } from '../../components/ui/Button';
 import { Input } from '../../components/ui/Input';
 import { useAuth } from '../../hooks/useAuth';
 import { parseAuthError } from '../../utils/errorUtils';
-import { AlertCircle } from 'lucide-react';
+import { AlertCircle, Eye, EyeOff } from 'lucide-react';
 
 interface LoginPageProps {
   onNavigateToForgotPassword: () => void;
@@ -22,6 +22,7 @@ export const LoginPage: React.FC<LoginPageProps> = ({
   const { login } = useAuth();
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const [showPassword, setShowPassword] = useState(false);
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
   const [isSubmitting, setIsSubmitting] = useState(false);
 
@@ -88,9 +89,9 @@ export const LoginPage: React.FC<LoginPageProps> = ({
         {sessionExpired && !errorMessage && (
           <div
             role="status"
-            className="p-3.5 bg-amber-50 border border-amber-200 text-amber-800 text-xs font-semibold rounded-xl flex items-center gap-2.5"
+            className="p-3.5 bg-[var(--color-warning-50)] border border-[var(--color-warning-200)] text-[var(--color-warning-800)] text-[length:var(--text-caption-size)] font-semibold rounded-[var(--radius-lg)] flex items-center gap-2.5"
           >
-            <AlertCircle className="w-4 h-4 shrink-0 text-amber-600" />
+            <AlertCircle className="w-4 h-4 shrink-0 text-[var(--color-warning-600)]" />
             <span>Your session has expired. Please sign in again to continue.</span>
           </div>
         )}
@@ -98,9 +99,9 @@ export const LoginPage: React.FC<LoginPageProps> = ({
         {errorMessage && (
           <div
             role="alert"
-            className="p-3.5 bg-rose-50 border border-rose-200 text-rose-700 text-xs font-semibold rounded-xl flex items-center gap-2.5"
+            className="p-3.5 bg-[var(--color-danger-50)] border border-[var(--color-danger-200)] text-[var(--color-danger-700)] text-[length:var(--text-caption-size)] font-semibold rounded-[var(--radius-lg)] flex items-center gap-2.5"
           >
-            <AlertCircle className="w-4 h-4 shrink-0 text-rose-600" />
+            <AlertCircle className="w-4 h-4 shrink-0 text-[var(--color-danger-600)]" />
             <span>{errorMessage}</span>
           </div>
         )}
@@ -125,7 +126,7 @@ export const LoginPage: React.FC<LoginPageProps> = ({
           <div className="flex items-center justify-between mb-1.5">
             <label
               htmlFor="login-password"
-              className="text-sm font-semibold text-slate-700"
+              className="text-[length:var(--text-caption-size)] font-semibold text-neutral-700"
             >
               Password
             </label>
@@ -133,13 +134,13 @@ export const LoginPage: React.FC<LoginPageProps> = ({
               type="button"
               id="link-forgot-password"
               onClick={onNavigateToForgotPassword}
-              className="text-sm font-bold text-teal-600 hover:text-teal-700 transition-colors cursor-pointer"
+              className="text-[length:var(--text-caption-size)] font-bold text-[var(--color-brand-600)] hover:text-[var(--color-brand-700)] transition-colors cursor-pointer"
             >
               Forgot password?
             </button>
           </div>
           <Input
-            type="password"
+            type={showPassword ? 'text' : 'password'}
             name="password"
             id="login-password"
             required
@@ -151,6 +152,17 @@ export const LoginPage: React.FC<LoginPageProps> = ({
             placeholder="••••••••"
             autoComplete="current-password"
             disabled={isSubmitting}
+            rightIcon={
+              <button
+                type="button"
+                onClick={() => setShowPassword(!showPassword)}
+                className="text-neutral-400 hover:text-neutral-700 focus:outline-none cursor-pointer"
+                tabIndex={-1}
+                aria-label={showPassword ? 'Hide password' : 'Show password'}
+              >
+                {showPassword ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
+              </button>
+            }
           />
         </div>
 
@@ -169,12 +181,12 @@ export const LoginPage: React.FC<LoginPageProps> = ({
         </div>
 
         {onNavigateToRegister && (
-          <div className="pt-5 border-t border-slate-100 text-center">
-            <span className="text-sm text-slate-600">Don't have a gym account? </span>
+          <div className="pt-5 border-t border-neutral-200 text-center">
+            <span className="text-[length:var(--text-caption-size)] text-neutral-600">Don't have a gym account? </span>
             <button
               type="button"
               onClick={onNavigateToRegister}
-              className="text-sm font-bold text-slate-900 hover:text-teal-600 transition-colors cursor-pointer"
+              className="text-[length:var(--text-caption-size)] font-bold text-neutral-900 hover:text-[var(--color-brand-600)] transition-colors cursor-pointer"
             >
               Create Account
             </button>

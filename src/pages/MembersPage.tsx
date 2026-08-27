@@ -133,7 +133,7 @@ export const MembersPage: React.FC<MembersPageProps> = ({
           />
         </div>
         
-        <div className="w-px h-6 bg-slate-200 shrink-0 mx-1" />
+        <div className="w-px h-6 bg-neutral-200 shrink-0 mx-1" />
 
         <FilterChips<FilterStatus>
           options={filterTabs}
@@ -142,14 +142,14 @@ export const MembersPage: React.FC<MembersPageProps> = ({
           className="pb-0"
         />
 
-        <div className="hidden sm:flex items-center gap-1 p-1 bg-slate-100/80 rounded-xl border border-slate-200 shrink-0 ml-auto h-[40px]">
+        <div className="hidden sm:flex items-center gap-1 p-1 bg-neutral-50 rounded-[var(--radius-xl)] border border-neutral-200 shrink-0 ml-auto h-[40px]">
           <IconButton
             icon={<AlignJustify className="w-4 h-4" />}
             aria-label="Comfortable view"
             variant="default"
             size="sm"
             onClick={() => setViewMode('comfortable')}
-            className={cn("rounded-lg hover:bg-white hover:shadow-sm h-full w-8", viewMode === 'comfortable' && "bg-white shadow-sm text-teal-600")}
+            className={cn("rounded-[var(--radius-lg)] hover:bg-white hover:shadow-sm h-full w-8", viewMode === 'comfortable' && "bg-white shadow-sm text-[var(--color-brand-600)]")}
           />
           <IconButton
             icon={<LayoutList className="w-4 h-4" />}
@@ -157,7 +157,7 @@ export const MembersPage: React.FC<MembersPageProps> = ({
             variant="default"
             size="sm"
             onClick={() => setViewMode('compact')}
-            className={cn("rounded-lg hover:bg-white hover:shadow-sm h-full w-8", viewMode === 'compact' && "bg-white shadow-sm text-teal-600")}
+            className={cn("rounded-[var(--radius-lg)] hover:bg-white hover:shadow-sm h-full w-8", viewMode === 'compact' && "bg-white shadow-sm text-[var(--color-brand-600)]")}
           />
         </div>
       </div>
@@ -238,7 +238,7 @@ export const MembersPage: React.FC<MembersPageProps> = ({
         <button
           type="button"
           onClick={onAddMember}
-          className="flex items-center justify-center w-14 h-14 bg-teal-600 text-white rounded-[20px] shadow-lg shadow-teal-600/30 active:scale-95 transition-transform"
+          className="flex items-center justify-center w-14 h-14 bg-[var(--color-brand-600)] text-white rounded-[var(--radius-full)] shadow-[0_8px_30px_rgba(0,0,0,0.12)] active:scale-95 transition-transform"
           aria-label="Add Member"
         >
           <Plus className="w-6 h-6 stroke-[2.5]" />

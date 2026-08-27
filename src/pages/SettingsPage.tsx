@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { Input } from '../components/ui/Input';
 import { Select, SegmentedControl } from '../components/ui';
 import { Button } from '../components/ui/Button';
+import { Card, CardHeader, CardTitle, CardDescription, CardContent } from '../components/ui/Card';
 import { useGym } from '../hooks/useGym';
 import { useGymSettings } from '../hooks/useGymSettings';
 import { useAuth } from '../hooks/useAuth';
@@ -161,17 +162,17 @@ export const SettingsPage: React.FC = () => {
       {/* ========================================================================= */}
       {/* SECTION 1: GYM PROFILE                                                    */}
       {/* ========================================================================= */}
-      <div id="section-gym-profile" className="bg-white border border-slate-100 rounded-[20px] p-6 shadow-sm mb-6">
-        <div className="mb-6 flex items-center gap-3 border-b border-slate-100 pb-5">
-          <div className="w-8 h-8 rounded-full bg-teal-50 text-teal-600 flex items-center justify-center shrink-0 border border-teal-100/50">
-            <Building2 className="w-4 h-4 text-teal-600" />
+      <Card id="section-gym-profile" className="mb-6">
+        <CardHeader className="flex flex-row items-center gap-3 border-b border-neutral-100 pb-4 mb-4">
+          <div className="w-8 h-8 rounded-full bg-neutral-100 text-neutral-600 flex items-center justify-center shrink-0 border border-neutral-200/50">
+            <Building2 className="w-4 h-4" />
           </div>
-          <div>
-            <h3 className="text-base font-bold text-slate-900">Gym Profile</h3>
-            <p className="text-xs text-slate-600 mt-0.5">Basic information about your fitness center</p>
+          <div className="space-y-0.5">
+            <CardTitle>Gym Profile</CardTitle>
+            <CardDescription>Basic information about your fitness center</CardDescription>
           </div>
-        </div>
-        <div>
+        </CardHeader>
+        <CardContent>
           <form onSubmit={handleSaveGymProfile} className="space-y-4">
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
               <Input
@@ -206,7 +207,7 @@ export const SettingsPage: React.FC = () => {
                 id="btn-save-gym-profile"
                 type="submit"
                 size="md"
-                variant="secondary"
+                variant="primary"
                 isLoading={isSavingGym}
                 className="px-6"
               >
@@ -214,23 +215,23 @@ export const SettingsPage: React.FC = () => {
               </Button>
             </div>
           </form>
-        </div>
-      </div>
+        </CardContent>
+      </Card>
 
       {/* ========================================================================= */}
       {/* SECTION 2: PAYMENT SETTINGS                                               */}
       {/* ========================================================================= */}
-      <div id="section-payment-settings" className="bg-white border border-slate-100 rounded-[20px] p-6 shadow-sm mb-6">
-        <div className="mb-6 flex items-center gap-3 border-b border-slate-100 pb-5">
-          <div className="w-8 h-8 rounded-full bg-purple-50 text-purple-600 flex items-center justify-center shrink-0 border border-purple-100/50">
-            <CreditCard className="w-4 h-4 text-purple-600" />
+      <Card id="section-payment-settings" className="mb-6">
+        <CardHeader className="flex flex-row items-center gap-3 border-b border-neutral-100 pb-4 mb-4">
+          <div className="w-8 h-8 rounded-full bg-neutral-100 text-neutral-600 flex items-center justify-center shrink-0 border border-neutral-200/50">
+            <CreditCard className="w-4 h-4" />
           </div>
-          <div>
-            <h3 className="text-base font-bold text-slate-900">Payment Settings</h3>
-            <p className="text-xs text-slate-600 mt-0.5">Default billing rules and automated reminder timing</p>
+          <div className="space-y-0.5">
+            <CardTitle>Payment Settings</CardTitle>
+            <CardDescription>Default billing rules and automated reminder timing</CardDescription>
           </div>
-        </div>
-        <div>
+        </CardHeader>
+        <CardContent>
           <form onSubmit={handleSavePaymentSettings} className="space-y-4">
             <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
               {/* Currency */}
@@ -284,7 +285,7 @@ export const SettingsPage: React.FC = () => {
                 id="btn-save-payment-settings"
                 type="submit"
                 size="md"
-                variant="secondary"
+                variant="primary"
                 isLoading={isSavingPaymentSettings}
                 className="px-6"
               >
@@ -292,23 +293,23 @@ export const SettingsPage: React.FC = () => {
               </Button>
             </div>
           </form>
-        </div>
-      </div>
+        </CardContent>
+      </Card>
 
       {/* ========================================================================= */}
       {/* SECTION 3: ACCOUNT                                                        */}
       {/* ========================================================================= */}
-      <div id="section-account-settings" className="bg-white border border-slate-100 rounded-[20px] p-6 shadow-sm mb-6">
-        <div className="mb-6 flex items-center gap-3 border-b border-slate-100 pb-5">
-          <div className="w-8 h-8 rounded-full bg-amber-50 text-amber-600 flex items-center justify-center shrink-0 border border-amber-100/50">
-            <User className="w-4 h-4 text-amber-600" />
+      <Card id="section-account-settings" className="mb-6">
+        <CardHeader className="flex flex-row items-center gap-3 border-b border-neutral-100 pb-4 mb-4">
+          <div className="w-8 h-8 rounded-full bg-neutral-100 text-neutral-600 flex items-center justify-center shrink-0 border border-neutral-200/50">
+            <User className="w-4 h-4" />
           </div>
-          <div>
-            <h3 className="text-base font-bold text-slate-900">Account</h3>
-            <p className="text-xs text-slate-600 mt-0.5">Owner credentials and login security</p>
+          <div className="space-y-0.5">
+            <CardTitle>Account</CardTitle>
+            <CardDescription>Owner credentials and login security</CardDescription>
           </div>
-        </div>
-        <div>
+        </CardHeader>
+        <CardContent>
           <form onSubmit={handleSaveAccount} className="space-y-4">
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
               <Input
@@ -344,7 +345,7 @@ export const SettingsPage: React.FC = () => {
                   <button
                     type="button"
                     onClick={() => setShowPassword(!showPassword)}
-                    className="text-slate-400 hover:text-slate-700 focus:outline-none cursor-pointer"
+                    className="w-11 h-11 sm:w-auto sm:h-auto flex items-center justify-center -mr-2 sm:mr-0 text-neutral-400 hover:text-neutral-700 focus:outline-none cursor-pointer"
                     tabIndex={-1}
                   >
                     {showPassword ? (
@@ -362,7 +363,7 @@ export const SettingsPage: React.FC = () => {
                 id="btn-save-account"
                 type="submit"
                 size="md"
-                variant="secondary"
+                variant="primary"
                 isLoading={isSavingAccount}
                 className="px-6"
               >
@@ -370,16 +371,16 @@ export const SettingsPage: React.FC = () => {
               </Button>
             </div>
           </form>
-        </div>
-      </div>
+        </CardContent>
+      </Card>
 
       {/* ========================================================================= */}
       {/* LOGOUT (Clearly placed at bottom, simple and understated)                */}
       {/* ========================================================================= */}
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mt-8 pb-12">
-        <div className="text-sm text-slate-600 flex flex-col sm:flex-row sm:items-center gap-1 sm:gap-4">
-          <span>Logged in as <span className="font-semibold text-slate-800">{user?.email || 'Owner'}</span></span>
-          <span className="hidden sm:inline text-slate-300">•</span>
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mt-8 pb-4">
+        <div className="text-[length:var(--text-body-size)] text-neutral-600 flex flex-col sm:flex-row sm:items-center gap-1 sm:gap-4">
+          <span>Logged in as <span className="font-bold text-neutral-800">{user?.email || 'Owner'}</span></span>
+          <span className="hidden sm:inline text-neutral-300">•</span>
           <button
             type="button"
             id="btn-restart-onboarding"
@@ -387,7 +388,7 @@ export const SettingsPage: React.FC = () => {
               localStorage.removeItem('gymflow_onboarding_completed');
               window.location.reload();
             }}
-            className="text-slate-600 hover:text-slate-900 underline transition-colors cursor-pointer text-sm text-left"
+            className="py-2 sm:py-0 min-h-[44px] sm:min-h-0 text-neutral-500 hover:text-neutral-900 underline transition-colors cursor-pointer text-left"
           >
             Restart First-Time Setup
           </button>
@@ -398,7 +399,7 @@ export const SettingsPage: React.FC = () => {
           variant="tertiary"
           size="sm"
           onClick={handleLogout}
-          className="text-slate-600 hover:text-rose-600 hover:bg-rose-50"
+          className="text-neutral-600 hover:text-[var(--color-danger-600)] hover:bg-[var(--color-danger-50)]"
           leftIcon={<LogOut className="w-4 h-4" />}
         >
           Log out

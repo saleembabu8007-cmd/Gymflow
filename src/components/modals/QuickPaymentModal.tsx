@@ -167,12 +167,12 @@ export const QuickPaymentModal: React.FC<QuickPaymentModalProps> = ({
           )}
 
           {/* Section 1: Member Context */}
-          <div className="bg-slate-50 p-4 sm:p-5 rounded-[20px] border border-slate-100">
+          <div className="bg-neutral-50 p-4 sm:p-5 rounded-[var(--radius-xl)] border border-neutral-200">
             <div className="flex items-center justify-between text-xs">
               <div className="flex items-center gap-3 min-w-0">
                 <Avatar name={member.name} size="sm" />
                 <div className="min-w-0">
-                  <span className="font-bold text-neutral-950 block text-sm truncate">
+                  <span className="font-bold text-neutral-950 block text-[length:var(--text-body-size)] truncate">
                     {member.name}
                   </span>
                   <span className="text-neutral-500 font-mono">{member.phone}</span>
@@ -191,9 +191,9 @@ export const QuickPaymentModal: React.FC<QuickPaymentModalProps> = ({
           </div>
 
           {/* Section 2: Payment Details */}
-          <div className="bg-slate-50 p-4 sm:p-5 rounded-[20px] border border-slate-100 space-y-4">
-            <h4 className="text-sm font-bold text-slate-900 flex items-center gap-2">
-              <Banknote className="w-4 h-4 text-emerald-600" />
+          <div className="bg-neutral-50 p-4 sm:p-5 rounded-[var(--radius-xl)] border border-neutral-200 space-y-4">
+            <h4 className="text-[length:var(--text-body-size)] font-bold text-neutral-900 flex items-center gap-2">
+              <Banknote className="w-4 h-4 text-[var(--color-success-600)]" />
               Payment Details
             </h4>
             
@@ -236,9 +236,9 @@ export const QuickPaymentModal: React.FC<QuickPaymentModalProps> = ({
           </div>
 
           {/* Section 3: Renewal & Notes */}
-          <div className="bg-slate-50 p-4 sm:p-5 rounded-[20px] border border-slate-100 space-y-4">
-            <h4 className="text-sm font-bold text-slate-900 flex items-center gap-2">
-              <Calendar className="w-4 h-4 text-sky-600" />
+          <div className="bg-neutral-50 p-4 sm:p-5 rounded-[var(--radius-xl)] border border-neutral-200 space-y-4">
+            <h4 className="text-[length:var(--text-body-size)] font-bold text-neutral-900 flex items-center gap-2">
+              <Calendar className="w-4 h-4 text-[var(--color-info-600)]" />
               Renewal & Notes
             </h4>
             
@@ -265,15 +265,15 @@ export const QuickPaymentModal: React.FC<QuickPaymentModalProps> = ({
               />
 
               <div>
-                <label className="text-xs font-semibold text-neutral-700 block mb-1.5">
+                <label className="text-[length:var(--text-caption-size)] font-semibold text-neutral-700 block mb-1.5">
                   Next payment due date
                 </label>
-                <div className="h-10 px-3.5 rounded-xl bg-emerald-50/70 border border-emerald-200 flex items-center justify-between text-xs font-semibold text-emerald-950">
+                <div className="h-11 px-3.5 rounded-[var(--radius-md)] bg-[var(--color-success-50)] border border-[var(--color-success-200)] flex items-center justify-between text-xs font-semibold text-[var(--color-success-900)]">
                   <span className="flex items-center gap-1.5">
-                    <Clock className="w-3.5 h-3.5 text-emerald-600" />
+                    <Clock className="w-3.5 h-3.5 text-[var(--color-success-600)]" />
                     {formatDate(calculatedNextDueDate, { format: 'medium' })}
                   </span>
-                  <span className="text-[10px] uppercase font-bold text-emerald-700">
+                  <span className="text-[10px] uppercase font-bold text-[var(--color-success-700)]">
                     Scheduled
                   </span>
                 </div>
@@ -294,7 +294,7 @@ export const QuickPaymentModal: React.FC<QuickPaymentModalProps> = ({
         </div>
 
         {/* Modal Action Footer */}
-        <div className="sticky bottom-0 bg-white border-t border-slate-100 p-4 sm:px-6 flex flex-col sm:flex-row items-center justify-end gap-3 z-10 shrink-0">
+        <div className="sticky bottom-0 bg-white border-t border-neutral-100 p-4 sm:px-6 flex flex-col sm:flex-row items-center justify-end gap-3 z-10 shrink-0">
           <Button
             type="button"
             variant="tertiary"
@@ -309,9 +309,10 @@ export const QuickPaymentModal: React.FC<QuickPaymentModalProps> = ({
           <Button
             id="btn-submit-mark-paid"
             type="submit"
+            variant="primary"
             size="md"
             isLoading={isSubmitting}
-            className="w-full sm:w-auto bg-neutral-900 text-white hover:bg-neutral-800 font-semibold px-6"
+            className="w-full sm:w-auto font-semibold px-6"
           >
             {isSubmitting ? 'Saving payment...' : 'Mark as Paid'}
           </Button>

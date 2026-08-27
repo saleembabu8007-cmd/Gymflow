@@ -43,13 +43,13 @@ export const ExpiredSubscriptionPage: React.FC = () => {
       <div className="w-full max-w-md space-y-8">
         {/* Lock Banner Header */}
         <div className="text-center space-y-3">
-          <div className="w-12 h-12 rounded-2xl bg-amber-500/10 border border-amber-500/20 text-amber-600 flex items-center justify-center mx-auto">
+          <div className="w-12 h-12 rounded-[var(--radius-xl)] bg-[var(--color-warning-500)]/10 border border-[var(--color-warning-500)]/20 text-[var(--color-warning-600)] flex items-center justify-center mx-auto">
             <Lock className="w-6 h-6" />
           </div>
-          <h1 className="text-2xl font-bold tracking-tight text-zinc-900">
+          <h1 className="text-[length:var(--text-heading-size)] font-bold tracking-tight text-neutral-900">
             Your GymFlow subscription has expired
           </h1>
-          <p className="text-sm text-zinc-600 leading-relaxed">
+          <p className="text-[length:var(--text-body-size)] text-neutral-600 leading-relaxed">
             Renew your subscription to continue managing your gym. Your member records and payment history remain completely safe.
           </p>
         </div>
@@ -57,25 +57,25 @@ export const ExpiredSubscriptionPage: React.FC = () => {
         {/* Paywall */}
         <div className="space-y-8">
           {paymentError && (
-            <div className="mb-4 p-3.5 bg-rose-50 border border-rose-200 text-rose-700 text-xs font-semibold rounded-xl flex items-center gap-2.5">
-              <AlertCircle className="w-4 h-4 shrink-0 text-rose-600" />
+            <div className="mb-4 p-3.5 bg-[var(--color-danger-50)] border border-[var(--color-danger-200)] text-[var(--color-danger-700)] text-[length:var(--text-caption-size)] font-semibold rounded-[var(--radius-lg)] flex items-center gap-2.5">
+              <AlertCircle className="w-4 h-4 shrink-0 text-[var(--color-danger-600)]" />
               <span>{paymentError}</span>
             </div>
           )}
 
-          <div className="py-4 border-y border-zinc-100 space-y-2">
-            <div className="flex items-center justify-between text-xs font-semibold text-zinc-500 uppercase tracking-wider">
+          <div className="py-4 border-y border-[var(--color-neutral-100)] space-y-2">
+            <div className="flex items-center justify-between text-[length:var(--text-caption-size)] font-semibold text-neutral-500 uppercase tracking-wider">
               <span>Plan</span>
               <span>Price</span>
             </div>
             <div className="flex items-center justify-between">
-              <span className="text-base font-bold text-zinc-900">{plan?.name || 'GymFlow Pro'}</span>
-              <span className="text-base font-bold font-mono text-zinc-900">{priceFormatted} / mo</span>
+              <span className="text-[length:var(--text-subtitle-size)] font-bold text-neutral-900">{plan?.name || 'GymFlow Pro'}</span>
+              <span className="text-[length:var(--text-subtitle-size)] font-bold font-mono text-neutral-900">{priceFormatted} / mo</span>
             </div>
           </div>
 
           <div className="space-y-2">
-            <h3 className="text-xs font-semibold text-zinc-500 uppercase tracking-wider">
+            <h3 className="text-[length:var(--text-caption-size)] font-semibold text-neutral-500 uppercase tracking-wider">
               Included Features
             </h3>
             <div className="space-y-2">
@@ -85,8 +85,8 @@ export const ExpiredSubscriptionPage: React.FC = () => {
                 'Payment Collection Ledger',
                 'PostgreSQL RLS Tenant Isolation',
               ].map((feature, idx) => (
-                <div key={idx} className="flex items-center gap-2 text-xs text-zinc-700">
-                  <CheckCircle2 className="w-4 h-4 text-emerald-600 shrink-0" />
+                <div key={idx} className="flex items-center gap-2 text-[length:var(--text-caption-size)] text-neutral-700">
+                  <CheckCircle2 className="w-4 h-4 text-[var(--color-success-600)] shrink-0" />
                   <span>{feature}</span>
                 </div>
               ))}
@@ -104,21 +104,22 @@ export const ExpiredSubscriptionPage: React.FC = () => {
               {paymentError ? 'Retry Payment' : 'Renew Subscription'}
             </Button>
           ) : (
-            <div className="py-3 border-y border-zinc-100 text-zinc-700 text-xs font-semibold text-center">
+            <div className="py-3 border-y border-[var(--color-neutral-100)] text-neutral-700 text-[length:var(--text-caption-size)] font-semibold text-center">
               Access suspended by Platform Administrator. Please contact platform support.
             </div>
           )}
 
           <div className="pt-4 flex items-center justify-between">
-            <span className="text-xs text-zinc-500 font-mono">Signed in as {user?.email}</span>
-            <button
+            <span className="text-[length:var(--text-caption-size)] text-neutral-500 font-mono">Signed in as {user?.email}</span>
+            <Button
               type="button"
+              variant="tertiary"
               onClick={logout}
-              className="text-xs font-semibold text-zinc-600 hover:text-zinc-900 flex items-center gap-1.5 cursor-pointer"
+              className="flex items-center gap-1.5"
             >
               <LogOut className="w-3.5 h-3.5" />
               Sign Out
-            </button>
+            </Button>
           </div>
         </div>
       </div>
