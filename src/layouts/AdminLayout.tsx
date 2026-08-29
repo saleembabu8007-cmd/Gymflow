@@ -8,8 +8,8 @@ import {
   ShieldCheck,
   Settings,
   LogOut,
-  ChevronRight,
 } from 'lucide-react';
+import { Logo } from '../components/ui/Logo';
 import { useAuth } from '../hooks/useAuth';
 import { cn } from '../utils/classNames';
 
@@ -23,11 +23,11 @@ interface AdminLayoutProps {
 
 const NAV_ITEMS: { id: AdminTab; label: string; icon: React.FC<{ className?: string }> }[] = [
   { id: 'overview', label: 'Overview', icon: LayoutDashboard },
-  { id: 'gyms', label: 'Customer Gyms', icon: Building2 },
+  { id: 'gyms', label: 'Gyms', icon: Building2 },
   { id: 'subscriptions', label: 'Subscriptions', icon: CreditCard },
-  { id: 'users', label: 'Platform Users', icon: Users },
-  { id: 'audit', label: 'Audit Activity', icon: ShieldCheck },
-  { id: 'settings', label: 'Platform Settings', icon: Settings },
+  { id: 'users', label: 'Users', icon: Users },
+  { id: 'audit', label: 'Audit Logs', icon: ShieldCheck },
+  { id: 'settings', label: 'Settings', icon: Settings },
 ];
 
 export const AdminLayout: React.FC<AdminLayoutProps> = ({
@@ -46,33 +46,33 @@ export const AdminLayout: React.FC<AdminLayoutProps> = ({
   };
 
   return (
-    <div className="h-screen bg-[var(--color-bg-subtle)] text-neutral-900 flex flex-col font-sans overflow-hidden">
-      {/* Top Navbar */}
-      <header className="border-b border-neutral-200 bg-white z-40 shrink-0">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
+    <div className="h-screen bg-[var(--color-bg-canvas)] text-neutral-900 flex flex-col font-sans overflow-hidden select-none">
+      {/* Top Admin Header */}
+      <header className="border-b border-neutral-200/80 bg-white z-40 shrink-0">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-14 flex items-center justify-between">
           <div className="flex items-center gap-3">
-            <div className="w-8 h-8 rounded-lg bg-[var(--color-brand-600)] text-white flex items-center justify-center font-bold">
-              <Activity className="w-4 h-4" />
-            </div>
-            <div className="flex flex-col">
-              <span className="font-extrabold text-neutral-900 text-base leading-tight tracking-tight">
-                GymFlow Platform Admin
+            <Logo size="sm" />
+            <div className="flex items-center gap-2">
+              <span className="font-extrabold text-neutral-950 text-sm tracking-tight font-display">
+                GymFlow
               </span>
-              <span className="text-[10px] text-[var(--color-brand-600)] font-mono font-semibold uppercase">Product Owner Control Panel</span>
+              <span className="px-1.5 py-0.5 rounded text-[10px] font-mono font-bold bg-neutral-900 text-white uppercase">
+                Platform Admin
+              </span>
             </div>
           </div>
 
           {/* User profile & logout */}
-          <div className="flex items-center gap-4">
+          <div className="flex items-center gap-3">
             <div className="hidden sm:flex flex-col text-right">
-              <span className="text-xs font-semibold text-neutral-900">{user?.name || 'Platform Admin'}</span>
+              <span className="text-xs font-bold text-neutral-900">{user?.name || 'Platform Admin'}</span>
               <span className="text-[10px] text-neutral-500 font-mono">{user?.email || 'admin@gymflow.in'}</span>
             </div>
             <button
               type="button"
               id="btn-admin-logout"
               onClick={handleAdminLogout}
-              className="p-2 rounded-xl text-neutral-500 hover:text-[var(--color-danger-600)] hover:bg-[var(--color-danger-50)] transition-colors cursor-pointer"
+              className="p-1.5 rounded-[var(--radius-md)] text-neutral-500 hover:text-[var(--color-danger-600)] hover:bg-[var(--color-danger-50)] transition-colors cursor-pointer border border-transparent hover:border-[var(--color-danger-200)]"
               title="Logout Platform Admin"
             >
               <LogOut className="w-4 h-4" />
@@ -82,8 +82,8 @@ export const AdminLayout: React.FC<AdminLayoutProps> = ({
       </header>
 
       {/* Admin Horizontal Nav Bar */}
-      <div className="border-b border-neutral-200 bg-white shrink-0">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex items-center gap-1 overflow-x-auto scrollbar-none py-2">
+      <div className="border-b border-neutral-200/80 bg-white shrink-0">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex items-center gap-1.5 overflow-x-auto no-scrollbar py-2">
           {NAV_ITEMS.map((item) => {
             const Icon = item.icon;
             const isSelected = currentTab === item.id;
@@ -94,13 +94,13 @@ export const AdminLayout: React.FC<AdminLayoutProps> = ({
                 id={`admin-nav-${item.id}`}
                 onClick={() => onTabChange(item.id)}
                 className={cn(
-                  'px-3.5 py-2 rounded-[var(--radius-xl)] text-[length:var(--text-caption-size)] font-semibold flex items-center gap-2 transition-all whitespace-nowrap cursor-pointer',
+                  'px-3 py-1.5 rounded-[var(--radius-md)] text-xs font-bold flex items-center gap-2 transition-all whitespace-nowrap cursor-pointer',
                   isSelected
-                    ? 'bg-neutral-100 text-neutral-900 border border-neutral-200 shadow-sm'
-                    : 'text-neutral-500 hover:text-neutral-900 hover:bg-neutral-50'
+                    ? 'bg-neutral-950 text-white shadow-2xs'
+                    : 'text-neutral-600 hover:text-neutral-950 hover:bg-neutral-100'
                 )}
               >
-                <Icon className={cn('w-4 h-4', isSelected ? 'text-[var(--color-brand-600)]' : 'text-neutral-400')} />
+                <Icon className="w-3.5 h-3.5" />
                 <span>{item.label}</span>
               </button>
             );
@@ -108,12 +108,12 @@ export const AdminLayout: React.FC<AdminLayoutProps> = ({
         </div>
       </div>
 
-      {/* Main Admin Content Body */}
-      <div className="flex-1 overflow-y-auto">
-        <main className="max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-8">
+      {/* Main Content Area */}
+      <main className="flex-1 overflow-y-auto p-4 sm:p-6 lg:p-8">
+        <div className="max-w-7xl mx-auto">
           {children}
-        </main>
-      </div>
+        </div>
+      </main>
     </div>
   );
 };

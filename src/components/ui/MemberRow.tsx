@@ -2,13 +2,11 @@ import React, { useState } from 'react';
 import { Member } from '../../types';
 import { Avatar } from './Avatar';
 import { Badge } from './Badge';
-import { Button } from './Button';
-import { IconButton } from './IconButton';
+import { ListRow } from './ListRow';
 import { formatCurrency } from '../../utils/currencyUtils';
 import { formatDate, getDifferenceInDays } from '../../utils/dateUtils';
-import { Clock, CheckCircle2, MessageSquare, MoreHorizontal, Calendar } from 'lucide-react';
+import { CheckCircle2, MessageSquare, MoreHorizontal, Calendar, User } from 'lucide-react';
 import { cn } from '../../utils/classNames';
-import { useMediaQuery } from '../../hooks/useMediaQuery';
 
 export interface MemberRowProps {
   member: Member;
@@ -31,12 +29,9 @@ export const MemberRow: React.FC<MemberRowProps> = ({
   highlighted,
   primaryAction = 'pay',
 }) => {
-  const [showMobileActions, setShowMobileActions] = useState(false);
+  const [showActionsMenu, setShowActionsMenu] = useState(false);
   const [isSuccessFlash, setIsSuccessFlash] = useState(false);
-  
-  // Collapse threshold: 640px (sm breakpoint)
-  const isDesktop = useMediaQuery('(min-width: 640px)');
-  
+
   const diffDays = getDifferenceInDays(member.nextPaymentDate);
   const isOverdue = diffDays < 0;
   const isDueToday = diffDays === 0;
@@ -49,177 +44,206 @@ export const MemberRow: React.FC<MemberRowProps> = ({
   const renderStatus = () => {
     if (isSuccessFlash) {
       return (
-        <Badge variant="success" icon={<CheckCircle2 className="w-3.5 h-3.5" />}>
+        <Badge variant="success" treatment="default">
           Paid
         </Badge>
       );
     }
-    
+
     if (isOverdue) {
       const days = Math.abs(diffDays);
       return (
-        <Badge variant="danger" icon={<Clock className="w-3.5 h-3.5" />}>
-          Overdue by {days} {days === 1 ? 'day' : 'days'}
-        </Badge>
+        <div className="flex items-center gap-1.5">
+          <Badge variant="danger" treatment="emphasis">
+            Overdue
+          </Badge>
+          <span className="text-[11px] text-neutral-500 font-medium">by {days} {days === 1 ? 'day' : 'days'}</span>
+        </div>
       );
     }
     if (isDueToday) {
       return (
-        <Badge variant="warning" icon={<Clock className="w-3.5 h-3.5" />}>
+        <Badge variant="warning" treatment="emphasis">
           Due today
         </Badge>
       );
     }
     if (diffDays <= 3) {
       return (
-        <Badge variant="warning" icon={<Clock className="w-3.5 h-3.5" />}>
-          Due in {diffDays} {diffDays === 1 ? 'day' : 'days'}
-        </Badge>
+        <div className="flex items-center gap-1.5">
+          <Badge variant="warning" treatment="default">
+            Due soon
+          </Badge>
+          <span className="text-[11px] text-neutral-500 font-medium">in {diffDays} {diffDays === 1 ? 'day' : 'days'}</span>
+        </div>
       );
     }
     return (
-      <Badge variant="success" icon={<CheckCircle2 className="w-3.5 h-3.5" />}>
+      <Badge variant="success" treatment="default">
         Paid up
       </Badge>
     );
   };
 
-  return (
-    <div
-      className={cn(
-        'group relative flex flex-col sm:flex-row sm:items-center justify-between gap-4 p-4 sm:p-5 rounded-[var(--radius-xl)] bg-white border border-neutral-200 transition-all duration-300 hover:shadow-[0_4px_20px_rgba(15,23,42,0.05)] cursor-pointer overflow-hidden',
-        isOverdue && !isSuccessFlash && 'border-l-4 border-l-[var(--color-danger-500)] bg-[var(--color-danger-50)] border-y-[var(--color-danger-200)] border-r-[var(--color-danger-200)]',
-        (highlighted || isSuccessFlash) && 'bg-[var(--color-success-50)] border-[var(--color-success-200)]',
-        isSuccessFlash && 'pointer-events-none shadow-none',
-        className
-      )}
-      onClick={() => onSelect?.(member)}
-    >
-      <div className="flex items-center gap-4 flex-1 min-w-0">
-        <Avatar name={displayName} size="md" />
-        <div className="flex-1 min-w-0">
-          <div className="flex flex-col sm:flex-row sm:items-center gap-1 sm:gap-3">
-            <span className="font-bold text-[length:var(--text-body-size)] text-neutral-900 truncate">
-              {displayName}
-            </span>
-            <div className="mt-1 sm:mt-0">
-              {renderStatus()}
-            </div>
-          </div>
-          <div className="mt-1.5 flex flex-wrap items-center gap-2">
-            <span className="text-[length:var(--text-caption-size)] text-neutral-600 font-mono tracking-tight">{member.phone}</span>
-            <span className="text-[length:var(--text-caption-size)] text-neutral-600">&middot;</span>
-            <span className="text-[length:var(--text-caption-size)] text-neutral-600 font-medium">{displayPlan}</span>
-          </div>
-        </div>
-      </div>
+  // Status & Metadata (at most 2 inline metadata pills: plan badge + status badge)
+  const metadataBadges = (
+    <div className="flex items-center gap-1.5 flex-wrap">
+      <Badge variant="neutral" treatment="default">
+        {displayPlan}
+      </Badge>
+      {renderStatus()}
+    </div>
+  );
 
-      <div className="flex items-center justify-between sm:justify-end gap-4 border-t border-neutral-100 sm:border-0 pt-3 sm:pt-0 shrink-0">
-        <div className="flex flex-col items-start sm:items-end mr-auto sm:mr-4">
-          <span className="tabular-nums font-bold text-neutral-900 tracking-tight text-[length:var(--text-subtitle-size)] leading-none">
-            {formatCurrency(displayFee, currencySymbol)}
-          </span>
-          <span className="inline-flex items-center gap-1 mt-1 text-[11px] font-bold uppercase tracking-wider text-neutral-400">
-            <Calendar className="w-3.5 h-3.5" />
-            {formatDate(member.nextPaymentDate, { format: 'short' })}
-          </span>
-        </div>
-
-        {isPending && (
-          <div className="relative flex items-center gap-2">
-            {isDesktop ? (
+  const actionsNode = (
+    <div className="relative flex items-center gap-1.5">
+      {isPending ? (
+        <>
+          {/* Exactly ONE primary pill-shaped action button with >=44px touch target */}
+          <button
+            type="button"
+            onClick={(e) => {
+              e.stopPropagation();
+              if (primaryAction === 'pay') {
+                setIsSuccessFlash(true);
+                setTimeout(() => onQuickPay?.(member), 800);
+              } else {
+                onRemind?.(member);
+              }
+            }}
+            className={cn(
+              "relative inline-flex items-center justify-center gap-1.5 h-8 px-3.5 sm:px-4 rounded-full font-bold text-xs transition-all shadow-2xs cursor-pointer select-none shrink-0",
+              "before:absolute before:-inset-1.5 before:content-[''] before:pointer-events-auto sm:before:hidden",
+              primaryAction === 'pay'
+                ? "bg-[var(--color-brand-500)] text-neutral-950 hover:bg-[var(--color-brand-400)] active:bg-[var(--color-brand-600)]"
+                : "bg-neutral-100 text-neutral-900 hover:bg-neutral-200 active:bg-neutral-300"
+            )}
+          >
+            {primaryAction === 'pay' ? (
               <>
-                <Button
-                  variant={primaryAction === 'remind' ? 'secondary' : 'tertiary'}
-                  size="md"
-                  onClick={(e) => {
-                    e.stopPropagation();
-                    onRemind?.(member);
-                  }}
-                  leftIcon={<MessageSquare className="w-4 h-4" />}
-                >
-                  Remind
-                </Button>
-                <Button
-                  variant={primaryAction === 'pay' ? 'secondary' : 'tertiary'}
-                  size="md"
-                  onClick={(e) => {
-                    e.stopPropagation();
-                    setIsSuccessFlash(true);
-                    setTimeout(() => {
-                      onQuickPay?.(member);
-                    }, 800);
-                  }}
-                >
-                  Mark Paid
-                </Button>
+                <CheckCircle2 className="w-3.5 h-3.5 stroke-[2.5]" />
+                <span>Mark Paid</span>
               </>
             ) : (
               <>
-                <Button
-                  variant="secondary"
-                  size="sm"
-                  onClick={(e) => {
-                    e.stopPropagation();
-                    if (primaryAction === 'pay') {
-                      setIsSuccessFlash(true);
-                      setTimeout(() => onQuickPay?.(member), 800);
-                    } else {
-                      onRemind?.(member);
-                    }
-                  }}
-                >
-                  {primaryAction === 'pay' ? 'Mark Paid' : 'Remind'}
-                </Button>
-                <IconButton
-                  icon={<MoreHorizontal className="w-5 h-5" />}
-                  aria-label="Actions"
-                  variant="default"
-                  onClick={(e) => {
-                    e.stopPropagation();
-                    setShowMobileActions(!showMobileActions);
-                  }}
-                />
-                {showMobileActions && (
-                  <>
-                    <div className="fixed inset-0 z-40" onClick={(e) => { e.stopPropagation(); setShowMobileActions(false); }} />
-                    <div className="absolute right-0 top-12 w-48 bg-white border border-neutral-200 rounded-[var(--radius-xl)] shadow-lg z-50 overflow-hidden flex flex-col p-1">
-                      {/* Remind Action */}
-                      <button
-                        type="button"
-                        className="flex items-center gap-3 px-3 min-h-[44px] text-[length:var(--text-body-size)] font-medium text-neutral-700 hover:bg-neutral-50 rounded-[var(--radius-lg)] text-left"
-                        onClick={(e) => {
-                          e.stopPropagation();
-                          setShowMobileActions(false);
-                          onRemind?.(member);
-                        }}
-                      >
-                        <MessageSquare className="w-4 h-4 text-neutral-500" />
-                        Send Reminder
-                      </button>
-
-                      {/* Mark Paid Action */}
-                      <button
-                        type="button"
-                        className="flex items-center gap-3 px-3 min-h-[44px] text-[length:var(--text-body-size)] font-bold text-[var(--color-success-700)] hover:bg-[var(--color-success-50)] rounded-[var(--radius-lg)] text-left"
-                        onClick={(e) => {
-                          e.stopPropagation();
-                          setShowMobileActions(false);
-                          setIsSuccessFlash(true);
-                          setTimeout(() => onQuickPay?.(member), 800);
-                        }}
-                      >
-                        <CheckCircle2 className="w-4 h-4 text-[var(--color-success-600)]" />
-                        Mark as Paid
-                      </button>
-                    </div>
-                  </>
-                )}
+                <MessageSquare className="w-3.5 h-3.5 stroke-[2.5]" />
+                <span>Remind</span>
               </>
             )}
+          </button>
+
+          {/* Secondary actions overflow trigger (>=44px touch target on mobile) */}
+          <button
+            type="button"
+            aria-label="More actions"
+            onClick={(e) => {
+              e.stopPropagation();
+              setShowActionsMenu(!showActionsMenu);
+            }}
+            className="w-11 h-11 sm:w-8 sm:h-8 rounded-full flex items-center justify-center text-neutral-400 hover:text-neutral-700 hover:bg-neutral-100 transition-colors cursor-pointer shrink-0"
+          >
+            <MoreHorizontal className="w-4 h-4" />
+          </button>
+        </>
+      ) : (
+        /* Non-pending / paid member: single overflow trigger for secondary actions */
+        <button
+          type="button"
+          aria-label="More actions"
+          onClick={(e) => {
+            e.stopPropagation();
+            setShowActionsMenu(!showActionsMenu);
+          }}
+          className="w-11 h-11 sm:w-8 sm:h-8 rounded-full flex items-center justify-center text-neutral-400 hover:text-neutral-700 hover:bg-neutral-100 transition-colors cursor-pointer shrink-0"
+        >
+          <MoreHorizontal className="w-4 h-4" />
+        </button>
+      )}
+
+      {/* Overflow Dropdown Menu */}
+      {showActionsMenu && (
+        <>
+          <div
+            className="fixed inset-0 z-40"
+            onClick={(e) => {
+              e.stopPropagation();
+              setShowActionsMenu(false);
+            }}
+          />
+          <div className="absolute right-0 top-10 w-48 bg-white border border-neutral-200 rounded-[var(--radius-xl)] shadow-lg z-50 overflow-hidden flex flex-col p-1 animate-in fade-in zoom-in-95 duration-100">
+            {/* If primary action is 'pay', secondary action is Remind */}
+            {primaryAction === 'pay' && (
+              <button
+                type="button"
+                className="flex items-center gap-2.5 px-3 min-h-[40px] text-xs font-medium text-neutral-700 hover:bg-neutral-50 rounded-[var(--radius-lg)] text-left cursor-pointer transition-colors"
+                onClick={(e) => {
+                  e.stopPropagation();
+                  setShowActionsMenu(false);
+                  onRemind?.(member);
+                }}
+              >
+                <MessageSquare className="w-4 h-4 text-neutral-400" />
+                <span>Send Reminder</span>
+              </button>
+            )}
+
+            {/* If primary action is 'remind', secondary action is Mark Paid */}
+            {primaryAction === 'remind' && (
+              <button
+                type="button"
+                className="flex items-center gap-2.5 px-3 min-h-[40px] text-xs font-bold text-[var(--color-success-700)] hover:bg-[var(--color-success-50)] rounded-[var(--radius-lg)] text-left cursor-pointer transition-colors"
+                onClick={(e) => {
+                  e.stopPropagation();
+                  setShowActionsMenu(false);
+                  setIsSuccessFlash(true);
+                  setTimeout(() => onQuickPay?.(member), 800);
+                }}
+              >
+                <CheckCircle2 className="w-4 h-4 text-[var(--color-success-600)]" />
+                <span>Mark as Paid</span>
+              </button>
+            )}
+
+            {/* View Member Profile */}
+            <button
+              type="button"
+              className="flex items-center gap-2.5 px-3 min-h-[40px] text-xs font-medium text-neutral-700 hover:bg-neutral-50 rounded-[var(--radius-lg)] text-left cursor-pointer transition-colors"
+              onClick={(e) => {
+                e.stopPropagation();
+                setShowActionsMenu(false);
+                onSelect?.(member);
+              }}
+            >
+              <User className="w-4 h-4 text-neutral-400" />
+              <span>View Profile</span>
+            </button>
           </div>
-        )}
-      </div>
+        </>
+      )}
     </div>
+  );
+
+  return (
+    <ListRow
+      onClick={() => onSelect?.(member)}
+      className={cn(
+        isSuccessFlash && 'pointer-events-none opacity-80 bg-[var(--color-success-50)]',
+        className
+      )}
+      highlighted={highlighted || isSuccessFlash}
+      isOverdue={isOverdue && !isSuccessFlash}
+      leading={<Avatar name={displayName} />}
+      title={displayName}
+      subtitle={member.phone}
+      status={metadataBadges}
+      value={formatCurrency(displayFee, currencySymbol)}
+      valueSubtitle={
+        <span className="inline-flex items-center gap-1">
+          <Calendar className="w-3 h-3" />
+          {formatDate(member.nextPaymentDate, { format: 'short' })}
+        </span>
+      }
+      actions={actionsNode}
+    />
   );
 };

@@ -1,81 +1,240 @@
 @import "tailwindcss";
 
-/* GymFlow V2.5 — Complete Visual Design Reset Tokens */
+/* 
+  GymFlow Master Design System Foundations (Single Source of Truth)
+  Strict Token Registry for Theme, Typography, Colors, Radii, Shadows, Motion, and Breakpoints.
+*/
 
 @theme {
-  /* Typography Tokens */
+  /* ========================================================================= */
+  /* 1. TYPOGRAPHY SYSTEM (Inter + Plus Jakarta Sans + JetBrains Mono)         */
+  /* ========================================================================= */
   --font-sans: 'Inter', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  --font-display: 'Plus Jakarta Sans', system-ui, -apple-system, sans-serif;
   --font-mono: 'JetBrains Mono', ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
 
-  /* Semantic Porcelain & Obsidian Color Tokens */
-  --color-bg-app: #fafafa;
-  --color-surface: #ffffff;
-  --color-surface-subtle: #f4f4f2;
-  --color-surface-elevated: #ffffff;
+  /* Typography Scale Tokens */
+  --text-display-weight: 800;
+  --text-display-lh: 1.15;
+  --text-display-tracking: -0.03em;
 
-  --color-foreground: #0c0c0e;
-  --color-foreground-muted: #52525b;
-  --color-foreground-subtle: #71717a;
-  --color-foreground-disabled: #a1a1aa;
+  --text-h1-weight: 700;
+  --text-h1-lh: 1.2;
+  --text-h1-tracking: -0.02em;
 
-  --color-border-subtle: #f4f4f2;
-  --color-border: #e4e4e7;
-  --color-border-strong: #d4d4d8;
+  --text-h2-size: 20px;
+  --text-h2-weight: 600;
+  --text-h2-lh: 1.3;
+  --text-h2-tracking: -0.01em;
 
-  --color-primary: #0c0c0e;
-  --color-primary-hover: #18181b;
-  --color-primary-active: #27272a;
-  --color-primary-subtle: #f4f4f2;
-  --color-primary-foreground: #ffffff;
+  --text-h3-size: 18px;
+  --text-h3-weight: 600;
+  --text-h3-lh: 1.4;
+  --text-h3-tracking: 0em;
 
-  --color-success: #059669;
-  --color-success-subtle: #ecfdf5;
-  --color-success-border: #a7f3d0;
-  --color-success-foreground: #047857;
+  --text-body-lg-size: 16px;
+  --text-body-lg-weight: 500;
+  --text-body-lg-lh: 1.5;
+  --text-body-lg-tracking: 0em;
 
-  --color-warning: #d97706;
-  --color-warning-subtle: #fffbe6;
-  --color-warning-border: #fde68a;
-  --color-warning-foreground: #b45309;
+  --text-body-size: 15px;
+  --text-body-weight: 400;
+  --text-body-lh: 1.5;
+  --text-body-tracking: 0em;
 
-  --color-danger: #e11d48;
-  --color-danger-subtle: #fff1f2;
-  --color-danger-border: #fecdd3;
-  --color-danger-foreground: #be123c;
+  --text-body-sm-size: 14px;
+  --text-body-sm-weight: 400;
+  --text-body-sm-lh: 1.5;
+  --text-body-sm-tracking: 0em;
 
-  --color-info: #0284c7;
-  --color-info-subtle: #f0f9ff;
-  --color-info-border: #bae6fd;
-  --color-info-foreground: #0369a1;
+  --text-caption-size: 13px;
+  --text-caption-weight: 500;
+  --text-caption-lh: 1.4;
+  --text-caption-tracking: 0.01em;
 
-  /* Restrained Micro Geometry Radius Tokens */
+  --text-micro-size: 12px;
+  --text-micro-weight: 700;
+  --text-micro-lh: 1.2;
+  --text-micro-tracking: 0.05em;
+
+  /* ========================================================================= */
+  /* 2. COLOR PALETTES (Brand Electric Lime + Warm Stone + Semantics)          */
+  /* ========================================================================= */
+
+  /* Brand Ramp: #B2E624 */
+  --color-brand-50: #FAFDED;
+  --color-brand-100: #F3FAD5;
+  --color-brand-200: #E6F6A6;
+  --color-brand-300: #D5F070;
+  --color-brand-400: #C7EC4B;
+  --color-brand-500: #B2E624;
+  --color-brand-600: #8DBD14;
+  --color-brand-700: #6B900C;
+  --color-brand-800: #516C09;
+  --color-brand-900: #384C07;
+  --color-brand-950: #1D2903;
+
+  /* Neutral Warm-Gray (Stone) Scale */
+  --color-neutral-50: #FAFAF9;
+  --color-neutral-100: #F5F5F4;
+  --color-neutral-200: #E7E5E4;
+  --color-neutral-300: #D6D3D1;
+  --color-neutral-400: #A8A29E;
+  --color-neutral-500: #78716C;
+  --color-neutral-600: #57534E;
+  --color-neutral-700: #44403C;
+  --color-neutral-800: #292524;
+  --color-neutral-900: #1C1917;
+  --color-neutral-950: #0C0A09;
+
+  /* Semantic Ramp: Success (Emerald) */
+  --color-success-50: #ECFDF5;
+  --color-success-100: #D1FAE5;
+  --color-success-200: #A7F3D0;
+  --color-success-300: #6EE7B7;
+  --color-success-400: #34D399;
+  --color-success-500: #10B981;
+  --color-success-600: #059669;
+  --color-success-700: #047857;
+  --color-success-800: #065F46;
+  --color-success-900: #064E3B;
+  --color-success-950: #022C22;
+
+  /* Semantic Ramp: Warning (Amber) */
+  --color-warning-50: #FFFBEB;
+  --color-warning-100: #FEF3C7;
+  --color-warning-200: #FDE68A;
+  --color-warning-300: #FCD34D;
+  --color-warning-400: #FBBF24;
+  --color-warning-500: #F59E0B;
+  --color-warning-600: #D97706;
+  --color-warning-700: #B45309;
+  --color-warning-800: #92400E;
+  --color-warning-900: #78350F;
+  --color-warning-950: #451A03;
+
+  /* Semantic Ramp: Danger (Red) */
+  --color-danger-50: #FEF2F2;
+  --color-danger-100: #FEE2E2;
+  --color-danger-200: #FECACA;
+  --color-danger-300: #FCA5A5;
+  --color-danger-400: #F87171;
+  --color-danger-500: #EF4444;
+  --color-danger-600: #DC2626;
+  --color-danger-700: #B91C1C;
+  --color-danger-800: #991B1B;
+  --color-danger-900: #7F1D1D;
+  --color-danger-950: #450A0A;
+
+  /* Semantic Ramp: Info (Blue) */
+  --color-info-50: #EFF6FF;
+  --color-info-100: #DBEAFE;
+  --color-info-200: #BFDBFE;
+  --color-info-300: #93C5FD;
+  --color-info-400: #60A5FA;
+  --color-info-500: #3B82F6;
+  --color-info-600: #2563EB;
+  --color-info-700: #1D4ED8;
+  --color-info-800: #1E40AF;
+  --color-info-900: #1E3A8A;
+  --color-info-950: #172554;
+
+  /* Semantic Surface and Foreground Mappings */
+  --color-bg-app: #FAFAF9;
+  --color-surface: #FFFFFF;
+  --color-surface-subtle: #F5F5F4;
+  --color-surface-elevated: #FFFFFF;
+
+  --color-foreground: #1C1917;
+  --color-foreground-muted: #78716C;
+  --color-foreground-subtle: #A8A29E;
+  --color-foreground-disabled: #D6D3D1;
+
+  --color-border-subtle: #F5F5F4;
+  --color-border: #E7E5E4;
+  --color-border-strong: #D6D3D1;
+
+  --color-primary: #B2E624;
+  --color-primary-hover: #8DBD14;
+  --color-primary-active: #6B900C;
+  --color-primary-subtle: #FAFDED;
+  --color-primary-foreground: #0C0A09;
+
+  /* ========================================================================= */
+  /* 3. MICRO-GEOMETRY RADIUS SYSTEM                                           */
+  /* ========================================================================= */
   --radius-xs: 3px;
   --radius-sm: 4px;
   --radius-md: 6px;
   --radius-lg: 10px;
   --radius-xl: 14px;
+  --radius-full: 9999px;
 
-  /* Zero Drop Shadow Defaults (Flat Soft Surfaces) */
+  /* ========================================================================= */
+  /* 4. RESTRAINED SHADOW SYSTEM (Zero drop shadows at rest)                   */
+  /* ========================================================================= */
   --shadow-none: none;
-  --shadow-xs: none;
-  --shadow-sm: none;
-  --shadow-md: none;
-  --shadow-lg: none;
+  --shadow-2xs: 0 1px 2px rgba(12, 10, 9, 0.04);
+  --shadow-xs: 0 1px 3px rgba(12, 10, 9, 0.06);
+  --shadow-sm: 0 4px 12px rgba(12, 10, 9, 0.05);
+  --shadow-md: 0 10px 24px rgba(12, 10, 9, 0.08);
+  --shadow-lg: 0 20px 40px rgba(12, 10, 9, 0.12);
 
-  /* Rapid 100ms Micro Motion */
+  /* ========================================================================= */
+  /* 5. RESTRICTED MOTION TOKENS                                               */
+  /* ========================================================================= */
+  --duration-micro: 100ms;
+  --duration-fast: 100ms;
+  --duration-normal: 150ms;
+  --duration-slow: 250ms;
+
   --ease-fast: cubic-bezier(0.16, 1, 0.3, 1);
   --ease-normal: cubic-bezier(0.16, 1, 0.3, 1);
-  --ease-slow: cubic-bezier(0.16, 1, 0.3, 1);
+  --ease-spring: cubic-bezier(0.34, 1.56, 0.64, 1);
 }
 
 :root {
-  --bg-app: #fafafa;
-  --bg-surface: #ffffff;
-  --bg-subtle: #f4f4f2;
-  --text-main: #0c0c0e;
-  --text-muted: #52525b;
-  --border-main: #e4e4e7;
-  --focus-ring: #0c0c0e;
+  --bg-app: #FAFAF9;
+  --bg-surface: #FFFFFF;
+  --bg-subtle: #F5F5F4;
+  --text-main: #1C1917;
+  --text-muted: #78716C;
+  --border-main: #E7E5E4;
+  --focus-ring: #0C0A09;
+
+  /* Fluid Responsive Typographic Steps */
+  --text-h1-size: 24px;
+  --text-display-size: 32px;
+
+  /* Control Heights & Touch Targets */
+  --height-control-dense: 32px;
+  --height-control-sm: 36px;
+  --height-control-md: 40px;
+  --height-control-touch: 44px;
+  --height-control-lg: 48px;
+
+  /* Z-Index Hierarchy */
+  --z-base: 0;
+  --z-dropdown: 10;
+  --z-sticky: 20;
+  --z-header: 30;
+  --z-backdrop: 40;
+  --z-modal: 50;
+  --z-toast: 60;
+}
+
+@media (min-width: 640px) {
+  :root {
+    --text-h1-size: 28px;
+    --text-display-size: 36px;
+  }
+}
+
+@media (min-width: 1024px) {
+  :root {
+    --text-h1-size: 32px;
+    --text-display-size: 40px;
+  }
 }
 
 @layer base {
@@ -85,6 +244,11 @@
     color: var(--text-main);
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
+  }
+
+  /* Tabular Numerals Mandatory Utility */
+  .tabular-nums {
+    font-variant-numeric: tabular-nums;
   }
 }
 
@@ -99,18 +263,30 @@
 }
 
 ::-webkit-scrollbar-thumb {
-  background: #e4e4e7;
+  background: #E7E5E4;
   border-radius: 9999px;
 }
 
 ::-webkit-scrollbar-thumb:hover {
-  background: #d4d4d8;
+  background: #D6D3D1;
 }
 
 /* Crisp focus ring styling for accessibility */
 *:focus-visible {
   outline: 2px solid var(--focus-ring);
   outline-offset: 2px;
+}
+
+/* Form input elements manage focus styling via container border/ring */
+input:focus,
+input:focus-visible,
+textarea:focus,
+textarea:focus-visible,
+select:focus,
+select:focus-visible {
+  outline: none !important;
+  outline-offset: 0 !important;
+  box-shadow: none;
 }
 
 /* Respect user OS prefers-reduced-motion accessibility preference */
@@ -130,6 +306,21 @@
     animation: shimmer 1.5s infinite linear;
     background: linear-gradient(90deg, var(--color-border-subtle) 0%, var(--color-border) 50%, var(--color-border-subtle) 100%);
     background-size: 200% 100%;
+  }
+
+  /* Density Helpers */
+  .density-compact {
+    --density-min-height: 44px;
+    --density-pad-y: 8px;
+    --density-pad-x: 12px;
+    --density-gap: 8px;
+  }
+
+  .density-comfortable {
+    --density-min-height: 56px;
+    --density-pad-y: 16px;
+    --density-pad-x: 20px;
+    --density-gap: 16px;
   }
 }
 

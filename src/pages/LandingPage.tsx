@@ -71,7 +71,6 @@ export const LandingPage: React.FC<LandingPageProps> = ({
           <Button
             type="button"
             variant="primary"
-            size="lg"
             onClick={onNavigateToRegister}
           >
             Create Gym Account <ArrowRight className="w-5 h-5 ml-1" />
@@ -79,7 +78,6 @@ export const LandingPage: React.FC<LandingPageProps> = ({
           <Button
             type="button"
             variant="secondary"
-            size="lg"
             onClick={onNavigateToLogin}
           >
             Owner Sign In
@@ -192,7 +190,6 @@ export const LandingPage: React.FC<LandingPageProps> = ({
           <Button
             type="button"
             variant="primary"
-            size="lg"
             fullWidth
             onClick={onNavigateToRegister}
           >

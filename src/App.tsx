@@ -15,6 +15,7 @@ import { AdminGymsPage } from './pages/admin/AdminGymsPage';
 import { AdminSubscriptionsPage } from './pages/admin/AdminSubscriptionsPage';
 import { AdminAuditPage } from './pages/admin/AdminAuditPage';
 import { AdminSettingsPage } from './pages/admin/AdminSettingsPage';
+import { AdminUsersPage } from './pages/admin/AdminUsersPage';
 import { AdminLoginPage } from './pages/admin/AdminLoginPage';
 import { NotFoundPage } from './pages/NotFoundPage';
 import { TodayPage } from './pages/TodayPage';
@@ -110,9 +111,7 @@ const AdminAppContent: React.FC<{
         <AdminGymsPage gyms={gyms} onToggleStatus={handleToggleStatus} />
       )}
       {adminTab === 'subscriptions' && <AdminSubscriptionsPage gyms={gyms} />}
-      {adminTab === 'users' && (
-        <AdminGymsPage gyms={gyms} onToggleStatus={handleToggleStatus} />
-      )}
+      {adminTab === 'users' && <AdminUsersPage gyms={gyms} />}
       {adminTab === 'audit' && <AdminAuditPage />}
       {adminTab === 'settings' && <AdminSettingsPage />}
     </AdminLayout>
@@ -363,8 +362,8 @@ const AppContent: React.FC = () => {
       switch (currentSubPath) {
         case '/app/today':
           return { 
-            title: `Good morning, ${user?.name?.split(' ')[0] || 'Owner'}! 👋`, 
-            subtitle: "Here's what's happening with your gym today." 
+            title: 'Today', 
+            subtitle: `Operational queue for ${user?.name?.split(' ')[0] || 'Gym Owner'}` 
           };
         case '/app/members':
           return { title: 'Members', subtitle: "Manage your gym's active, overdue, and pending memberships." };

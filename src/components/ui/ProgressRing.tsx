@@ -19,7 +19,7 @@ export const ProgressRing: React.FC<ProgressRingProps> = ({
   variant = 'auto',
   caption,
   label,
-  textColor = 'text-slate-900',
+  textColor = 'text-neutral-950',
   className,
 }) => {
   const percentage = Math.min(Math.max((value / max) * 100, 0), 100);
@@ -31,11 +31,10 @@ export const ProgressRing: React.FC<ProgressRingProps> = ({
     else activeVariant = 'danger';
   }
 
-  // Define radius, stroke width, total width, and text size per size variant
   const dimensions = {
-    sm: { radius: 32, stroke: 6, width: 80, fontSize: 'text-xl' },
-    md: { radius: 56, stroke: 10, width: 140, fontSize: 'text-4xl' },
-    lg: { radius: 80, stroke: 14, width: 200, fontSize: 'text-5xl' },
+    sm: { radius: 28, stroke: 5, width: 68, fontSize: 'text-base' },
+    md: { radius: 48, stroke: 8, width: 116, fontSize: 'text-2xl' },
+    lg: { radius: 70, stroke: 12, width: 168, fontSize: 'text-4xl' },
   };
 
   const { radius, stroke, width, fontSize } = dimensions[size];
@@ -53,21 +52,21 @@ export const ProgressRing: React.FC<ProgressRingProps> = ({
   }, [strokeDashoffsetTarget]);
 
   const colorVariants = {
-    success: { stroke: 'text-emerald-500', track: 'text-emerald-50' },
-    warning: { stroke: 'text-amber-500', track: 'text-amber-50' },
-    danger: { stroke: 'text-rose-500', track: 'text-rose-50' },
-    brand: { stroke: 'text-teal-500', track: 'text-teal-50' },
-    auto: { stroke: 'text-slate-600', track: 'text-slate-50' },
+    success: { stroke: 'text-[var(--color-success-500)]', track: 'text-[var(--color-success-100)]' },
+    warning: { stroke: 'text-[var(--color-warning-500)]', track: 'text-[var(--color-warning-100)]' },
+    danger: { stroke: 'text-[var(--color-danger-500)]', track: 'text-[var(--color-danger-100)]' },
+    brand: { stroke: 'text-[var(--color-brand-500)]', track: 'text-[var(--color-brand-100)]' },
+    auto: { stroke: 'text-neutral-900', track: 'text-neutral-100' },
   };
 
   const colors = colorVariants[activeVariant as keyof typeof colorVariants];
 
   return (
-    <div className={cn('relative flex flex-col items-center justify-center', className)} style={{ width, height: width }}>
+    <div className={cn('relative flex flex-col items-center justify-center select-none font-sans', className)} style={{ width, height: width }}>
       <svg
         height={width}
         width={width}
-        className="absolute inset-0 -rotate-90 transform drop-shadow-sm"
+        className="absolute inset-0 -rotate-90 transform"
       >
         {/* Background Track */}
         <circle
@@ -90,17 +89,17 @@ export const ProgressRing: React.FC<ProgressRingProps> = ({
           r={normalizedRadius}
           cx={width / 2}
           cy={width / 2}
-          className={cn('transition-all duration-1000 ease-out', colors.stroke)}
+          className={cn('transition-all duration-700 ease-out', colors.stroke)}
         />
       </svg>
-      
+
       {/* Centered Value and Caption */}
       <div className="absolute inset-0 flex flex-col items-center justify-center text-center">
-        <span className={cn('font-black font-display tabular-nums tracking-tight leading-none', fontSize, textColor)}>
+        <span className={cn('font-bold font-display tabular-nums tracking-tight leading-none', fontSize, textColor)}>
           {label ?? `${Math.round(percentage)}%`}
         </span>
         {caption && size !== 'sm' && (
-          <span className="text-[11px] font-bold text-slate-400 uppercase tracking-widest mt-2 px-2 leading-tight">
+          <span className="text-[10px] font-mono font-bold text-neutral-500 uppercase tracking-wider mt-1 px-1 leading-tight">
             {caption}
           </span>
         )}

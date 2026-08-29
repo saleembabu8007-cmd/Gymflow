@@ -1,93 +1,119 @@
 /**
- * GymFlow V2.5 — Complete Visual Design Reset Tokens Catalog
- * Programmatic TypeScript Token Mappings for Human-Centric Operational Design
+ * GymFlow Master Design System — Programmatic TypeScript Token Dictionary
+ * Single authoritative source of truth matching src/index.css
  */
 
 export const colors = {
+  brand: {
+    50: '#FAFDED',
+    100: '#F3FAD5',
+    200: '#E6F6A6',
+    300: '#D5F070',
+    400: '#C7EC4B',
+    500: '#B2E624', // Primary Brand Accent
+    600: '#8DBD14',
+    700: '#6B900C',
+    800: '#516C09',
+    900: '#384C07',
+    950: '#1D2903',
+  },
+  neutral: {
+    50: '#FAFAF9',  // Page Background
+    100: '#F5F5F4', // Subtle Surface
+    200: '#E7E5E4', // Default Border
+    300: '#D6D3D1', // Strong Border
+    400: '#A8A29E', // Subtle / Placeholder Text
+    500: '#78716C', // Muted Text
+    600: '#57534E',
+    700: '#44403C',
+    800: '#292524',
+    900: '#1C1917', // Primary Foreground Text
+    950: '#0C0A09', // Obsidian Core Text
+  },
   bg: {
-    app: '#fafafa',
-    surface: '#ffffff',
-    subtle: '#f4f4f2',
-    elevated: '#ffffff',
+    app: '#FAFAF9',
+    surface: '#FFFFFF',
+    subtle: '#F5F5F4',
+    elevated: '#FFFFFF',
   },
   foreground: {
-    main: '#0c0c0e',
-    muted: '#52525b',
-    subtle: '#71717a',
-    disabled: '#a1a1aa',
+    main: '#1C1917',
+    muted: '#78716C',
+    subtle: '#A8A29E',
+    disabled: '#D6D3D1',
   },
   border: {
-    subtle: '#f4f4f2',
-    default: '#e4e4e7',
-    strong: '#d4d4d8',
+    subtle: '#F5F5F4',
+    default: '#E7E5E4',
+    strong: '#D6D3D1',
   },
   primary: {
-    main: '#0c0c0e',
-    hover: '#18181b',
-    active: '#27272a',
-    subtle: '#f4f4f2',
-    foreground: '#ffffff',
+    main: '#B2E624',
+    hover: '#8DBD14',
+    active: '#6B900C',
+    subtle: '#FAFDED',
+    foreground: '#0C0A09',
   },
   status: {
     paid: {
-      main: '#059669',
-      subtle: '#ecfdf5',
-      border: '#a7f3d0',
+      main: '#10B981',
+      subtle: '#ECFDF5',
+      border: '#A7F3D0',
       foreground: '#047857',
     },
     dueToday: {
-      main: '#d97706',
-      subtle: '#fffbe6',
-      border: '#fde68a',
-      foreground: '#b45309',
+      main: '#F59E0B',
+      subtle: '#FFFBEB',
+      border: '#FDE68A',
+      foreground: '#B45309',
     },
     dueSoon: {
-      main: '#d97706',
-      subtle: '#fffbe6',
-      border: '#fde68a',
-      foreground: '#b45309',
+      main: '#F59E0B',
+      subtle: '#FFFBEB',
+      border: '#FDE68A',
+      foreground: '#B45309',
     },
     overdue: {
-      main: '#e11d48',
-      subtle: '#fff1f2',
-      border: '#fecdd3',
-      foreground: '#be123c',
+      main: '#EF4444',
+      subtle: '#FEF2F2',
+      border: '#FECACA',
+      foreground: '#B91C1C',
     },
     expired: {
-      main: '#71717a',
-      subtle: '#f4f4f2',
-      border: '#e4e4e7',
-      foreground: '#52525b',
+      main: '#78716C',
+      subtle: '#F5F5F4',
+      border: '#E7E5E4',
+      foreground: '#57534E',
     },
     pending: {
-      main: '#4f46e5',
-      subtle: '#eef2ff',
-      border: '#c7d2fe',
-      foreground: '#3730a3',
+      main: '#6366F1',
+      subtle: '#EEF2FF',
+      border: '#C7D2FE',
+      foreground: '#4338CA',
     },
     info: {
-      main: '#0284c7',
-      subtle: '#f0f9ff',
-      border: '#bae6fd',
-      foreground: '#0369a1',
+      main: '#3B82F6',
+      subtle: '#EFF6FF',
+      border: '#BFDBFE',
+      foreground: '#1D4ED8',
     },
     success: {
-      main: '#059669',
-      subtle: '#ecfdf5',
-      border: '#a7f3d0',
+      main: '#10B981',
+      subtle: '#ECFDF5',
+      border: '#A7F3D0',
       foreground: '#047857',
     },
     warning: {
-      main: '#d97706',
-      subtle: '#fffbe6',
-      border: '#fde68a',
-      foreground: '#b45309',
+      main: '#F59E0B',
+      subtle: '#FFFBEB',
+      border: '#FDE68A',
+      foreground: '#B45309',
     },
     danger: {
-      main: '#e11d48',
-      subtle: '#fff1f2',
-      border: '#fecdd3',
-      foreground: '#be123c',
+      main: '#EF4444',
+      subtle: '#FEF2F2',
+      border: '#FECACA',
+      foreground: '#B91C1C',
     },
   },
 };
@@ -120,11 +146,11 @@ export const responsivePadding = {
 };
 
 export const controlHeights = {
-  h8: '32px',  // Dense row actions
-  h9: '36px',  // Small inputs & buttons
-  h10: '40px', // Standard form inputs & primary buttons
-  h11: '44px', // Touch-friendly controls
-  h12: '48px', // Mobile hero actions
+  dense: '32px',  // Dense row actions (h-8)
+  sm: '36px',     // Small inputs & buttons (h-9)
+  md: '40px',     // Standard form inputs & primary buttons (h-10)
+  touch: '44px',  // Touch-friendly controls (min-h-[44px])
+  lg: '48px',     // Mobile hero actions (h-12)
 };
 
 export const densityTiers = {
@@ -146,45 +172,47 @@ export const borderRadius = {
 export const typography = {
   fontFamily: {
     sans: "'Inter', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif",
+    display: "'Plus Jakarta Sans', system-ui, -apple-system, sans-serif",
     mono: "'JetBrains Mono', ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace",
   },
   fontSize: {
-    xs: '0.75rem',
-    sm: '0.875rem',
-    base: '1rem',
-    lg: '1.125rem',
-    xl: '1.25rem',
-    '2xl': '1.5rem',
+    micro: '11px',
+    caption: '12px',
+    bodySm: '14px',
+    body: '15px',
+    bodyLg: '16px',
+    h3: '18px',
+    h2: '20px',
+    h1: '24px',
+    display: '32px',
   },
 };
 
-export const sizing = {
-  h8: '32px',
-  h9: '36px',
-  h10: '40px',
-  h11: '44px',
-  h12: '48px',
-};
-
 export const shadows = {
-  xs: 'none',
-  sm: 'none',
-  md: 'none',
-  lg: 'none',
+  none: 'none',
+  '2xs': '0 1px 2px rgba(12, 10, 9, 0.04)',
+  xs: '0 1px 3px rgba(12, 10, 9, 0.06)',
+  sm: '0 4px 12px rgba(12, 10, 9, 0.05)',
+  md: '0 10px 24px rgba(12, 10, 9, 0.08)',
+  lg: '0 20px 40px rgba(12, 10, 9, 0.12)',
 };
 
 export const motion = {
+  micro: '100ms cubic-bezier(0.16, 1, 0.3, 1)',
   fast: '100ms cubic-bezier(0.16, 1, 0.3, 1)',
   normal: '150ms cubic-bezier(0.16, 1, 0.3, 1)',
-  slow: '200ms cubic-bezier(0.16, 1, 0.3, 1)',
+  slow: '250ms cubic-bezier(0.16, 1, 0.3, 1)',
 };
 
 export const breakpoints = {
+  mobileSm: '375px',
+  mobileMd: '390px',
+  mobileLg: '430px',
   sm: '640px',
   md: '768px',
   lg: '1024px',
   xl: '1280px',
-  '2xl': '1536px',
+  '2xl': '1440px',
 };
 
 export const zIndex = {
@@ -206,7 +234,6 @@ export const TOKENS = {
   densityTiers,
   borderRadius,
   typography,
-  sizing,
   shadows,
   motion,
   breakpoints,

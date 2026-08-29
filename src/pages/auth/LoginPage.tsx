@@ -4,7 +4,7 @@ import { Button } from '../../components/ui/Button';
 import { Input } from '../../components/ui/Input';
 import { useAuth } from '../../hooks/useAuth';
 import { parseAuthError } from '../../utils/errorUtils';
-import { AlertCircle, Eye, EyeOff } from 'lucide-react';
+import { AlertCircle, Eye, EyeOff, Lock, Mail } from 'lucide-react';
 
 interface LoginPageProps {
   onNavigateToForgotPassword: () => void;
@@ -26,7 +26,7 @@ export const LoginPage: React.FC<LoginPageProps> = ({
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
   const [isSubmitting, setIsSubmitting] = useState(false);
 
-  const [sessionExpired, setSessionExpired] = useState(() => {
+  const [sessionExpired] = useState(() => {
     if (sessionExpiredNotice) return true;
     try {
       const stored = sessionStorage.getItem('gymflow_session_expired');
@@ -35,7 +35,7 @@ export const LoginPage: React.FC<LoginPageProps> = ({
         return true;
       }
     } catch {
-      // Ignore sessionStorage access error
+      // Ignore sessionStorage error
     }
     return false;
   });
@@ -53,7 +53,7 @@ export const LoginPage: React.FC<LoginPageProps> = ({
       setIsSubmitting(true);
       setErrorMessage(null);
       const user = await login(email.trim(), password);
-      
+
       let redirectPath: string | undefined;
       try {
         const storedPath = sessionStorage.getItem('gymflow_redirect_path');
@@ -62,7 +62,7 @@ export const LoginPage: React.FC<LoginPageProps> = ({
           sessionStorage.removeItem('gymflow_redirect_path');
         }
       } catch {
-        // Ignore sessionStorage read error
+        // Ignore sessionStorage error
       }
 
       if (
@@ -82,24 +82,24 @@ export const LoginPage: React.FC<LoginPageProps> = ({
 
   return (
     <AuthLayout
-      title="Welcome Back"
-      subtitle="Sign in to your GymFlow owner dashboard"
+      title="Welcome back"
+      subtitle="Sign in to manage your gym members and dues"
     >
-      <form onSubmit={handleSubmit} className="space-y-4" noValidate>
+      <form onSubmit={handleSubmit} className="space-y-4 select-none font-sans" noValidate>
         {sessionExpired && !errorMessage && (
           <div
             role="status"
-            className="p-3.5 bg-[var(--color-warning-50)] border border-[var(--color-warning-200)] text-[var(--color-warning-800)] text-[length:var(--text-caption-size)] font-semibold rounded-[var(--radius-lg)] flex items-center gap-2.5"
+            className="p-3 bg-[var(--color-warning-50)] border border-[var(--color-warning-200)] text-[var(--color-warning-800)] text-xs font-semibold rounded-[var(--radius-md)] flex items-center gap-2"
           >
             <AlertCircle className="w-4 h-4 shrink-0 text-[var(--color-warning-600)]" />
-            <span>Your session has expired. Please sign in again to continue.</span>
+            <span>Your session has expired. Please sign in again.</span>
           </div>
         )}
 
         {errorMessage && (
           <div
             role="alert"
-            className="p-3.5 bg-[var(--color-danger-50)] border border-[var(--color-danger-200)] text-[var(--color-danger-700)] text-[length:var(--text-caption-size)] font-semibold rounded-[var(--radius-lg)] flex items-center gap-2.5"
+            className="p-3 bg-[var(--color-danger-50)] border border-[var(--color-danger-200)] text-[var(--color-danger-700)] text-xs font-semibold rounded-[var(--radius-md)] flex items-center gap-2"
           >
             <AlertCircle className="w-4 h-4 shrink-0 text-[var(--color-danger-600)]" />
             <span>{errorMessage}</span>
@@ -109,54 +109,36 @@ export const LoginPage: React.FC<LoginPageProps> = ({
         <Input
           label="Email Address"
           type="email"
-          name="email"
-          id="login-email"
           required
+          autoComplete="email"
+          placeholder="name@example.com"
           value={email}
           onChange={(e) => {
             setEmail(e.target.value);
             if (errorMessage) setErrorMessage(null);
           }}
-          placeholder="owner@yourgym.com"
-          autoComplete="email"
-          disabled={isSubmitting}
+          leftIcon={<Mail className="w-4 h-4" />}
+          autoFocus
         />
 
-        <div>
-          <div className="flex items-center justify-between mb-1.5">
-            <label
-              htmlFor="login-password"
-              className="text-[length:var(--text-caption-size)] font-semibold text-neutral-700"
-            >
-              Password
-            </label>
-            <button
-              type="button"
-              id="link-forgot-password"
-              onClick={onNavigateToForgotPassword}
-              className="text-[length:var(--text-caption-size)] font-bold text-[var(--color-brand-600)] hover:text-[var(--color-brand-700)] transition-colors cursor-pointer"
-            >
-              Forgot password?
-            </button>
-          </div>
+        <div className="space-y-1">
           <Input
+            label="Password"
             type={showPassword ? 'text' : 'password'}
-            name="password"
-            id="login-password"
             required
+            autoComplete="current-password"
+            placeholder="Enter password"
             value={password}
             onChange={(e) => {
               setPassword(e.target.value);
               if (errorMessage) setErrorMessage(null);
             }}
-            placeholder="••••••••"
-            autoComplete="current-password"
-            disabled={isSubmitting}
+            leftIcon={<Lock className="w-4 h-4" />}
             rightIcon={
               <button
                 type="button"
                 onClick={() => setShowPassword(!showPassword)}
-                className="text-neutral-400 hover:text-neutral-700 focus:outline-none cursor-pointer"
+                className="text-neutral-400 hover:text-neutral-700 cursor-pointer"
                 tabIndex={-1}
                 aria-label={showPassword ? 'Hide password' : 'Show password'}
               >
@@ -164,31 +146,40 @@ export const LoginPage: React.FC<LoginPageProps> = ({
               </button>
             }
           />
+
+          <div className="flex justify-end pt-1">
+            <button
+              type="button"
+              onClick={onNavigateToForgotPassword}
+              className="text-xs font-semibold text-neutral-500 hover:text-neutral-900 transition-colors cursor-pointer"
+            >
+              Forgot password?
+            </button>
+          </div>
         </div>
 
         <div className="pt-2">
           <Button
             type="submit"
-            id="btn-login-submit"
-            className="w-full"
             variant="primary"
-            size="lg"
+            fullWidth
             isLoading={isSubmitting}
             disabled={isSubmitting}
+            size="md"
           >
-            {isSubmitting ? 'Signing in...' : 'Sign In'}
+            Sign In
           </Button>
         </div>
 
         {onNavigateToRegister && (
-          <div className="pt-5 border-t border-neutral-200 text-center">
-            <span className="text-[length:var(--text-caption-size)] text-neutral-600">Don't have a gym account? </span>
+          <div className="pt-3 border-t border-neutral-100 text-center text-xs text-neutral-500">
+            <span>Don't have an account? </span>
             <button
               type="button"
               onClick={onNavigateToRegister}
-              className="text-[length:var(--text-caption-size)] font-bold text-neutral-900 hover:text-[var(--color-brand-600)] transition-colors cursor-pointer"
+              className="font-bold text-neutral-900 hover:underline cursor-pointer"
             >
-              Create Account
+              Sign up
             </button>
           </div>
         )}

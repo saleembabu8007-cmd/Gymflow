@@ -4,20 +4,20 @@ import { cn } from '../../utils/classNames';
 export interface AvatarProps {
   name: string;
   imageUrl?: string;
-  size?: 'xs' | 'sm' | 'md' | 'lg';
-  status?: 'paid' | 'overdue';
+  size?: 'xs' | 'sm' | 'md' | 'lg' | 'xl';
+  status?: 'paid' | 'overdue' | 'active' | 'inactive';
   className?: string;
 }
 
 const identityPalettes = [
-  'bg-purple-100 text-purple-800',   // Grape
-  'bg-pink-100 text-pink-800',       // Flamingo
-  'bg-indigo-100 text-indigo-800',   // Indigo
-  'bg-sky-100 text-sky-800',         // Sky
-  'bg-violet-100 text-violet-800',   // Violet
-  'bg-fuchsia-100 text-fuchsia-800', // Fuchsia
-  'bg-teal-100 text-teal-800',       // Teal
-  'bg-orange-100 text-orange-800',   // Orange
+  'bg-neutral-900 text-white',
+  'bg-neutral-800 text-neutral-100',
+  'bg-neutral-700 text-neutral-100',
+  'bg-stone-800 text-stone-100',
+  'bg-stone-700 text-stone-100',
+  'bg-amber-900/90 text-amber-100',
+  'bg-emerald-900/90 text-emerald-100',
+  'bg-blue-900/90 text-blue-100',
 ];
 
 function getInitials(name: string): string {
@@ -48,10 +48,11 @@ export const Avatar: React.FC<AvatarProps> = ({
   const colorClass = getDeterministicColor(name);
 
   const sizeClasses = {
-    xs: 'w-6 h-6 text-[10px]', // 24px
-    sm: 'w-8 h-8 text-[12px]', // 32px
-    md: 'w-10 h-10 text-[14px]',// 40px
-    lg: 'w-14 h-14 text-[18px]',// 56px
+    xs: 'w-6 h-6 text-[10px]',   // 24px
+    sm: 'w-8 h-8 text-[12px]',   // 32px
+    md: 'w-10 h-10 text-[14px]', // 40px
+    lg: 'w-12 h-12 text-[16px]', // 48px
+    xl: 'w-14 h-14 text-[18px]', // 56px
   };
 
   const statusDotSizes = {
@@ -59,6 +60,14 @@ export const Avatar: React.FC<AvatarProps> = ({
     sm: 'w-2 h-2',
     md: 'w-2.5 h-2.5',
     lg: 'w-3 h-3',
+    xl: 'w-3.5 h-3.5',
+  };
+
+  const statusColorMap = {
+    paid: 'bg-[var(--color-success-500)]',
+    active: 'bg-[var(--color-success-500)]',
+    overdue: 'bg-[var(--color-danger-500)]',
+    inactive: 'bg-neutral-400',
   };
 
   const renderStatusDot = () => {
@@ -66,9 +75,9 @@ export const Avatar: React.FC<AvatarProps> = ({
     return (
       <span
         className={cn(
-          "absolute bottom-0 right-0 rounded-full ring-2 ring-white shadow-sm",
+          "absolute bottom-0 right-0 rounded-full ring-2 ring-white shadow-xs",
           statusDotSizes[size],
-          status === 'paid' ? 'bg-[var(--color-success-500)]' : 'bg-[var(--color-danger-500)]'
+          statusColorMap[status]
         )}
       />
     );
@@ -76,7 +85,7 @@ export const Avatar: React.FC<AvatarProps> = ({
 
   if (imageUrl) {
     return (
-      <div className={cn("relative inline-flex shrink-0", className)}>
+      <div className={cn("relative inline-flex shrink-0 select-none", className)}>
         <img
           src={imageUrl}
           alt={name}
@@ -91,10 +100,10 @@ export const Avatar: React.FC<AvatarProps> = ({
   }
 
   return (
-    <div className={cn("relative inline-flex shrink-0", className)}>
+    <div className={cn("relative inline-flex shrink-0 select-none", className)}>
       <div
         className={cn(
-          'rounded-full font-bold flex items-center justify-center select-none ring-2 ring-white',
+          'rounded-full font-bold flex items-center justify-center ring-2 ring-white shadow-2xs font-sans',
           sizeClasses[size],
           colorClass
         )}
@@ -103,6 +112,51 @@ export const Avatar: React.FC<AvatarProps> = ({
         {initials}
       </div>
       {renderStatusDot()}
+    </div>
+  );
+};
+
+export interface AvatarGroupProps {
+  children: React.ReactNode;
+  max?: number;
+  size?: 'xs' | 'sm' | 'md' | 'lg';
+  className?: string;
+}
+
+export const AvatarGroup: React.FC<AvatarGroupProps> = ({
+  children,
+  max = 4,
+  size = 'sm',
+  className,
+}) => {
+  const avatars = React.Children.toArray(children);
+  const visibleAvatars = avatars.slice(0, max);
+  const remainingCount = avatars.length - max;
+
+  const sizeClasses = {
+    xs: 'w-6 h-6 text-[10px]',
+    sm: 'w-8 h-8 text-[12px]',
+    md: 'w-10 h-10 text-[14px]',
+    lg: 'w-12 h-12 text-[16px]',
+  };
+
+  return (
+    <div className={cn('flex items-center -space-x-2 overflow-hidden select-none', className)}>
+      {visibleAvatars.map((child, index) => (
+        <div key={index} className="inline-block ring-2 ring-white rounded-full">
+          {child}
+        </div>
+      ))}
+      {remainingCount > 0 && (
+        <div
+          className={cn(
+            'rounded-full bg-neutral-200 text-neutral-700 font-bold flex items-center justify-center ring-2 ring-white',
+            sizeClasses[size]
+          )}
+        >
+          +{remainingCount}
+        </div>
+      )}
     </div>
   );
 };

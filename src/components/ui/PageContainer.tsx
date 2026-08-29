@@ -33,16 +33,26 @@ export const PageContainer: React.FC<PageContainerProps> = ({
   headerClassName,
   maxWidth = '7xl',
 }) => {
+  const hasHeader = Boolean(title || actions || onBack);
+
   return (
-    <div className={cn('w-full mx-auto space-y-6 sm:space-y-8 pb-16 sm:pb-8', maxWidthMap[maxWidth], containerClassName)}>
-      <PageHeader
-        title={title}
-        subtitle={subtitle}
-        badge={badge}
-        actions={actions}
-        onBack={onBack}
-        className={headerClassName}
-      />
+    <div
+      className={cn(
+        'w-full mx-auto space-y-5 sm:space-y-6 px-4 sm:px-6 lg:px-8 py-4 sm:py-6 pb-24 md:pb-10',
+        maxWidthMap[maxWidth],
+        containerClassName
+      )}
+    >
+      {hasHeader && (
+        <PageHeader
+          title={title || ''}
+          subtitle={subtitle}
+          badge={badge}
+          actions={actions}
+          onBack={onBack}
+          className={headerClassName}
+        />
+      )}
       <div className="w-full">{children}</div>
     </div>
   );

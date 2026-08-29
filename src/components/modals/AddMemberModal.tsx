@@ -2,8 +2,10 @@ import React, { useState, useEffect } from 'react';
 import { Modal } from '../ui/Modal';
 import { Button } from '../ui/Button';
 import { Input } from '../ui/Input';
+import { Textarea } from '../ui/Textarea';
 import { Select } from '../ui/Select';
 import { Avatar } from '../ui/Avatar';
+import { TwoTierNumber } from '../ui/TwoTierNumber';
 import { Member } from '../../types';
 import { useGym } from '../../hooks/useGym';
 import { useGymSettings } from '../../hooks/useGymSettings';
@@ -17,11 +19,13 @@ import {
   CreditCard,
   Phone,
   User,
-  Plus,
   ArrowRight,
-  Eye,
-  Check,
+  ArrowLeft,
+  Mail,
+  FileText,
+  Plus,
 } from 'lucide-react';
+import { cn } from '../../utils/classNames';
 
 interface AddMemberModalProps {
   isOpen: boolean;
@@ -36,7 +40,6 @@ interface FormErrors {
   phone?: string;
   monthlyFee?: string;
   startDate?: string;
-  nextPaymentDate?: string;
   email?: string;
 }
 
@@ -51,7 +54,10 @@ export const AddMemberModal: React.FC<AddMemberModalProps> = ({
   const { currencySymbol, settings } = useGymSettings();
   const { success, error: showErrorToast } = useToast();
 
-  // Form states
+  // Wizard Step: 1 (Personal Info) -> 2 (Membership & Fee) -> 3 (Success)
+  const [currentStep, setCurrentStep] = useState<1 | 2>(1);
+
+  // Form Fields
   const [name, setName] = useState('');
   const [phone, setPhone] = useState('');
   const [email, setEmail] = useState('');
@@ -61,16 +67,15 @@ export const AddMemberModal: React.FC<AddMemberModalProps> = ({
   const [nextPaymentDate, setNextPaymentDate] = useState<string>('');
   const [notes, setNotes] = useState('');
 
-  // UI status
+  // UI state
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [errors, setErrors] = useState<FormErrors>({});
   const [addedMember, setAddedMember] = useState<Member | null>(null);
   const prevIsOpenRef = React.useRef(false);
 
-  // Initialize and synchronize smart defaults only when modal opens freshly
+  // Reset form when modal opens
   useEffect(() => {
     if (isOpen && !prevIsOpenRef.current) {
-      // Find initial active plan
       const defaultPlan = plans[0];
       const initialPlanId = defaultPlan?.id || 'plan_1m';
       const initialDuration = defaultPlan?.durationMonths || 1;
@@ -87,20 +92,20 @@ export const AddMemberModal: React.FC<AddMemberModalProps> = ({
       setEmail('');
       setNotes('');
       setErrors({});
+      setCurrentStep(1);
       setAddedMember(null);
     } else if (!isOpen && prevIsOpenRef.current) {
-      // Reset state when closed
       setAddedMember(null);
       setErrors({});
+      setCurrentStep(1);
     }
     prevIsOpenRef.current = isOpen;
   }, [isOpen, plans, settings.defaultMonthlyFee]);
 
-  // Find currently selected plan object
   const selectedPlan = plans.find((p) => p.id === selectedPlanId) || plans[0];
   const durationMonths = selectedPlan?.durationMonths || 1;
 
-  // Handle plan change: intelligently pre-fill fee & recalculate next payment date
+  // Plan Selection Handler
   const handlePlanChange = (planId: string) => {
     setSelectedPlanId(planId);
     const plan = plans.find((p) => p.id === planId);
@@ -114,7 +119,7 @@ export const AddMemberModal: React.FC<AddMemberModalProps> = ({
     }
   };
 
-  // Handle start date change: automatically update suggested next payment date
+  // Start Date Handler
   const handleStartDateChange = (newStartDate: string) => {
     setStartDate(newStartDate);
     if (newStartDate) {
@@ -126,17 +131,15 @@ export const AddMemberModal: React.FC<AddMemberModalProps> = ({
     }
   };
 
-  const validate = (): boolean => {
+  // Step 1 Validation
+  const validateStep1 = (): boolean => {
     const newErrors: FormErrors = {};
-
-    // 1. Name validation
     if (!name.trim()) {
-      newErrors.name = 'Please enter the member\'s full name';
+      newErrors.name = "Please enter member's full name";
     } else if (name.trim().length < 2) {
       newErrors.name = 'Name must be at least 2 characters';
     }
 
-    // 2. Phone validation
     const cleanPhone = phone.replace(/[^0-9+]/g, '');
     if (!phone.trim()) {
       newErrors.phone = 'Please enter a valid phone number';
@@ -144,23 +147,6 @@ export const AddMemberModal: React.FC<AddMemberModalProps> = ({
       newErrors.phone = 'Please enter a complete phone number';
     }
 
-    // 3. Fee validation
-    const feeNum = Number(monthlyFee);
-    if (!monthlyFee || isNaN(feeNum) || feeNum <= 0) {
-      newErrors.monthlyFee = 'Fee must be greater than 0';
-    }
-
-    // 4. Start date validation
-    if (!startDate) {
-      newErrors.startDate = 'Please select a valid start date';
-    }
-
-    // 5. Next payment date validation
-    if (!nextPaymentDate) {
-      newErrors.nextPaymentDate = 'Please select when the next payment is due';
-    }
-
-    // 6. Optional email validation
     if (email.trim() && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email.trim())) {
       newErrors.email = 'Please enter a valid email address';
     }
@@ -169,11 +155,33 @@ export const AddMemberModal: React.FC<AddMemberModalProps> = ({
     return Object.keys(newErrors).length === 0;
   };
 
+  // Step 2 Validation
+  const validateStep2 = (): boolean => {
+    const newErrors: FormErrors = {};
+    const feeNum = Number(monthlyFee);
+    if (!monthlyFee || isNaN(feeNum) || feeNum <= 0) {
+      newErrors.monthlyFee = 'Fee must be greater than 0';
+    }
+
+    if (!startDate) {
+      newErrors.startDate = 'Please select a start date';
+    }
+
+    setErrors(newErrors);
+    return Object.keys(newErrors).length === 0;
+  };
+
+  const handleNextStep = (e: React.FormEvent) => {
+    e.preventDefault();
+    if (validateStep1()) {
+      setCurrentStep(2);
+    }
+  };
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
-    if (!validate()) {
-      showErrorToast('Check Required Fields', 'Please complete all required fields correctly.');
+    if (!validateStep2()) {
       return;
     }
 
@@ -197,8 +205,6 @@ export const AddMemberModal: React.FC<AddMemberModalProps> = ({
 
       success('Member added', `${newMember.name} has been enrolled successfully.`);
       if (onMemberAdded) onMemberAdded(newMember);
-
-      // Transition to success screen inside modal
       setAddedMember(newMember);
     } catch (err: any) {
       const userFriendlyError = parseAppError(err, "Couldn't add member. Please check the details and try again.");
@@ -208,9 +214,9 @@ export const AddMemberModal: React.FC<AddMemberModalProps> = ({
     }
   };
 
-  // Reset form to add another member smoothly
   const handleResetForAnother = () => {
     setAddedMember(null);
+    setCurrentStep(1);
     setName('');
     setPhone('');
     setEmail('');
@@ -233,259 +239,253 @@ export const AddMemberModal: React.FC<AddMemberModalProps> = ({
     <Modal
       isOpen={isOpen}
       onClose={onClose}
-      title={addedMember ? undefined : 'Add Member'}
-      description={addedMember ? undefined : 'Add a new member and know when their next payment is due.'}
       maxWidth="md"
+      showCloseButton={!isSubmitting}
     >
-      {addedMember ? (
-        /* --- SUCCESS STATE --- */
-        <div className="py-3 text-center space-y-6">
-          {/* Green Check Icon & Heading */}
-          <div className="flex flex-col items-center justify-center space-y-2">
-            <div className="w-14 h-14 rounded-full bg-[var(--color-success-50)] text-[var(--color-success-600)] flex items-center justify-center border border-[var(--color-success-200)] shadow-sm">
-              <CheckCircle2 className="w-8 h-8 text-[var(--color-success-600)]" />
+      <div className="p-5 sm:p-6 select-none font-sans">
+        {addedMember ? (
+          /* ========================================================================= */
+          /* SUCCESS STATE                                                             */
+          /* ========================================================================= */
+          <div className="py-4 text-center space-y-6">
+            <div className="flex flex-col items-center justify-center space-y-2">
+              <div className="w-14 h-14 rounded-full bg-[var(--color-success-50)] text-[var(--color-success-600)] flex items-center justify-center border border-[var(--color-success-200)] shadow-2xs">
+                <CheckCircle2 className="w-8 h-8 stroke-[2]" />
+              </div>
+              <h3 className="text-xl font-bold text-neutral-950 tracking-tight font-display">
+                Member Enrolled
+              </h3>
+              <p className="text-xs text-neutral-500 max-w-xs">
+                {addedMember.name} has been enrolled in {addedMember.planName}.
+              </p>
             </div>
-            <h3 className="text-xl font-bold text-neutral-950 tracking-tight">
-              Member added.
-            </h3>
-            <p className="text-xs sm:text-sm text-neutral-500 max-w-xs">
-              {addedMember.name} is now enrolled. Their next payment is scheduled.
-            </p>
-          </div>
 
-          {/* Member Summary Card */}
-          <div className="p-4 rounded-2xl bg-neutral-50 border border-neutral-200/80 text-left space-y-3 shadow-2xs">
-            <div className="flex items-center gap-3">
-              <Avatar name={addedMember.name} size="md" />
-              <div className="min-w-0">
-                <span className="font-bold text-sm text-neutral-900 block truncate">
-                  {addedMember.name}
-                </span>
-                <span className="text-xs text-neutral-500 font-mono">
-                  {addedMember.phone}
-                </span>
+            {/* Member Snapshot Card */}
+            <div className="p-4 rounded-[var(--radius-lg)] bg-neutral-50/80 border border-neutral-200/80 text-left flex items-center justify-between gap-4">
+              <div className="flex items-center gap-3 min-w-0">
+                <Avatar name={addedMember.name} size="md" />
+                <div className="min-w-0">
+                  <div className="font-bold text-sm text-neutral-900 truncate">
+                    {addedMember.name}
+                  </div>
+                  <div className="text-xs text-neutral-500 font-mono mt-0.5">
+                    {addedMember.phone}
+                  </div>
+                </div>
+              </div>
+
+              <div className="text-right shrink-0">
+                <TwoTierNumber
+                  value={formatCurrency(Number(addedMember.monthlyFee) || 0, currencySymbol)}
+                  caption={`Due ${formatDate(addedMember.nextPaymentDate, { format: 'short' })}`}
+                  size="sm"
+                  align="right"
+                />
               </div>
             </div>
 
-            <div className="grid grid-cols-2 gap-2 pt-2 border-t border-neutral-200/60 text-xs">
+            {/* Action Buttons */}
+            <div className="flex flex-col sm:flex-row items-center gap-2.5 pt-2">
+              {onViewMember && (
+                <Button
+                  variant="primary"
+                  fullWidth
+                  onClick={() => {
+                    onClose();
+                    onViewMember(addedMember);
+                  }}
+                >
+                  View Member Profile
+                </Button>
+              )}
+              <Button
+                variant="secondary"
+                fullWidth
+                onClick={handleResetForAnother}
+                leftIcon={<Plus className="w-4 h-4" />}
+              >
+                Add Another
+              </Button>
+            </div>
+          </div>
+        ) : (
+          /* ========================================================================= */
+          /* 2-STEP PROGRESSIVE DISCLOSURE FORM                                        */
+          /* ========================================================================= */
+          <div className="space-y-5">
+            {/* Header & Step Indicator */}
+            <div className="flex items-center justify-between pb-3 border-b border-neutral-200/80">
               <div>
-                <span className="text-[10px] uppercase font-semibold text-neutral-400 block">
-                  Plan & Fee
-                </span>
-                <span className="font-semibold text-neutral-900">
-                  {addedMember.planName} · {formatCurrency(addedMember.monthlyFee, currencySymbol)}
-                </span>
+                <h2 className="text-lg font-bold text-neutral-950 tracking-tight font-display">
+                  Add Member
+                </h2>
+                <p className="text-xs text-neutral-500 mt-0.5">
+                  {currentStep === 1 ? 'Step 1 of 2 · Member Details' : 'Step 2 of 2 · Membership Plan'}
+                </p>
               </div>
 
-              <div>
-                <span className="text-[10px] uppercase font-semibold text-neutral-400 block">
-                  Next Due Date
+              <div className="flex items-center gap-1.5 font-mono text-xs font-bold">
+                <span
+                  className={cn(
+                    'w-6 h-6 rounded-full flex items-center justify-center text-xs transition-colors',
+                    currentStep === 1
+                      ? 'bg-neutral-900 text-white'
+                      : 'bg-[var(--color-success-500)] text-white'
+                  )}
+                >
+                  1
                 </span>
-                <span className="font-semibold text-neutral-900">
-                  {formatDate(addedMember.nextPaymentDate, { format: 'medium' })}
+                <span className="w-3 h-0.5 bg-neutral-200" />
+                <span
+                  className={cn(
+                    'w-6 h-6 rounded-full flex items-center justify-center text-xs transition-colors',
+                    currentStep === 2
+                      ? 'bg-neutral-900 text-white'
+                      : 'bg-neutral-100 text-neutral-400'
+                  )}
+                >
+                  2
                 </span>
               </div>
             </div>
-          </div>
 
-          {/* Success Actions */}
-          <div className="flex flex-col sm:flex-row items-center gap-3 pt-2">
-            <Button
-              id="btn-add-another-member"
-              variant="tertiary"
-              size="md"
-              onClick={handleResetForAnother}
-              className="w-full sm:flex-1 py-2.5 font-semibold"
-            >
-              Add Another Member
-            </Button>
-
-            <Button
-              id="btn-view-new-member"
-              variant="primary"
-              size="md"
-              onClick={() => {
-                if (onViewMember) {
-                  onViewMember(addedMember);
-                } else {
-                  onClose();
-                }
-              }}
-              className="w-full sm:flex-1 py-2.5 font-semibold"
-            >
-              View Member
-            </Button>
-          </div>
-        </div>
-      ) : (
-        /* --- ADD MEMBER FORM --- */
-        <form onSubmit={handleSubmit} className="flex flex-col h-full">
-          <div className="space-y-6 flex-1 p-4 sm:p-6">
-            {/* 1. Personal Details Card */}
-            <div className="bg-neutral-50 p-4 sm:p-5 rounded-[var(--radius-xl)] border border-neutral-200 space-y-4">
-              <h4 className="text-[length:var(--text-body-size)] font-bold text-neutral-900 flex items-center gap-2">
-                <User className="w-4 h-4 text-[var(--color-brand-600)]" />
-                Who's joining?
-              </h4>
-              <Input
-                id="member-fullname-input"
-                label="Full name *"
-                placeholder="e.g. Rahul Verma"
-                value={name}
-                onChange={(e) => {
-                  setName(e.target.value);
-                  if (errors.name) setErrors((prev) => ({ ...prev, name: undefined }));
-                }}
-                error={errors.name}
-                required
-                autoFocus
-              />
-
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+            {currentStep === 1 ? (
+              /* --- STEP 1: PERSONAL DETAILS --- */
+              <form onSubmit={handleNextStep} className="space-y-4">
                 <Input
-                  id="member-phone-input"
-                  label="Phone number *"
+                  label="Full Name"
+                  required
+                  placeholder="e.g. Rahul Sharma"
+                  value={name}
+                  onChange={(e) => {
+                    setName(e.target.value);
+                    if (errors.name) setErrors((prev) => ({ ...prev, name: undefined }));
+                  }}
+                  error={errors.name}
+                  leftIcon={<User className="w-4 h-4" />}
+                  autoFocus
+                />
+
+                <Input
+                  label="Phone Number"
+                  required
                   type="tel"
-                  placeholder="e.g. 9876543210"
+                  placeholder="+91 98765 43210"
                   value={phone}
                   onChange={(e) => {
                     setPhone(e.target.value);
                     if (errors.phone) setErrors((prev) => ({ ...prev, phone: undefined }));
                   }}
                   error={errors.phone}
-                  required
+                  leftIcon={<Phone className="w-4 h-4" />}
+                  helperText="Required for automated WhatsApp payment reminders."
                 />
 
                 <Input
-                  id="member-email-input"
-                  label="Email"
+                  label="Email Address"
                   type="email"
-                  placeholder="e.g. rahul@example.com"
+                  placeholder="name@example.com (Optional)"
                   value={email}
                   onChange={(e) => {
                     setEmail(e.target.value);
                     if (errors.email) setErrors((prev) => ({ ...prev, email: undefined }));
                   }}
                   error={errors.email}
-                  helperText="Optional"
+                  leftIcon={<Mail className="w-4 h-4" />}
                 />
-              </div>
-            </div>
 
-            {/* 2. Membership Card */}
-            <div className="bg-neutral-50 p-4 sm:p-5 rounded-[var(--radius-xl)] border border-neutral-200 space-y-4">
-              <h4 className="text-[length:var(--text-body-size)] font-bold text-neutral-900 flex items-center gap-2">
-                <CreditCard className="w-4 h-4 text-neutral-600" />
-                Membership
-              </h4>
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                <div className="flex items-center justify-end gap-3 pt-3 border-t border-neutral-200/80">
+                  <Button type="button" variant="secondary" onClick={onClose}>
+                    Cancel
+                  </Button>
+                  <Button
+                    type="submit"
+                    variant="primary"
+                    rightIcon={<ArrowRight className="w-4 h-4" />}
+                  >
+                    Continue to Plan
+                  </Button>
+                </div>
+              </form>
+            ) : (
+              /* --- STEP 2: MEMBERSHIP & PAYMENT SCHEDULE --- */
+              <form onSubmit={handleSubmit} className="space-y-4">
                 <Select
-                  id="member-plan-select"
-                  label="Membership plan *"
+                  label="Membership Plan"
                   value={selectedPlanId}
-                  onChange={(value) => handlePlanChange(value)}
+                  onChange={(val) => handlePlanChange(val)}
                   options={plans.map((p) => ({
                     value: p.id,
-                    label: `${p.name} (${p.durationMonths} ${p.durationMonths === 1 ? 'month' : 'months'})`,
+                    label: `${p.name} (${p.durationMonths}mo) — ${formatCurrency(p.defaultFee, currencySymbol)}`,
                   }))}
                 />
 
-                <Input
-                  id="member-fee-input"
-                  label={`Monthly fee (${currencySymbol}) *`}
-                  type="number"
-                  min="1"
-                  placeholder="e.g. 1500"
-                  value={monthlyFee}
-                  onChange={(e) => {
-                    setMonthlyFee(e.target.value);
-                    if (errors.monthlyFee) setErrors((prev) => ({ ...prev, monthlyFee: undefined }));
-                  }}
-                  prefixText={currencySymbol}
-                  error={errors.monthlyFee}
-                  required
-                />
-              </div>
-            </div>
-
-            {/* 3. Dates & Notes Card */}
-            <div className="bg-neutral-50 p-4 sm:p-5 rounded-[var(--radius-xl)] border border-neutral-200 space-y-4">
-              <h4 className="text-[length:var(--text-body-size)] font-bold text-neutral-900 flex items-center gap-2">
-                <Calendar className="w-4 h-4 text-neutral-600" />
-                Schedule
-              </h4>
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                <Input
-                  id="member-startdate-input"
-                  label="Start date *"
-                  type="date"
-                  value={startDate}
-                  onChange={(e) => handleStartDateChange(e.target.value)}
-                  error={errors.startDate}
-                  required
-                />
-
-                <div className="flex flex-col gap-1.5">
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-3.5">
                   <Input
-                    id="member-nextpayment-input"
-                    label="Next payment date *"
-                    type="date"
-                    value={nextPaymentDate}
-                    onChange={(e) => {
-                      setNextPaymentDate(e.target.value);
-                      if (errors.nextPaymentDate) setErrors((prev) => ({ ...prev, nextPaymentDate: undefined }));
-                    }}
-                    error={errors.nextPaymentDate}
+                    label="Admission Date"
                     required
+                    type="date"
+                    value={startDate}
+                    onChange={(e) => handleStartDateChange(e.target.value)}
+                    error={errors.startDate}
+                    leftIcon={<Calendar className="w-4 h-4" />}
                   />
-                  {!errors.nextPaymentDate && (
-                    <div className="inline-flex items-center gap-1.5 px-2.5 py-1.5 rounded-[var(--radius-md)] bg-[var(--color-info-50)] border border-[var(--color-info-200)] text-[10px] font-semibold text-[var(--color-info-700)] w-fit">
-                      <Calendar className="w-3 h-3" />
-                      Suggested based on {durationMonths} mo plan
-                    </div>
-                  )}
-                </div>
-              </div>
 
-              <div className="pt-2">
-                <Input
-                  id="member-notes-input"
+                  <Input
+                    label="Fee Amount"
+                    required
+                    type="number"
+                    prefixText={currencySymbol}
+                    placeholder="1500"
+                    value={monthlyFee}
+                    onChange={(e) => {
+                      setMonthlyFee(e.target.value);
+                      if (errors.monthlyFee) setErrors((prev) => ({ ...prev, monthlyFee: undefined }));
+                    }}
+                    error={errors.monthlyFee}
+                  />
+                </div>
+
+                {/* Auto-Calculated Next Payment Indicator */}
+                <div className="p-3 rounded-[var(--radius-md)] bg-neutral-50 border border-neutral-200/80 flex items-center justify-between text-xs">
+                  <span className="text-neutral-500 font-medium">First renewal due:</span>
+                  <span className="font-bold text-neutral-900 font-mono">
+                    {formatDate(nextPaymentDate, { format: 'medium' })}
+                  </span>
+                </div>
+
+                <Textarea
                   label="Notes"
-                  placeholder="e.g. Morning 7:00 AM batch, prefers UPI"
+                  placeholder="Medical conditions, fitness goals, or locker # (Optional)"
                   value={notes}
                   onChange={(e) => setNotes(e.target.value)}
-                  helperText="Optional"
+                  rows={2}
                 />
-              </div>
-            </div>
-          </div>
 
-          {/* Form Actions - Sticky Footer */}
-          <div className="sticky bottom-0 bg-white border-t border-slate-100 p-4 sm:px-6 flex flex-col sm:flex-row items-center justify-end gap-3 z-10">
-            <Button
-              type="button"
-              variant="tertiary"
-              size="md"
-              onClick={onClose}
-              disabled={isSubmitting}
-              className="w-full sm:w-auto"
-            >
-              Cancel
-            </Button>
-
-            <Button
-              id="btn-submit-add-member"
-              type="submit"
-              variant="primary"
-              size="md"
-              isLoading={isSubmitting}
-              className="w-full sm:w-auto"
-            >
-              {isSubmitting ? 'Adding member...' : 'Add Member'}
-            </Button>
+                <div className="flex items-center justify-between gap-3 pt-3 border-t border-neutral-200/80">
+                  <Button
+                    type="button"
+                    variant="secondary"
+                    onClick={() => setCurrentStep(1)}
+                    leftIcon={<ArrowLeft className="w-4 h-4" />}
+                    disabled={isSubmitting}
+                  >
+                    Back
+                  </Button>
+                  <Button
+                    type="submit"
+                    variant="primary"
+                    isLoading={isSubmitting}
+                    disabled={isSubmitting}
+                  >
+                    Enroll Member
+                  </Button>
+                </div>
+              </form>
+            )}
           </div>
-        </form>
-      )}
+        )}
+      </div>
     </Modal>
   );
 };

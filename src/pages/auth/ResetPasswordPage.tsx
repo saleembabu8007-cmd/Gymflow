@@ -3,7 +3,7 @@ import { AuthLayout } from '../../layouts/AuthLayout';
 import { Button } from '../../components/ui/Button';
 import { Input } from '../../components/ui/Input';
 import { useAuth } from '../../hooks/useAuth';
-import { CheckCircle2, AlertCircle } from 'lucide-react';
+import { CheckCircle2, AlertCircle, Lock, Eye, EyeOff } from 'lucide-react';
 
 interface ResetPasswordPageProps {
   onNavigateToLogin: () => void;
@@ -17,6 +17,8 @@ export const ResetPasswordPage: React.FC<ResetPasswordPageProps> = ({
   const { updatePassword } = useAuth();
   const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
+  const [showPassword, setShowPassword] = useState(false);
+  const [showConfirmPassword, setShowConfirmPassword] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isSuccess, setIsSuccess] = useState(false);
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
@@ -53,20 +55,20 @@ export const ResetPasswordPage: React.FC<ResetPasswordPageProps> = ({
         title="Password updated"
         subtitle="Your password has been changed successfully"
       >
-        <div className="space-y-4 text-center">
-          <div className="w-12 h-12 rounded-[var(--radius-xl)] bg-[var(--color-success-50)] text-[var(--color-success-600)] flex items-center justify-center mx-auto">
-            <CheckCircle2 className="w-6 h-6" />
+        <div className="space-y-4 text-center select-none font-sans">
+          <div className="w-12 h-12 rounded-full bg-[var(--color-success-50)] text-[var(--color-success-600)] flex items-center justify-center mx-auto border border-[var(--color-success-200)] shadow-2xs">
+            <CheckCircle2 className="w-6 h-6 stroke-[2]" />
           </div>
 
-          <p className="text-[length:var(--text-caption-size)] font-medium text-neutral-600 leading-relaxed">
+          <p className="text-xs text-neutral-600 leading-relaxed">
             Your new password has been saved. You can now use it to sign in to GymFlow.
           </p>
 
-          <div className="pt-2">
+          <div className="pt-3">
             <Button
               type="button"
-              className="w-full"
-              size="lg"
+              variant="primary"
+              fullWidth
               onClick={onNavigateToLogin}
             >
               Sign In to Dashboard
@@ -83,14 +85,14 @@ export const ResetPasswordPage: React.FC<ResetPasswordPageProps> = ({
       subtitle={
         targetEmail
           ? `Create a new password for ${targetEmail}`
-          : 'Choose a new strong password for your account'
+          : 'Choose a strong password for your account'
       }
     >
-      <form onSubmit={handleSubmit} className="space-y-4" noValidate>
+      <form onSubmit={handleSubmit} className="space-y-4 select-none font-sans" noValidate>
         {errorMessage && (
           <div
             role="alert"
-            className="p-3 bg-[var(--color-danger-50)] border border-[var(--color-danger-200)] text-[var(--color-danger-700)] text-[length:var(--text-caption-size)] font-semibold rounded-[var(--radius-lg)] flex items-center gap-2"
+            className="p-3 bg-[var(--color-danger-50)] border border-[var(--color-danger-200)] text-[var(--color-danger-700)] text-xs font-semibold rounded-[var(--radius-md)] flex items-center gap-2"
           >
             <AlertCircle className="w-4 h-4 shrink-0 text-[var(--color-danger-600)]" />
             <span>{errorMessage}</span>
@@ -99,56 +101,76 @@ export const ResetPasswordPage: React.FC<ResetPasswordPageProps> = ({
 
         <Input
           label="New Password"
-          type="password"
-          name="new-password"
-          id="new-password"
+          type={showPassword ? 'text' : 'password'}
           required
+          autoComplete="new-password"
+          placeholder="Min. 6 characters"
           value={password}
           onChange={(e) => {
             setPassword(e.target.value);
             if (errorMessage) setErrorMessage(null);
           }}
-          placeholder="Min 6 characters"
-          autoComplete="new-password"
-          disabled={isSubmitting}
+          leftIcon={<Lock className="w-4 h-4" />}
+          rightIcon={
+            <button
+              type="button"
+              onClick={() => setShowPassword(!showPassword)}
+              className="text-neutral-400 hover:text-neutral-700 cursor-pointer"
+              tabIndex={-1}
+              aria-label={showPassword ? 'Hide password' : 'Show password'}
+            >
+              {showPassword ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
+            </button>
+          }
+          autoFocus
         />
 
         <Input
           label="Confirm New Password"
-          type="password"
-          name="confirm-password"
-          id="confirm-password"
+          type={showConfirmPassword ? 'text' : 'password'}
           required
+          autoComplete="new-password"
+          placeholder="Re-enter new password"
           value={confirmPassword}
           onChange={(e) => {
             setConfirmPassword(e.target.value);
             if (errorMessage) setErrorMessage(null);
           }}
-          placeholder="Re-enter password"
-          autoComplete="new-password"
-          disabled={isSubmitting}
+          leftIcon={<Lock className="w-4 h-4" />}
+          rightIcon={
+            <button
+              type="button"
+              onClick={() => setShowConfirmPassword(!showConfirmPassword)}
+              className="text-neutral-400 hover:text-neutral-700 cursor-pointer"
+              tabIndex={-1}
+              aria-label={showConfirmPassword ? 'Hide password' : 'Show password'}
+            >
+              {showConfirmPassword ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
+            </button>
+          }
         />
 
-        <div className="pt-2 space-y-3">
+        <div className="pt-2">
           <Button
             type="submit"
-            id="btn-update-password"
-            className="w-full"
-            size="lg"
+            variant="primary"
+            fullWidth
             isLoading={isSubmitting}
             disabled={isSubmitting}
+            size="md"
           >
-            {isSubmitting ? 'Updating password...' : 'Update password'}
+            Update Password
           </Button>
+        </div>
 
-          <Button
+        <div className="pt-3 border-t border-neutral-100 text-center text-xs">
+          <button
             type="button"
-            variant="tertiary"
             onClick={onNavigateToLogin}
-            className="w-full"
+            className="text-neutral-600 hover:text-neutral-900 font-semibold cursor-pointer"
           >
-            Cancel and return to Sign In
-          </Button>
+            ← Back to Sign In
+          </button>
         </div>
       </form>
     </AuthLayout>

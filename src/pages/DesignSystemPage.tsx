@@ -17,7 +17,7 @@ import { StatCard } from '../components/ui/StatCard';
 import { useToast } from '../components/ui/Toast';
 import { colors, spacing, borderRadius, typography } from '../styles/tokens';
 import { PAYMENT_STATUS } from '../types';
-import { Dumbbell, Plus, CreditCard, Bell, Sparkles, Check, AlertCircle } from 'lucide-react';
+import { Dumbbell, Plus, CreditCard, Bell, Sparkles, Check, AlertCircle, CheckCircle2 } from 'lucide-react';
 
 export const DesignSystemPage: React.FC = () => {
   const { success, error, warning, info } = useToast();
@@ -114,23 +114,17 @@ export const DesignSystemPage: React.FC = () => {
         <Card>
           <CardContent className="p-6 space-y-6">
             <div className="space-y-2">
-              <span className="text-xs font-semibold text-neutral-500 uppercase tracking-wider block">Variants</span>
+              <span className="text-xs font-semibold text-neutral-500 uppercase tracking-wider block">Variants (6 Total)</span>
               <div className="flex flex-wrap gap-3 items-center">
                 <Button variant="primary">Primary</Button>
                 <Button variant="secondary">Secondary</Button>
                 <Button variant="tertiary">Tertiary</Button>
                 <Button variant="destructive" leftIcon={<AlertCircle className="w-4 h-4" />}>Destructive</Button>
-                <Button variant="tertiary" leftIcon={<AlertCircle className="w-4 h-4" />}>Ghost Destructive (Removed)</Button>
-                <Button variant="primary" isLoading>Loading</Button>
-              </div>
-            </div>
-
-            <div className="space-y-2 pt-4 border-t border-neutral-100">
-              <span className="text-xs font-semibold text-neutral-500 uppercase tracking-wider block">Sizes</span>
-              <div className="flex flex-wrap gap-3 items-center">
-                <Button size="sm">Small (32px)</Button>
-                <Button size="md">Medium (40px)</Button>
-                <Button size="lg">Large (48px)</Button>
+                <Button variant="icon" leftIcon={<AlertCircle className="w-5 h-5" />} aria-label="Icon only" />
+                <div className="bg-neutral-50 p-2 border border-neutral-100 rounded-[var(--radius-lg)]">
+                  <Button variant="inline-action" leftIcon={<CheckCircle2 className="w-4 h-4" />}>Inline-action</Button>
+                </div>
+                <Button variant="primary" isLoading>Loading State</Button>
               </div>
             </div>
           </CardContent>
@@ -202,38 +196,36 @@ export const DesignSystemPage: React.FC = () => {
               <div className="space-y-2">
                 <span className="text-xs font-semibold text-neutral-500 uppercase tracking-wider block">Sizes (lg, md, sm)</span>
                 <div className="flex items-end gap-4">
-                  <Avatar name="Amit Patel" size="lg" />
-                  <Avatar name="Sneha Reddy" size="md" />
-                  <Avatar name="Vikram Sharma" size="sm" />
+                  <Avatar name="Amit Patel" />
+                  <Avatar name="Sneha Reddy" />
+                  <Avatar name="Vikram Sharma" />
                 </div>
               </div>
               
               <div className="space-y-2">
                 <span className="text-xs font-semibold text-neutral-500 uppercase tracking-wider block">Identity Colors</span>
                 <div className="flex items-center gap-3">
-                  <Avatar name="Coral" size="md" />
-                  <Avatar name="Orange" size="md" />
-                  <Avatar name="Yellow" size="md" />
-                  <Avatar name="Lime" size="md" />
-                  <Avatar name="Cyan" size="md" />
-                  <Avatar name="Violet User" size="md" />
+                  <Avatar name="Coral" />
+                  <Avatar name="Orange" />
+                  <Avatar name="Yellow" />
+                  <Avatar name="Lime" />
+                  <Avatar name="Cyan" />
+                  <Avatar name="Violet User" />
                 </div>
               </div>
 
               <div className="space-y-2">
                 <span className="text-xs font-semibold text-neutral-500 uppercase tracking-wider block">Status & Photos</span>
                 <div className="flex items-center gap-4">
-                  <Avatar name="Rahul Verma" size="md" status="paid" />
-                  <Avatar name="Pooja Hegde" size="md" status="overdue" />
+                  <Avatar name="Rahul Verma" status="paid" />
+                  <Avatar name="Pooja Hegde" status="overdue" />
                   <Avatar 
                     name="John Doe" 
-                    size="md" 
                     status="paid"
                     imageUrl="https://images.unsplash.com/photo-1599566150163-29194dcaad36?auto=format&fit=crop&q=80&w=100&h=100" 
                   />
                   <Avatar 
                     name="Jane Smith" 
-                    size="lg" 
                     status="overdue"
                     imageUrl="https://images.unsplash.com/photo-1494790108377-be9c29b29330?auto=format&fit=crop&q=80&w=150&h=150" 
                   />
@@ -248,16 +240,16 @@ export const DesignSystemPage: React.FC = () => {
               <CardDescription>Accessible floating status banners</CardDescription>
             </CardHeader>
             <CardContent className="flex flex-wrap gap-2.5">
-              <Button size="sm" variant="primary" onClick={() => success('Payment Saved', '₹1,500 recorded via UPI')}>
+              <Button variant="primary" onClick={() => success('Payment Saved', '₹1,500 recorded via UPI')}>
                 Trigger Success Toast
               </Button>
-              <Button size="sm" variant="destructive" onClick={() => error('Action Failed', 'Could not delete record')}>
+              <Button variant="destructive" onClick={() => error('Action Failed', 'Could not delete record')}>
                 Trigger Error Toast
               </Button>
-              <Button size="sm" variant="secondary" onClick={() => warning('Due Soon Alert', 'Member fee is due tomorrow')}>
+              <Button variant="secondary" onClick={() => warning('Due Soon Alert', 'Member fee is due tomorrow')}>
                 Trigger Warning
               </Button>
-              <Button size="sm" variant="tertiary" onClick={() => info('Information', 'Backup synced with storage')}>
+              <Button variant="tertiary" onClick={() => info('Information', 'Backup synced with storage')}>
                 Trigger Info
               </Button>
             </CardContent>
@@ -279,9 +271,9 @@ export const DesignSystemPage: React.FC = () => {
                 <div className="space-y-1">
                   <span className="text-xs font-semibold text-neutral-500 uppercase tracking-wider block">Sizes</span>
                   <div className="space-y-3">
-                    <ProgressBar value={40} size="sm" variant="brand" />
-                    <ProgressBar value={60} size="md" variant="brand" />
-                    <ProgressBar value={80} size="lg" variant="brand" />
+                    <ProgressBar value={40} variant="brand" />
+                    <ProgressBar value={60} variant="brand" />
+                    <ProgressBar value={80} variant="brand" />
                   </div>
                 </div>
                 
@@ -304,9 +296,9 @@ export const DesignSystemPage: React.FC = () => {
             </CardHeader>
             <CardContent className="flex flex-col items-center gap-8 py-4">
               <div className="flex items-end justify-center gap-8 w-full">
-                <ProgressRing value={25} size="sm" variant="danger" />
-                <ProgressRing value={65} size="md" variant="warning" caption="Goal Progress" />
-                <ProgressRing value={85} size="lg" variant="success" caption="Security Score" />
+                <ProgressRing value={25} variant="danger" />
+                <ProgressRing value={65} variant="warning" caption="Goal Progress" />
+                <ProgressRing value={85} variant="success" caption="Security Score" />
               </div>
             </CardContent>
           </Card>
@@ -352,15 +344,26 @@ export const DesignSystemPage: React.FC = () => {
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
           <Card>
             <CardHeader className="pb-3">
-              <CardTitle className="text-sm">Badge</CardTitle>
-              <CardDescription>Pill shaped, semantic background with solid text.</CardDescription>
+              <CardTitle className="text-sm">Badge Treatments</CardTitle>
+              <CardDescription>Default (dot) vs Emphasis (pill).</CardDescription>
             </CardHeader>
-            <CardContent className="flex flex-wrap gap-3">
-              <Badge variant="success">Brand</Badge>
-              <Badge variant="warning">Due Soon</Badge>
-              <Badge variant="danger">Overdue</Badge>
-              <Badge variant="info">Upcoming</Badge>
-              <Badge variant="neutral">Neutral</Badge>
+            <CardContent className="flex flex-col gap-4">
+              <div className="flex flex-wrap gap-4 items-center">
+                <span className="text-xs text-neutral-500 w-16">Default</span>
+                <Badge variant="success">Paid</Badge>
+                <Badge variant="warning">Due Soon</Badge>
+                <Badge variant="danger">Overdue</Badge>
+                <Badge variant="info">Upcoming</Badge>
+                <Badge variant="neutral">Neutral</Badge>
+              </div>
+              <div className="flex flex-wrap gap-4 items-center">
+                <span className="text-xs text-neutral-500 w-16">Emphasis</span>
+                <Badge variant="success" treatment="emphasis">Paid</Badge>
+                <Badge variant="warning" treatment="emphasis">Due Soon</Badge>
+                <Badge variant="danger" treatment="emphasis">Overdue</Badge>
+                <Badge variant="info" treatment="emphasis">Upcoming</Badge>
+                <Badge variant="neutral" treatment="emphasis">Neutral</Badge>
+              </div>
             </CardContent>
           </Card>
 
@@ -371,9 +374,9 @@ export const DesignSystemPage: React.FC = () => {
             </CardHeader>
             <CardContent className="flex items-center gap-4">
               <Avatar name="xs (24px)" size="xs" status="paid" />
-              <Avatar name="sm (32px)" size="sm" status="overdue" />
-              <Avatar name="md (40px)" size="md" />
-              <Avatar name="lg (56px)" size="lg" />
+              <Avatar name="sm (32px)" status="overdue" />
+              <Avatar name="md (40px)" />
+              <Avatar name="lg (56px)" />
             </CardContent>
           </Card>
         </div>
@@ -399,9 +402,9 @@ export const DesignSystemPage: React.FC = () => {
             <div>
               <h3 className="text-xs font-bold text-slate-600 mb-2 uppercase">Avatar Dimension Match Check</h3>
               <div className="flex items-center gap-4">
-                <Avatar name="Match Test" size="md" />
+                <Avatar name="Match Test" />
                 <span className="text-sm text-slate-400">vs</span>
-                <SkeletonAvatar size="md" />
+                <SkeletonAvatar />
               </div>
             </div>
           </CardContent>

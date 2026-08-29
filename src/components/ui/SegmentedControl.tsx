@@ -31,14 +31,14 @@ export const SegmentedControl: React.FC<SegmentedControlProps> = ({
   return (
     <div className={cn("flex flex-col gap-1.5 w-full", className)}>
       {label && (
-        <label htmlFor={controlId} className="text-[12px] font-medium text-neutral-500 select-none">
+        <label htmlFor={controlId} className="text-[length:var(--text-caption-size)] font-semibold text-neutral-700 select-none">
           {label}
         </label>
       )}
       
       <div 
         id={controlId}
-        className="flex p-1 bg-neutral-100 rounded-[var(--radius-lg)] relative w-full"
+        className="flex p-1 bg-neutral-100 rounded-[var(--radius-lg)] relative w-full h-10"
         role="radiogroup"
         aria-label={label}
       >
@@ -61,14 +61,15 @@ export const SegmentedControl: React.FC<SegmentedControlProps> = ({
               aria-checked={isSelected}
               onClick={() => onChange(option.value)}
               className={cn(
-                "relative flex-1 flex items-center justify-center gap-1.5 py-2.5 min-h-[44px] text-[length:var(--text-button-size)] font-semibold rounded-[var(--radius-md)] transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-brand-500",
+                "relative flex-1 flex items-center justify-center gap-1.5 h-full text-[length:var(--text-body-size)] font-semibold rounded-[var(--radius-md)] transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-brand-500",
+                "before:absolute before:-inset-y-[6px] before:inset-x-0 before:content-['']",
                 isSelected ? "text-neutral-900" : "text-neutral-600 hover:text-neutral-900"
               )}
             >
               {isSelected && (
                 <motion.div
                   layoutId={`${controlId}-indicator`}
-                  className="absolute inset-0 bg-white rounded-[var(--radius-md)] shadow-[var(--shadow-raised)] pointer-events-none"
+                  className="absolute inset-0 bg-white rounded-[var(--radius-md)] shadow-sm pointer-events-none"
                   transition={{ type: "spring", bounce: 0.2, duration: 0.2 }}
                 />
               )}

@@ -174,7 +174,6 @@ export const SubscriptionPage: React.FC = () => {
           {BILLING_CONFIG.isBillingEnabled ? (
             <Button
               variant="primary"
-              size="md"
               isLoading={processing}
               onClick={handleInitiatePayment}
             >

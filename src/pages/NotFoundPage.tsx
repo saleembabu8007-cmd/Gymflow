@@ -21,7 +21,6 @@ export const NotFoundPage: React.FC<NotFoundPageProps> = ({ onNavigateHome }) =>
         </div>
         <div className="pt-2 flex flex-col gap-2">
           <Button
-            size="md"
             onClick={onNavigateHome}
             className="w-full font-semibold bg-white text-neutral-950 hover:bg-neutral-200"
             leftIcon={<Home className="w-4 h-4" />}

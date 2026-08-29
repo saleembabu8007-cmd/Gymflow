@@ -7,13 +7,17 @@ import {
   AlertTriangle,
   XCircle,
   Users,
-  TrendingUp,
   ArrowRight,
 } from 'lucide-react';
 import { PlatformStats, PlatformGymTenant } from '../../types';
 import { formatCurrency } from '../../utils/currencyUtils';
-import { Card, CardHeader, CardTitle, CardDescription, CardContent } from '../../components/ui/Card';
-import { Badge } from '../../components/ui/Badge';
+import { SectionHeader } from '../../components/ui/SectionHeader';
+import { InlineSummary } from '../../components/ui/InlineSummary';
+import { StatusBadge } from '../../components/ui/StatusBadge';
+import { Avatar } from '../../components/ui/Avatar';
+import { TwoTierNumber } from '../../components/ui/TwoTierNumber';
+import { formatDate } from '../../utils/dateUtils';
+import { cn } from '../../utils/classNames';
 
 interface AdminOverviewPageProps {
   stats: PlatformStats | null;
@@ -31,138 +35,162 @@ export const AdminOverviewPage: React.FC<AdminOverviewPageProps> = ({
   const activeGymsCount = stats?.activeGyms ?? stats?.totalGyms ?? 0;
 
   return (
-    <div className="space-y-4 font-sans max-w-7xl">
-      {/* Top Operational Header */}
-      <div className="mb-6">
-        <h1 className="text-xl font-bold text-neutral-900 tracking-tight">Platform Operational Overview</h1>
-        <p className="text-[length:var(--text-caption-size)] text-neutral-500 mt-1">
-          Real-time metrics across all customer gym tenants and billing subscriptions
+    <div className="space-y-6 select-none font-sans max-w-7xl mx-auto">
+      {/* Top Header */}
+      <div>
+        <h1 className="text-xl sm:text-2xl font-bold text-neutral-950 tracking-tight font-display">
+          Platform Overview
+        </h1>
+        <p className="text-xs text-neutral-500 mt-0.5">
+          Real-time health across customer gym tenants and active subscriptions
         </p>
       </div>
 
-      {/* KPI Cards Grid */}
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-        {/* Total Gyms */}
-        <Card className="p-4 flex flex-col justify-center">
-          <div className="text-[length:var(--text-caption-size)] text-neutral-500 font-medium mb-1">Total Customer Gyms</div>
-          <div className="text-[length:var(--text-heading-size)] font-mono font-bold text-neutral-900">{stats?.totalGyms || 0}</div>
-          <div className="text-[10px] text-[var(--color-success-600)] mt-1 font-mono font-medium">
-            {activeGymsCount} active accounts
-          </div>
-        </Card>
+      {/* Operational Inline Metric Line */}
+      <InlineSummary
+        metrics={[
+          {
+            label: 'Total Gyms',
+            value: stats?.totalGyms || 0,
+            caption: `${activeGymsCount} active`,
+            variant: 'default',
+          },
+          {
+            label: 'Active Subscriptions',
+            value: stats?.activeSubscriptions || 0,
+            caption: `${stats?.pastDueSubscriptions || 0} past due`,
+            variant: (stats?.pastDueSubscriptions || 0) > 0 ? 'warning' : 'success',
+          },
+          {
+            label: 'Platform MRR',
+            value: formatCurrency(stats?.mrr || 0, '₹'),
+            caption: 'recurring revenue',
+            variant: 'success',
+          },
+          {
+            label: 'Total Members',
+            value: stats?.totalMembers || 0,
+            caption: 'across all gyms',
+            variant: 'default',
+          },
+        ]}
+      />
 
-        {/* Active Subscriptions */}
-        <Card className="p-4 flex flex-col justify-center">
-          <div className="text-[length:var(--text-caption-size)] text-neutral-500 font-medium mb-1">Active Subscriptions</div>
-          <div className="text-[length:var(--text-heading-size)] font-mono font-bold text-[var(--color-success-600)]">
-            {stats?.activeSubscriptions || 0}
-          </div>
-          <div className="text-[10px] text-neutral-500 mt-1 font-mono font-medium">
-            {stats?.pastDueSubscriptions || 0} past due
-          </div>
-        </Card>
+      {/* 2-Column Split Overview */}
+      <div className="grid grid-cols-1 lg:grid-cols-12 gap-6">
+        {/* Left Column (7 Cols): Recent Gym Tenants */}
+        <div className="lg:col-span-7 space-y-3">
+          <SectionHeader
+            title="Customer Gyms"
+            count={gyms.length}
+            subtitle="Latest onboarded tenants"
+            action={
+              <button
+                type="button"
+                onClick={onNavigateToGyms}
+                className="text-xs font-semibold text-neutral-600 hover:text-neutral-950 flex items-center gap-1 transition-colors cursor-pointer"
+              >
+                View all <ArrowRight className="w-3 h-3" />
+              </button>
+            }
+          />
 
-        {/* Estimated MRR */}
-        <Card className="p-4 flex flex-col justify-center">
-          <div className="text-[length:var(--text-caption-size)] text-neutral-500 font-medium mb-1">Estimated MRR</div>
-          <div className="text-[length:var(--text-heading-size)] font-mono font-bold text-[var(--color-success-600)]">
-            {formatCurrency(stats?.mrr || 0, '₹')}
-          </div>
-          <div className="text-[10px] text-neutral-500 mt-1 font-mono font-medium">
-            Recurring subscription revenue
-          </div>
-        </Card>
-
-        {/* Total Members Across Tenants */}
-        <Card className="p-4 flex flex-col justify-center">
-          <div className="text-[length:var(--text-caption-size)] text-neutral-500 font-medium mb-1">Total Members (Platform)</div>
-          <div className="text-[length:var(--text-heading-size)] font-mono font-bold text-neutral-900">{stats?.totalMembers || 0}</div>
-          <div className="text-[10px] text-neutral-500 mt-1 font-mono font-medium">
-            Across all customer gyms
-          </div>
-        </Card>
-      </div>
-
-      {/* Secondary Status Breakdown */}
-      <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
-        <Card className="p-4 flex items-center gap-3">
-          <div className="w-9 h-9 rounded-[var(--radius-lg)] bg-[var(--color-warning-50)] text-[var(--color-warning-600)] border border-[var(--color-warning-200)] flex items-center justify-center shrink-0">
-            <Clock className="w-4 h-4" />
-          </div>
-          <div>
-            <div className="text-[length:var(--text-caption-size)] text-neutral-500 font-medium">Pending Dues (Tenants)</div>
-            <div className="text-lg font-mono font-bold text-neutral-900">{stats?.pendingPayments || 0} member dues</div>
-          </div>
-        </Card>
-
-        <Card className="p-4 flex items-center gap-3">
-          <div className="w-9 h-9 rounded-[var(--radius-lg)] bg-[var(--color-danger-50)] text-[var(--color-danger-600)] border border-[var(--color-danger-200)] flex items-center justify-center shrink-0">
-            <AlertTriangle className="w-4 h-4" />
-          </div>
-          <div>
-            <div className="text-[length:var(--text-caption-size)] text-neutral-500 font-medium">Suspended Accounts</div>
-            <div className="text-lg font-mono font-bold text-[var(--color-danger-600)]">{stats?.suspendedGyms || 0} gyms</div>
-          </div>
-        </Card>
-
-        <Card className="p-4 flex items-center gap-3">
-          <div className="w-9 h-9 rounded-[var(--radius-lg)] bg-neutral-100 text-neutral-600 border border-neutral-200 flex items-center justify-center shrink-0">
-            <XCircle className="w-4 h-4" />
-          </div>
-          <div>
-            <div className="text-[length:var(--text-caption-size)] text-neutral-500 font-medium">Cancelled Subscriptions</div>
-            <div className="text-lg font-mono font-bold text-neutral-500">{stats?.cancelledSubscriptions || 0} cancelled</div>
-          </div>
-        </Card>
-      </div>
-
-      {/* Recent Gym Tenants Overview */}
-      <Card>
-        <CardHeader className="flex flex-row items-center justify-between border-b border-neutral-100 pb-4">
-          <div className="space-y-0.5">
-            <CardTitle>Recent Gym Tenants</CardTitle>
-            <CardDescription>Latest customer gym onboarding activity</CardDescription>
-          </div>
-          <button
-            type="button"
-            onClick={onNavigateToGyms}
-            className="text-[length:var(--text-caption-size)] font-semibold text-[var(--color-brand-600)] hover:text-[var(--color-brand-700)] flex items-center gap-1 cursor-pointer transition-colors"
-          >
-            <span>View All</span>
-          </button>
-        </CardHeader>
-
-        <CardContent className="p-0">
-          <div className="divide-y divide-neutral-100 overflow-hidden">
+          <div className="bg-white border border-neutral-200/80 rounded-[var(--radius-lg)] shadow-2xs divide-y divide-neutral-100 overflow-hidden">
             {gyms.slice(0, 5).map((gym) => (
-              <div key={gym.id} className="p-4 flex items-center justify-between gap-4 hover:bg-neutral-50 transition-colors">
-                <div className="flex items-center gap-3 min-w-0">
-                  <div className="w-8 h-8 rounded-[var(--radius-lg)] bg-neutral-100 text-neutral-600 flex items-center justify-center shrink-0 font-bold text-xs border border-neutral-200">
-                    {gym.name.slice(0, 2).toUpperCase()}
-                  </div>
+              <div
+                key={gym.id}
+                className="p-3.5 sm:p-4 flex items-center justify-between gap-3 hover:bg-neutral-50/80 transition-colors"
+              >
+                <div className="flex items-center gap-3 min-w-0 flex-1">
+                  <Avatar name={gym.name} size="sm" />
                   <div className="min-w-0">
-                    <span className="font-bold text-[length:var(--text-body-size)] text-neutral-900 block truncate">{gym.name}</span>
-                    <span className="text-[length:var(--text-caption-size)] text-neutral-500 truncate block font-mono">
-                      Owner: {gym.ownerName} ({gym.ownerEmail})
+                    <span className="font-bold text-xs sm:text-sm text-neutral-900 block truncate">
+                      {gym.name}
+                    </span>
+                    <span className="text-[11px] text-neutral-500 font-mono truncate block">
+                      {gym.ownerName} · {gym.ownerEmail}
                     </span>
                   </div>
                 </div>
 
-                <div className="flex items-center gap-3 text-xs shrink-0">
-                  <Badge variant="neutral">
-                    {gym.memberCount} Members
-                  </Badge>
-                  {gym.status === 'ACTIVE' ? (
-                    <Badge variant="success" icon={<CheckCircle className="w-3 h-3" />}>ACTIVE</Badge>
-                  ) : (
-                    <Badge variant="danger" icon={<XCircle className="w-3 h-3" />}>SUSPENDED</Badge>
-                  )}
+                <div className="flex items-center gap-2.5 shrink-0 text-right">
+                  <span className="px-2 py-0.5 text-[10px] font-bold rounded-full bg-neutral-100 text-neutral-700 font-mono">
+                    {gym.memberCount} members
+                  </span>
+                  <StatusBadge status={gym.status === 'ACTIVE' ? 'ACTIVE' : 'INACTIVE'} />
                 </div>
               </div>
             ))}
           </div>
-        </CardContent>
-      </Card>
+        </div>
+
+        {/* Right Column (5 Cols): Platform Health Breakdown */}
+        <div className="lg:col-span-5 space-y-3">
+          <SectionHeader
+            title="Subscription Health"
+            subtitle="Current billing status breakdown"
+            action={
+              <button
+                type="button"
+                onClick={onNavigateToSubscriptions}
+                className="text-xs font-semibold text-neutral-600 hover:text-neutral-950 flex items-center gap-1 transition-colors cursor-pointer"
+              >
+                Manage <ArrowRight className="w-3 h-3" />
+              </button>
+            }
+          />
+
+          <div className="bg-white border border-neutral-200/80 rounded-[var(--radius-lg)] shadow-2xs divide-y divide-neutral-100 overflow-hidden">
+            <div className="p-3.5 flex items-center justify-between">
+              <div className="flex items-center gap-2.5">
+                <div className="w-7 h-7 rounded-full bg-[var(--color-success-50)] text-[var(--color-success-700)] flex items-center justify-center">
+                  <CheckCircle className="w-3.5 h-3.5" />
+                </div>
+                <span className="text-xs font-semibold text-neutral-800">Active Paid Subscriptions</span>
+              </div>
+              <span className="text-xs font-bold text-neutral-900 font-mono">
+                {stats?.activeSubscriptions || 0}
+              </span>
+            </div>
+
+            <div className="p-3.5 flex items-center justify-between">
+              <div className="flex items-center gap-2.5">
+                <div className="w-7 h-7 rounded-full bg-[var(--color-warning-50)] text-[var(--color-warning-700)] flex items-center justify-center">
+                  <Clock className="w-3.5 h-3.5" />
+                </div>
+                <span className="text-xs font-semibold text-neutral-800">Past Due Invoices</span>
+              </div>
+              <span className="text-xs font-bold text-[var(--color-warning-700)] font-mono">
+                {stats?.pastDueSubscriptions || 0}
+              </span>
+            </div>
+
+            <div className="p-3.5 flex items-center justify-between">
+              <div className="flex items-center gap-2.5">
+                <div className="w-7 h-7 rounded-full bg-[var(--color-danger-50)] text-[var(--color-danger-700)] flex items-center justify-center">
+                  <AlertTriangle className="w-3.5 h-3.5" />
+                </div>
+                <span className="text-xs font-semibold text-neutral-800">Suspended Gym Accounts</span>
+              </div>
+              <span className="text-xs font-bold text-[var(--color-danger-700)] font-mono">
+                {stats?.suspendedGyms || 0}
+              </span>
+            </div>
+
+            <div className="p-3.5 flex items-center justify-between">
+              <div className="flex items-center gap-2.5">
+                <div className="w-7 h-7 rounded-full bg-neutral-100 text-neutral-500 flex items-center justify-center">
+                  <XCircle className="w-3.5 h-3.5" />
+                </div>
+                <span className="text-xs font-semibold text-neutral-800">Cancelled Plans</span>
+              </div>
+              <span className="text-xs font-bold text-neutral-500 font-mono">
+                {stats?.cancelledSubscriptions || 0}
+              </span>
+            </div>
+          </div>
+        </div>
+      </div>
     </div>
   );
 };

@@ -29,36 +29,36 @@ export const ProgressBar: React.FC<ProgressBarProps> = ({
 
   const sizeClasses = {
     sm: 'h-1.5',
-    md: 'h-2.5', // ~10px thick for better visibility
-    lg: 'h-4',
+    md: 'h-2',
+    lg: 'h-3',
   };
 
   const trackClasses = {
-    success: 'bg-emerald-100/60',
-    warning: 'bg-amber-100/60',
-    danger: 'bg-rose-100/60',
-    brand: 'bg-teal-100/60',
-    auto: 'bg-slate-100',
+    success: 'bg-[var(--color-success-100)]',
+    warning: 'bg-[var(--color-warning-100)]',
+    danger: 'bg-[var(--color-danger-100)]',
+    brand: 'bg-[var(--color-brand-100)]',
+    auto: 'bg-neutral-100',
   };
 
   const fillClasses = {
-    success: 'bg-emerald-500 shadow-[0_0_8px_rgba(16,185,129,0.4)]',
-    warning: 'bg-amber-500 shadow-[0_0_8px_rgba(245,158,11,0.4)]',
-    danger: 'bg-rose-500 shadow-[0_0_8px_rgba(225,29,72,0.4)]',
-    brand: 'bg-teal-500 shadow-[0_0_8px_rgba(13,148,136,0.4)]',
-    auto: 'bg-slate-500',
+    success: 'bg-[var(--color-success-500)]',
+    warning: 'bg-[var(--color-warning-500)]',
+    danger: 'bg-[var(--color-danger-500)]',
+    brand: 'bg-[var(--color-brand-500)]',
+    auto: 'bg-neutral-900',
   };
 
   return (
-    <div className={cn('w-full flex flex-col gap-1.5', className)}>
+    <div className={cn('w-full flex flex-col gap-1 select-none font-sans', className)}>
       <div className={cn('w-full rounded-full overflow-hidden', trackClasses[activeVariant as keyof typeof trackClasses], sizeClasses[size])}>
         <div
-          className={cn('h-full rounded-full transition-all duration-700 ease-out', fillClasses[activeVariant as keyof typeof fillClasses])}
+          className={cn('h-full rounded-full transition-all duration-500 ease-out', fillClasses[activeVariant as keyof typeof fillClasses])}
           style={{ width: `${percentage}%` }}
         />
       </div>
       {showLabel && (
-        <div className="flex justify-end text-[11px] font-bold tracking-wider text-slate-600">
+        <div className="flex justify-end text-[11px] font-mono font-bold text-neutral-600">
           <span>{Math.round(percentage)}%</span>
         </div>
       )}

@@ -1,14 +1,22 @@
 import React from 'react';
-import { PaymentStatus } from '../../types';
-import { getStatusConfig } from '../../utils/statusUtils';
-import { cn } from '../../utils/classNames';
-import { AlertCircle, Clock, CheckCircle2, XCircle } from 'lucide-react';
+import { Badge } from './Badge';
+import { Check, Clock, AlertTriangle, AlertCircle, Sparkles } from 'lucide-react';
+
+export type DomainStatus = 
+  | 'PAID' 
+  | 'DUE_TODAY' 
+  | 'DUE_SOON' 
+  | 'OVERDUE' 
+  | 'EXPIRED' 
+  | 'ACTIVE' 
+  | 'INACTIVE' 
+  | 'PENDING'
+  | string;
 
 export interface StatusBadgeProps {
-  status: PaymentStatus;
+  status: DomainStatus;
   customLabel?: string;
   showIcon?: boolean;
-  size?: 'sm' | 'md';
   className?: string;
 }
 
@@ -16,47 +24,89 @@ export const StatusBadge: React.FC<StatusBadgeProps> = ({
   status,
   customLabel,
   showIcon = true,
-  size = 'md',
   className,
 }) => {
-  const config = getStatusConfig(status);
+  const normalizedStatus = (status || '').toUpperCase();
 
-  const sizeClasses = {
-    sm: 'text-[11px] px-2 py-0.5 gap-1 font-semibold',
-    md: 'text-xs px-2.5 py-1 gap-1.5 font-semibold',
-  };
-
-  const renderStatusIcon = () => {
-    switch (status) {
+  const getStatusConfig = () => {
+    switch (normalizedStatus) {
       case 'OVERDUE':
-        return <AlertCircle className="w-3 h-3 text-rose-600 shrink-0" />;
+        return {
+          label: 'Overdue',
+          variant: 'danger' as const,
+          treatment: 'emphasis' as const,
+          icon: <AlertCircle className="w-3 h-3" />,
+        };
       case 'DUE_TODAY':
-        return <Clock className="w-3 h-3 text-amber-600 shrink-0" />;
+        return {
+          label: 'Due Today',
+          variant: 'warning' as const,
+          treatment: 'emphasis' as const,
+          icon: <AlertTriangle className="w-3 h-3" />,
+        };
       case 'DUE_SOON':
-        return <Clock className="w-3 h-3 text-sky-600 shrink-0" />;
+        return {
+          label: 'Due Soon',
+          variant: 'warning' as const,
+          treatment: 'default' as const,
+          icon: <Clock className="w-3 h-3" />,
+        };
       case 'PAID':
-        return <CheckCircle2 className="w-3 h-3 text-emerald-600 shrink-0" />;
+        return {
+          label: 'Paid',
+          variant: 'success' as const,
+          treatment: 'default' as const,
+          icon: <Check className="w-3 h-3" />,
+        };
+      case 'ACTIVE':
+        return {
+          label: 'Active',
+          variant: 'success' as const,
+          treatment: 'emphasis' as const,
+          icon: <Sparkles className="w-3 h-3" />,
+        };
       case 'EXPIRED':
-        return <XCircle className="w-3 h-3 text-zinc-600 shrink-0" />;
+        return {
+          label: 'Expired',
+          variant: 'neutral' as const,
+          treatment: 'emphasis' as const,
+          icon: undefined,
+        };
+      case 'INACTIVE':
+        return {
+          label: 'Inactive',
+          variant: 'neutral' as const,
+          treatment: 'default' as const,
+          icon: undefined,
+        };
+      case 'PENDING':
+        return {
+          label: 'Pending',
+          variant: 'info' as const,
+          treatment: 'emphasis' as const,
+          icon: <Clock className="w-3 h-3" />,
+        };
       default:
-        return <span className={cn('w-1.5 h-1.5 rounded-full shrink-0', config.dotClass)} />;
+        return {
+          label: normalizedStatus || 'Unknown',
+          variant: 'neutral' as const,
+          treatment: 'default' as const,
+          icon: undefined,
+        };
     }
   };
 
-  const textLabel = customLabel || config.label;
+  const config = getStatusConfig();
+  const displayLabel = customLabel || config.label;
 
   return (
-    <span
-      aria-label={`Status: ${textLabel}`}
-      className={cn(
-        'inline-flex items-center whitespace-nowrap select-none transition-colors font-mono tracking-tight uppercase',
-        config.bgClass,
-        sizeClasses[size],
-        className
-      )}
+    <Badge
+      variant={config.variant}
+      treatment={config.treatment}
+      icon={showIcon ? config.icon : null}
+      className={className}
     >
-      {showIcon && renderStatusIcon()}
-      <span>{textLabel}</span>
-    </span>
+      {displayLabel}
+    </Badge>
   );
 };

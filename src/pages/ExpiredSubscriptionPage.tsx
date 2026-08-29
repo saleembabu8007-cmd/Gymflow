@@ -96,7 +96,6 @@ export const ExpiredSubscriptionPage: React.FC = () => {
           {BILLING_CONFIG.isBillingEnabled ? (
             <Button
               variant="primary"
-              size="lg"
               fullWidth
               isLoading={renewing}
               onClick={handleRenew}

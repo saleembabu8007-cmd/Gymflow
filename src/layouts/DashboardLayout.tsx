@@ -35,11 +35,11 @@ export const DashboardLayout: React.FC<DashboardLayoutProps> = ({
 
   const handleLogout = onLogout || logout;
   const pendingCount = overdueMembers.length + dueTodayMembers.length + dueSoonMembers.length;
-  const gymName = gym?.name || 'GymFlow Tenant';
+  const gymName = gym?.name || 'Gym Workspace';
 
   return (
-    <div className="h-screen bg-zinc-50 flex overflow-hidden">
-      {/* Desktop Sidebar */}
+    <div className="h-screen bg-[var(--color-bg-app)] flex overflow-hidden font-sans">
+      {/* Desktop Sidebar (Fixed 240px) */}
       <Sidebar
         currentPath={currentPath}
         onNavigate={onNavigate}
@@ -50,7 +50,7 @@ export const DashboardLayout: React.FC<DashboardLayoutProps> = ({
         pendingCount={pendingCount}
       />
 
-      {/* Main Content Area */}
+      {/* Main Content Viewport */}
       <div className="flex-1 flex flex-col min-w-0 overflow-hidden">
         <Header
           user={user}
@@ -62,8 +62,8 @@ export const DashboardLayout: React.FC<DashboardLayoutProps> = ({
           subtitle={pageSubtitle}
         />
 
-        <div className="flex-1 overflow-y-auto pb-[calc(5.5rem+env(safe-area-inset-bottom))] md:pb-10">
-          <main className="p-4 sm:p-6 lg:p-8 max-w-7xl w-full mx-auto">
+        <div className="flex-1 overflow-y-auto pb-[calc(5.5rem+env(safe-area-inset-bottom))] md:pb-8">
+          <main className="max-w-7xl w-full mx-auto p-4 sm:p-6 lg:p-8">
             {children}
           </main>
         </div>

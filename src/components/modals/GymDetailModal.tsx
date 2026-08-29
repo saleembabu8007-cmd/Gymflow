@@ -179,7 +179,6 @@ export const GymDetailModal: React.FC<GymDetailModalProps> = ({
               <div className="flex items-center gap-2 shrink-0">
                 <Button
                   variant="tertiary"
-                  size="sm"
                   onClick={() => setShowConfirm(false)}
                   disabled={isUpdating}
                 >
@@ -187,7 +186,6 @@ export const GymDetailModal: React.FC<GymDetailModalProps> = ({
                 </Button>
                 <Button
                   variant={isSuspended ? 'primary' : 'destructive'}
-                  size="sm"
                   onClick={handleAction}
                   isLoading={isUpdating}
                 >
@@ -198,14 +196,13 @@ export const GymDetailModal: React.FC<GymDetailModalProps> = ({
           ) : (
             <Button
               variant={isSuspended ? 'tertiary' : 'destructive'}
-              size="sm"
               onClick={() => setShowConfirm(true)}
             >
               {isSuspended ? 'Reactivate Gym Account' : 'Suspend Gym Account'}
             </Button>
           )}
 
-          <Button variant="tertiary" size="sm" onClick={onClose}>
+          <Button variant="tertiary" onClick={onClose}>
             Close
           </Button>
         </div>

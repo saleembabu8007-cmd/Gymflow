@@ -60,7 +60,6 @@ export const AdminProtectedRoute: React.FC<AdminProtectedRouteProps> = ({ childr
           <div className="pt-2 flex flex-col gap-2">
             <Button
               variant="destructive"
-              size="md"
               onClick={logout}
               className="w-full font-semibold"
               leftIcon={<LogOut className="w-4 h-4" />}

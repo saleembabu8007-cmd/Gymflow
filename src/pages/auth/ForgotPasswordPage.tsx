@@ -3,7 +3,7 @@ import { AuthLayout } from '../../layouts/AuthLayout';
 import { Button } from '../../components/ui/Button';
 import { Input } from '../../components/ui/Input';
 import { useAuth } from '../../hooks/useAuth';
-import { CheckCircle2, AlertCircle } from 'lucide-react';
+import { CheckCircle2, AlertCircle, Mail, ArrowLeft } from 'lucide-react';
 
 interface ForgotPasswordPageProps {
   onNavigateToLogin: () => void;
@@ -32,7 +32,7 @@ export const ForgotPasswordPage: React.FC<ForgotPasswordPageProps> = ({
     try {
       setIsSubmitting(true);
       setErrorMessage(null);
-      await resetPassword(email);
+      await resetPassword(email.trim());
       setIsSubmitted(true);
     } catch {
       setErrorMessage('Failed to send reset link. Please try again.');
@@ -45,23 +45,23 @@ export const ForgotPasswordPage: React.FC<ForgotPasswordPageProps> = ({
     return (
       <AuthLayout
         title="Check your email"
-        subtitle="Password reset instructions have been sent"
+        subtitle="Password recovery instructions sent"
       >
-        <div className="space-y-4 text-center">
-          <div className="w-12 h-12 rounded-[var(--radius-xl)] bg-[var(--color-success-50)] text-[var(--color-success-600)] flex items-center justify-center mx-auto">
-            <CheckCircle2 className="w-6 h-6" />
+        <div className="space-y-4 text-center select-none font-sans">
+          <div className="w-12 h-12 rounded-full bg-[var(--color-success-50)] text-[var(--color-success-600)] flex items-center justify-center mx-auto border border-[var(--color-success-200)] shadow-2xs">
+            <CheckCircle2 className="w-6 h-6 stroke-[2]" />
           </div>
 
-          <p className="text-[length:var(--text-caption-size)] font-medium text-neutral-600 leading-relaxed">
-            If an account exists for <strong className="text-neutral-900">{email}</strong>, you will receive an email with a link to reset your password.
+          <p className="text-xs text-neutral-600 leading-relaxed max-w-sm mx-auto">
+            If an account exists for <strong className="text-neutral-900">{email}</strong>, we have sent instructions to reset your password.
           </p>
 
-          <div className="space-y-2 pt-2">
+          <div className="space-y-2 pt-3">
             {onNavigateToResetPassword && (
               <Button
                 type="button"
-                className="w-full"
-                size="md"
+                variant="primary"
+                fullWidth
                 onClick={() => onNavigateToResetPassword(email)}
               >
                 Enter New Password
@@ -70,10 +70,10 @@ export const ForgotPasswordPage: React.FC<ForgotPasswordPageProps> = ({
 
             <Button
               type="button"
-              variant="tertiary"
-              className="w-full"
-              size="md"
+              variant="secondary"
+              fullWidth
               onClick={onNavigateToLogin}
+              leftIcon={<ArrowLeft className="w-4 h-4" />}
             >
               Back to Sign In
             </Button>
@@ -85,14 +85,14 @@ export const ForgotPasswordPage: React.FC<ForgotPasswordPageProps> = ({
 
   return (
     <AuthLayout
-      title="Reset your password"
-      subtitle="Enter your registered email address to receive a recovery link"
+      title="Reset password"
+      subtitle="Enter your email address to receive a recovery link"
     >
-      <form onSubmit={handleSubmit} className="space-y-4" noValidate>
+      <form onSubmit={handleSubmit} className="space-y-4 select-none font-sans" noValidate>
         {errorMessage && (
           <div
             role="alert"
-            className="p-3 bg-[var(--color-danger-50)] border border-[var(--color-danger-200)] text-[var(--color-danger-700)] text-[length:var(--text-caption-size)] font-semibold rounded-[var(--radius-lg)] flex items-center gap-2"
+            className="p-3 bg-[var(--color-danger-50)] border border-[var(--color-danger-200)] text-[var(--color-danger-700)] text-xs font-semibold rounded-[var(--radius-md)] flex items-center gap-2"
           >
             <AlertCircle className="w-4 h-4 shrink-0 text-[var(--color-danger-600)]" />
             <span>{errorMessage}</span>
@@ -100,41 +100,41 @@ export const ForgotPasswordPage: React.FC<ForgotPasswordPageProps> = ({
         )}
 
         <Input
-          label="Account Email"
+          label="Email Address"
           type="email"
-          name="email"
-          id="forgot-email"
           required
+          autoComplete="email"
+          placeholder="name@example.com"
           value={email}
           onChange={(e) => {
             setEmail(e.target.value);
             if (errorMessage) setErrorMessage(null);
           }}
-          placeholder="e.g. vikram@ironfitness.in"
-          autoComplete="email"
-          disabled={isSubmitting}
+          leftIcon={<Mail className="w-4 h-4" />}
+          autoFocus
         />
 
-        <div className="pt-2 space-y-3">
+        <div className="pt-2">
           <Button
             type="submit"
-            id="btn-send-reset"
-            className="w-full"
-            size="lg"
+            variant="primary"
+            fullWidth
             isLoading={isSubmitting}
             disabled={isSubmitting}
+            size="md"
           >
-            {isSubmitting ? 'Sending link...' : 'Send reset link'}
+            Send Recovery Link
           </Button>
+        </div>
 
-          <Button
+        <div className="pt-3 border-t border-neutral-100 text-center text-xs">
+          <button
             type="button"
-            variant="tertiary"
             onClick={onNavigateToLogin}
-            className="w-full"
+            className="text-neutral-600 hover:text-neutral-900 font-semibold cursor-pointer"
           >
-            Back to Sign In
-          </Button>
+            ← Back to Sign In
+          </button>
         </div>
       </form>
     </AuthLayout>

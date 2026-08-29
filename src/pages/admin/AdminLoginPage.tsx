@@ -1,7 +1,8 @@
 import React, { useState } from 'react';
-import { ShieldCheck, Lock, ArrowRight, AlertCircle, Dumbbell } from 'lucide-react';
+import { ShieldCheck, Lock, AlertCircle, Mail, ArrowLeft } from 'lucide-react';
 import { Button } from '../../components/ui/Button';
 import { Input } from '../../components/ui/Input';
+import { Logo } from '../../components/ui/Logo';
 import { useAuth } from '../../hooks/useAuth';
 import { parseAuthError } from '../../utils/errorUtils';
 
@@ -14,7 +15,6 @@ interface AdminLoginPageProps {
 export const AdminLoginPage: React.FC<AdminLoginPageProps> = ({
   onNavigateToGymLogin,
   onAdminLoginSuccess,
-  onNavigateToForgotPassword,
 }) => {
   const { login } = useAuth();
   const [email, setEmail] = useState('');
@@ -25,7 +25,7 @@ export const AdminLoginPage: React.FC<AdminLoginPageProps> = ({
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!email || !password) {
-      setError('Please enter your administrator email and password');
+      setError('Please enter administrator email and password.');
       return;
     }
 
@@ -41,7 +41,7 @@ export const AdminLoginPage: React.FC<AdminLoginPageProps> = ({
           (user.role as string) === 'ADMIN');
 
       if (!isPlatformAdmin) {
-        setError("You don't have permission to access the GymFlow admin console.");
+        setError("You don't have authorization to access the GymFlow platform admin console.");
       } else {
         onAdminLoginSuccess();
       }
@@ -53,107 +53,89 @@ export const AdminLoginPage: React.FC<AdminLoginPageProps> = ({
   };
 
   return (
-    <div className="min-h-screen bg-[var(--color-neutral-950)] flex flex-col justify-between p-4 sm:p-6 lg:p-8 font-sans text-[var(--color-neutral-100)]">
-      {/* Header Bar */}
-      <div className="flex items-center justify-between max-w-md w-full mx-auto">
-        <div className="flex items-center gap-2.5">
-          <div className="w-8 h-8 rounded-[var(--radius-xl)] bg-[var(--color-danger-600)] text-white flex items-center justify-center font-extrabold text-sm shadow-lg">
-            <Dumbbell className="w-4 h-4" />
+    <div className="min-h-screen bg-[var(--color-bg-canvas)] flex flex-col justify-center py-10 sm:py-16 px-4 sm:px-6 lg:px-8 select-none font-sans">
+      <div className="sm:mx-auto sm:w-full sm:max-w-md">
+        {/* Brand Header */}
+        <div className="flex flex-col items-center text-center">
+          <div className="flex items-center gap-2.5">
+            <Logo size="md" />
+            <div className="flex items-center gap-2">
+              <span className="font-extrabold text-neutral-950 text-xl tracking-tight font-display">
+                GymFlow
+              </span>
+              <span className="px-1.5 py-0.5 rounded text-[10px] font-mono font-bold bg-neutral-900 text-white uppercase">
+                Admin
+              </span>
+            </div>
           </div>
-          <span className="font-extrabold text-white text-lg tracking-tight">GymFlow</span>
-        </div>
-        <span className="px-2.5 py-1 rounded-full bg-[var(--color-danger-500)]/10 border border-[var(--color-danger-500)]/20 text-[var(--color-danger-400)] text-xs font-bold flex items-center gap-1.5">
-          <ShieldCheck className="w-3.5 h-3.5" />
-          Internal Console
-        </span>
-      </div>
 
-      {/* Main Login Card */}
-      <div className="max-w-sm w-full mx-auto my-auto space-y-8">
-        <div className="text-center space-y-2">
-          <div className="w-12 h-12 rounded-[var(--radius-xl)] bg-[var(--color-neutral-900)] border border-[var(--color-neutral-800)] text-[var(--color-danger-500)] flex items-center justify-center mx-auto">
-            <Lock className="w-5 h-5" />
-          </div>
-          <h1 className="text-2xl font-bold tracking-tight text-white mt-4">
+          <h1 className="mt-5 text-xl font-bold tracking-tight text-neutral-950 font-display">
             Platform Admin Console
           </h1>
-          <p className="text-xs text-[var(--color-neutral-400)] leading-relaxed">
+          <p className="mt-1 text-xs text-neutral-500 max-w-sm mx-auto">
             Authorized GymFlow operational management access only.
           </p>
         </div>
 
-        <form onSubmit={handleSubmit} className="space-y-6">
-          {error && (
-            <div className="p-3.5 rounded-[var(--radius-xl)] bg-[var(--color-danger-500)]/10 border border-[var(--color-danger-500)]/20 text-[var(--color-danger-300)] text-[length:var(--text-caption-size)] font-medium flex items-center gap-2.5">
-              <AlertCircle className="w-4 h-4 shrink-0 text-[var(--color-danger-400)]" />
-              <span>{error}</span>
-            </div>
-          )}
+        {/* Login Card */}
+        <div className="mt-6 sm:mt-8">
+          <div className="bg-white py-6 sm:py-8 px-5 sm:px-8 rounded-[var(--radius-lg)] shadow-2xs border border-neutral-200/80">
+            {error && (
+              <div className="mb-4 p-3 bg-[var(--color-danger-50)] border border-[var(--color-danger-200)] text-[var(--color-danger-700)] text-xs font-semibold rounded-[var(--radius-md)] flex items-center gap-2">
+                <AlertCircle className="w-4 h-4 shrink-0 text-[var(--color-danger-600)]" />
+                <span>{error}</span>
+              </div>
+            )}
 
-          <div className="space-y-4">
-            <Input
-              id="admin-login-email"
-              type="email"
-              label="Admin Email Address"
-              placeholder="admin@gymflow.io"
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-              required
-              disabled={loading}
-              variant="dark"
-            />
-
-            <div>
+            <form onSubmit={handleSubmit} className="space-y-4">
               <Input
-                id="admin-login-password"
-                type="password"
+                label="Admin Email"
+                type="email"
+                required
+                autoComplete="email"
+                placeholder="admin@gymflow.in"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                leftIcon={<Mail className="w-4 h-4" />}
+                autoFocus
+              />
+
+              <Input
                 label="Password"
-                placeholder="••••••••••••"
+                type="password"
+                required
+                autoComplete="current-password"
+                placeholder="Enter admin password"
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
-                required
-                disabled={loading}
-                variant="dark"
+                leftIcon={<Lock className="w-4 h-4" />}
               />
-              {onNavigateToForgotPassword && (
-                <div className="text-right mt-1.5">
-                  <button
-                    type="button"
-                    onClick={onNavigateToForgotPassword}
-                    className="text-[length:var(--text-caption-size)] text-[var(--color-neutral-400)] hover:text-[var(--color-danger-400)] transition-colors font-medium cursor-pointer"
-                  >
-                    Forgot admin password?
-                  </button>
-                </div>
-              )}
-            </div>
+
+              <div className="pt-2">
+                <Button
+                  type="submit"
+                  variant="primary"
+                  fullWidth
+                  isLoading={loading}
+                  disabled={loading}
+                  size="md"
+                >
+                  Access Admin Console
+                </Button>
+              </div>
+
+              <div className="pt-3 border-t border-neutral-100 text-center text-xs">
+                <button
+                  type="button"
+                  onClick={onNavigateToGymLogin}
+                  className="text-neutral-500 hover:text-neutral-900 font-semibold cursor-pointer"
+                >
+                  ← Return to Gym Owner Portal
+                </button>
+              </div>
+            </form>
           </div>
-
-          <Button
-            type="submit"
-            size="lg"
-            fullWidth
-            isLoading={loading}
-            className="bg-[var(--color-danger-600)] hover:bg-[var(--color-danger-500)] text-white font-bold border-none"
-          >
-            Authenticate Admin Console
-          </Button>
-
-          <div className="pt-6 border-t border-[var(--color-neutral-800)]/80 text-center">
-            <button
-              type="button"
-              onClick={onNavigateToGymLogin}
-              className="text-[length:var(--text-caption-size)] font-medium text-[var(--color-neutral-400)] hover:text-white transition-colors cursor-pointer"
-            >
-              Gym Owner Sign In →
-            </button>
-          </div>
-        </form>
-      </div>
-
-      {/* Footer */}
-      <div className="text-center text-[11px] text-[var(--color-neutral-600)] font-medium">
-        GymFlow Platform Operations • Protected by Supabase Database RLS
+        </div>
       </div>
     </div>
   );

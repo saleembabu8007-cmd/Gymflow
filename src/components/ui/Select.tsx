@@ -3,6 +3,8 @@ import { createPortal } from 'react-dom';
 import { ChevronDown, Check, AlertCircle } from 'lucide-react';
 import { motion, AnimatePresence } from 'motion/react';
 import { cn } from '../../utils/classNames';
+import { useMediaQuery } from '../../hooks/useMediaQuery';
+import { BottomSheet } from './BottomSheet';
 
 export interface SelectOption {
   value: string | number;
@@ -41,6 +43,8 @@ export const Select: React.FC<SelectProps> = ({
   const buttonRef = useRef<HTMLButtonElement>(null);
   const optionsRef = useRef<(HTMLButtonElement | null)[]>([]);
   const [dropdownStyle, setDropdownStyle] = useState<React.CSSProperties>({});
+  
+  const isMobile = useMediaQuery('(max-width: 639px)');
 
   const selectId = id || (label ? `select-${label.toLowerCase().replace(/\s+/g, '-')}` : undefined);
   const errorId = error && selectId ? `${selectId}-error` : undefined;
@@ -51,7 +55,7 @@ export const Select: React.FC<SelectProps> = ({
 
   // Update position of the portal
   useEffect(() => {
-    if (isOpen && buttonRef.current) {
+    if (isOpen && !isMobile && buttonRef.current) {
       const updatePosition = () => {
         if (buttonRef.current) {
           const rect = buttonRef.current.getBoundingClientRect();
@@ -66,7 +70,6 @@ export const Select: React.FC<SelectProps> = ({
 
       updatePosition();
       
-      // Use capture phase to catch scroll events on any parent container (like Modals)
       window.addEventListener('scroll', updatePosition, true);
       window.addEventListener('resize', updatePosition);
       
@@ -75,11 +78,12 @@ export const Select: React.FC<SelectProps> = ({
         window.removeEventListener('resize', updatePosition);
       };
     }
-  }, [isOpen]);
+  }, [isOpen, isMobile]);
 
   useEffect(() => {
     const handleOutsideClick = (event: MouseEvent) => {
       if (
+        !isMobile &&
         containerRef.current && 
         !containerRef.current.contains(event.target as Node) &&
         !(event.target as Element).closest('[data-select-portal]')
@@ -94,7 +98,7 @@ export const Select: React.FC<SelectProps> = ({
     return () => {
       document.removeEventListener('mousedown', handleOutsideClick);
     };
-  }, [isOpen]);
+  }, [isOpen, isMobile]);
 
   useEffect(() => {
     if (isOpen) {
@@ -148,15 +152,69 @@ export const Select: React.FC<SelectProps> = ({
     }
   };
 
+  const wrapperClasses = cn(
+    'relative flex items-center w-full min-h-[40px] bg-white border border-neutral-200 rounded-[var(--radius-md)] transition-colors shadow-sm',
+    disabled && 'opacity-50 bg-neutral-50 cursor-not-allowed',
+    error
+      ? 'border-[var(--color-danger-500)] focus-within:ring-1 focus-within:ring-[var(--color-danger-500)]'
+      : 'focus-within:border-[var(--color-brand-500)] focus-within:ring-1 focus-within:ring-[var(--color-brand-500)]',
+    isOpen && !error && 'border-[var(--color-brand-500)] ring-1 ring-[var(--color-brand-500)]'
+  );
+
+  const renderOptionsList = () => (
+    <div className="flex flex-col" role="listbox">
+      {options.length === 0 ? (
+        <div className="px-3 py-3 text-[14px] text-neutral-500 text-center">
+          No options available
+        </div>
+      ) : (
+        options.map((opt, i) => {
+          const isSelected = String(opt.value) === String(value);
+          return (
+            <button
+              key={String(opt.value)}
+              ref={(el) => { optionsRef.current[i] = el; }}
+              type="button"
+              role="option"
+              aria-selected={isSelected}
+              disabled={opt.disabled}
+              onKeyDown={handleKeyDown}
+              onClick={() => {
+                onChange(String(opt.value));
+                setIsOpen(false);
+                buttonRef.current?.focus();
+              }}
+              className={cn(
+                "w-full px-3 py-2.5 min-h-[44px] text-left text-[length:var(--text-body-size)] flex items-center justify-between transition-colors disabled:opacity-50 focus:outline-none rounded-[var(--radius-md)]",
+                isSelected 
+                  ? "bg-[var(--color-brand-50)] text-[var(--color-brand-900)] font-bold" 
+                  : "text-neutral-700 font-medium hover:bg-neutral-50 focus:bg-neutral-50 hover:text-neutral-900"
+              )}
+            >
+              <span className="truncate">{opt.label}</span>
+              {isSelected && <Check className="w-4 h-4 text-[var(--color-brand-600)]" />}
+            </button>
+          );
+        })
+      )}
+    </div>
+  );
+
   return (
     <div className={cn("w-full flex flex-col gap-1.5", className)} ref={containerRef}>
       {label && (
-        <label htmlFor={selectId} className="text-[12px] font-medium text-neutral-500 select-none">
+        <label htmlFor={selectId} className="text-[length:var(--text-caption-size)] font-semibold text-neutral-700 flex items-center select-none">
           {label}
         </label>
       )}
       
-      <div className="relative w-full">
+      <div className={wrapperClasses}>
+        {leftIcon && (
+          <div className="absolute left-3 text-neutral-400 pointer-events-none flex items-center justify-center">
+            {leftIcon}
+          </div>
+        )}
+        
         <button
           ref={buttonRef}
           type="button"
@@ -167,87 +225,56 @@ export const Select: React.FC<SelectProps> = ({
           aria-haspopup="listbox"
           aria-expanded={isOpen}
           className={cn(
-            'w-full min-h-[44px] bg-white border rounded-[var(--radius-md)] text-[length:var(--text-body-size)] font-semibold text-neutral-900 transition-colors flex items-center justify-between focus:outline-none focus-visible:ring-2 focus-visible:ring-brand-500 focus-visible:border-brand-500 disabled:opacity-50 disabled:cursor-not-allowed',
+            'w-full h-[44px] -my-[2px] bg-transparent text-left text-[length:var(--text-body-size)] text-neutral-900 flex items-center justify-between focus:outline-none disabled:cursor-not-allowed',
             leftIcon ? 'pl-10 pr-3' : 'px-3',
-            error ? 'border-danger-500 text-danger-900' : 'border-neutral-200 hover:border-neutral-300',
-            isOpen && 'border-brand-500 ring-1 ring-brand-500'
+            !selectedOption && 'text-neutral-400 font-normal'
           )}
         >
-          {leftIcon && (
-            <div className="absolute left-3 text-neutral-400 pointer-events-none flex items-center justify-center">
-              {leftIcon}
-            </div>
-          )}
-          
-          <span className="truncate">
+          <span className={cn("truncate font-medium", !selectedOption && "font-normal")}>
             {selectedOption ? selectedOption.label : 'Select an option'}
           </span>
-          
-          <ChevronDown className={cn("w-4 h-4 text-neutral-400 transition-transform duration-[var(--duration-standard)]", isOpen && "rotate-180")} />
+          <ChevronDown className={cn("w-4 h-4 text-neutral-400 transition-transform duration-[var(--duration-standard)] shrink-0 ml-2", isOpen && "rotate-180")} />
         </button>
 
-        {typeof document !== 'undefined' && createPortal(
-          <AnimatePresence>
-            {isOpen && (
-              <motion.div
-                data-select-portal
-                style={dropdownStyle}
-                initial={{ opacity: 0, y: -4 }}
-                animate={{ opacity: 1, y: 0 }}
-                exit={{ opacity: 0, y: -4 }}
-                transition={{ duration: 0.2, ease: [0.0, 0.0, 0.2, 1] }}
-                className="z-[9999] bg-white border border-neutral-100 rounded-[var(--radius-lg)] py-1 shadow-[var(--shadow-overlay)] overflow-hidden"
-              >
-                <div className="max-h-60 overflow-y-auto flex flex-col" role="listbox">
-                  {options.length === 0 ? (
-                    <div className="px-3 py-3 text-[14px] text-neutral-500 text-center">
-                      No options available
-                    </div>
-                  ) : (
-                    options.map((opt, i) => {
-                      const isSelected = String(opt.value) === String(value);
-                      return (
-                        <button
-                          key={String(opt.value)}
-                          ref={(el) => { optionsRef.current[i] = el; }}
-                          type="button"
-                          role="option"
-                          aria-selected={isSelected}
-                          disabled={opt.disabled}
-                          onKeyDown={handleKeyDown}
-                          onClick={() => {
-                            onChange(String(opt.value));
-                            setIsOpen(false);
-                            buttonRef.current?.focus();
-                          }}
-                          className={cn(
-                            "w-full px-3 py-2.5 min-h-[44px] text-left text-[length:var(--text-body-size)] flex items-center justify-between transition-colors disabled:opacity-50 focus:outline-none focus:bg-neutral-100",
-                            isSelected 
-                              ? "bg-[var(--color-brand-100)] text-[var(--color-brand-900)] font-bold" 
-                              : "text-neutral-700 font-medium hover:bg-neutral-50 hover:text-neutral-900"
-                          )}
-                        >
-                          <span className="truncate">{opt.label}</span>
-                          {isSelected && <Check className="w-4 h-4 text-[var(--color-brand-600)]" />}
-                        </button>
-                      );
-                    })
-                  )}
-                </div>
-              </motion.div>
-            )}
-          </AnimatePresence>,
-          document.body
+        {isMobile ? (
+          <BottomSheet 
+            isOpen={isOpen} 
+            onClose={() => setIsOpen(false)} 
+            title={label || 'Select an option'}
+          >
+            {renderOptionsList()}
+          </BottomSheet>
+        ) : (
+          typeof document !== 'undefined' && createPortal(
+            <AnimatePresence>
+              {isOpen && (
+                <motion.div
+                  data-select-portal
+                  style={dropdownStyle}
+                  initial={{ opacity: 0, y: -4 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  exit={{ opacity: 0, y: -4 }}
+                  transition={{ duration: 0.2, ease: [0.0, 0.0, 0.2, 1] }}
+                  className="z-[9999] bg-white border border-neutral-100 rounded-[var(--radius-lg)] p-1 shadow-[var(--shadow-overlay)] overflow-hidden"
+                >
+                  <div className="max-h-60 overflow-y-auto">
+                    {renderOptionsList()}
+                  </div>
+                </motion.div>
+              )}
+            </AnimatePresence>,
+            document.body
+          )
         )}
       </div>
 
       {error ? (
-        <p id={errorId} role="alert" aria-live="polite" className="text-[length:var(--text-micro-size)] text-[var(--color-danger-600)] font-[var(--text-micro-weight)] flex items-center gap-1 mt-0.5">
+        <p id={errorId} role="alert" aria-live="polite" className="text-[12px] font-medium text-[var(--color-danger-600)] flex items-center gap-1.5 mt-0.5">
           <AlertCircle className="w-3.5 h-3.5 shrink-0" />
           {error}
         </p>
       ) : helperText ? (
-        <p id={helperId} className="text-[length:var(--text-micro-size)] font-[var(--text-micro-weight)] text-neutral-500 mt-0.5">
+        <p id={helperId} className="text-[12px] font-medium text-neutral-500 mt-0.5">
           {helperText}
         </p>
       ) : null}

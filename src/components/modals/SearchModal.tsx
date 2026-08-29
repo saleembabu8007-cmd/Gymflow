@@ -3,6 +3,7 @@ import { Modal } from '../ui/Modal';
 import { SearchInput } from '../ui/SearchInput';
 import { StatusBadge } from '../ui/StatusBadge';
 import { Avatar } from '../ui/Avatar';
+import { TwoTierNumber } from '../ui';
 import { SearchResultSkeleton } from '../ui/Skeleton';
 import { Member } from '../../types';
 import { useMembers } from '../../hooks/useMembers';
@@ -116,17 +117,26 @@ export const SearchModal: React.FC<SearchModalProps> = ({
                         onClose();
                       }}
                     >
-                      <Avatar name={member.name} size="sm" />
+                      <Avatar name={member.name} />
                       <div className="min-w-0">
                         <div className="flex items-center gap-2">
                           <span className="text-[length:var(--text-body-size)] font-semibold text-neutral-900 truncate">
                             {member.name}
                           </span>
                           {member.calculatedStatus && (
-                            <StatusBadge status={member.calculatedStatus} size="sm" />
+                            <StatusBadge status={member.calculatedStatus} />
                           )}
                         </div>
-                        <p className="text-[length:var(--text-caption-size)] text-neutral-500 truncate">{member.phone} • {formatCurrency(member.monthlyFee, currencySymbol)}/mo</p>
+                        <div className="flex items-center gap-1.5 text-[length:var(--text-caption-size)] text-neutral-500 truncate">
+                          <span>{member.phone}</span>
+                          <span>&middot;</span>
+                          <TwoTierNumber
+                            value={formatCurrency(member.monthlyFee, currencySymbol)}
+                            caption="/mo"
+                            size="xs"
+                            valueClassName="text-neutral-700"
+                          />
+                        </div>
                       </div>
                     </div>
 

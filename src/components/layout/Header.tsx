@@ -1,7 +1,6 @@
 import React from 'react';
-import { Search, Plus, ShieldCheck, ChevronDown } from 'lucide-react';
+import { Search, Plus, ShieldCheck } from 'lucide-react';
 import { Button } from '../ui/Button';
-import { Avatar } from '../ui/Avatar';
 import { User as UserType } from '../../types';
 
 interface HeaderProps {
@@ -16,7 +15,7 @@ interface HeaderProps {
 
 export const Header: React.FC<HeaderProps> = ({
   user,
-  gymName = 'Iron Fitness',
+  gymName = 'Gym Workspace',
   onOpenQuickAdd,
   onOpenSearch,
   onNavigateAdmin,
@@ -24,67 +23,68 @@ export const Header: React.FC<HeaderProps> = ({
   subtitle,
 }) => {
   return (
-    <header className="h-[72px] border-b border-slate-200/80 bg-white/90 backdrop-blur-md sticky top-0 z-20 px-4 sm:px-6 lg:px-8 flex items-center justify-center shrink-0">
-      <div className="max-w-7xl w-full mx-auto flex items-center justify-between gap-4 select-none">
-        {/* Left: Page Title & Subtitle */}
-        <div className="flex flex-col justify-center min-w-0 py-2">
+    <header className="h-[60px] border-b border-neutral-200/80 bg-white/95 backdrop-blur-xs sticky top-0 z-20 px-4 sm:px-6 lg:px-8 flex items-center justify-center shrink-0 select-none">
+      <div className="max-w-7xl w-full mx-auto flex items-center justify-between gap-4">
+        {/* Left: Page Title & Optional Context Subtitle */}
+        <div className="flex items-baseline gap-2 min-w-0">
           {title && (
-            <h1 className="text-xl sm:text-2xl font-extrabold tracking-tight text-zinc-950 leading-tight truncate">
+            <h1 className="text-base sm:text-lg font-bold text-neutral-950 tracking-tight leading-tight truncate font-display">
               {title}
             </h1>
           )}
           {subtitle && (
-            <span className="text-sm text-slate-600 truncate leading-snug mt-0.5 hidden sm:block">
-              {subtitle}
+            <span className="text-xs text-neutral-500 truncate hidden sm:inline">
+              · {subtitle}
             </span>
           )}
         </div>
 
-        {/* Right: Quick Search, Primary Action, Avatar */}
-        <div className="flex items-center gap-2 sm:gap-4 shrink-0">
-          {/* Quick Search Shortcut Button */}
+        {/* Right: Search, Admin Shortcut, Contextual Action */}
+        <div className="flex items-center gap-2 sm:gap-3 shrink-0">
+          {/* Quick Search Trigger */}
           {onOpenSearch && (
             <button
               type="button"
               id="header-search-btn"
               onClick={onOpenSearch}
-              className="flex items-center justify-center md:justify-start gap-2 w-10 h-10 md:w-auto md:px-4 md:h-11 rounded-full bg-neutral-100 hover:bg-neutral-200 text-neutral-700 transition-colors cursor-pointer"
+              className="flex items-center gap-2 h-9 px-3 rounded-full bg-neutral-100 hover:bg-neutral-200/80 text-neutral-600 hover:text-neutral-900 transition-colors cursor-pointer text-xs font-medium"
               title="Search members or transactions (⌘K)"
+              aria-label="Search members or transactions"
             >
-              <Search className="w-[18px] h-[18px] text-neutral-600 stroke-[2.5]" />
-              <span className="hidden md:inline text-[15px] font-medium mr-2">Search...</span>
-              <kbd className="hidden lg:inline-block px-1.5 py-0.5 text-[10px] bg-white border border-neutral-300 rounded text-neutral-600 font-mono shadow-sm">
+              <Search className="w-3.5 h-3.5" />
+              <span className="hidden sm:inline">Search...</span>
+              <kbd className="hidden lg:inline-block px-1.5 py-0.2 bg-white border border-neutral-200 rounded text-[10px] font-mono text-neutral-500 shadow-2xs">
                 ⌘K
               </kbd>
             </button>
           )}
 
-          {/* Platform Admin Console Navigation Trigger */}
-          {onNavigateAdmin && (
+          {/* Platform Admin Switcher */}
+          {onNavigateAdmin && user?.role === 'PLATFORM_ADMIN' && (
             <Button
               id="header-admin-console-btn"
-              variant="tertiary"
-              size="md"
+              variant="outline"
+              size="sm"
               onClick={onNavigateAdmin}
-              leftIcon={<ShieldCheck className="w-5 h-5 text-rose-500" />}
-              className="hidden lg:flex border-slate-300 hover:bg-slate-100 font-semibold rounded-full px-5"
+              leftIcon={<ShieldCheck className="w-3.5 h-3.5 text-neutral-700" />}
+              className="hidden lg:flex"
             >
-              Admin Console
+              Admin
             </Button>
           )}
 
-          {/* Quick Add Member button */}
+          {/* Quick Add Member Primary Action */}
           {onOpenQuickAdd && (
             <Button
               id="header-quick-add-btn"
               variant="primary"
-              size="md"
+              size="sm"
               onClick={onOpenQuickAdd}
-              leftIcon={<Plus className="w-5 h-5" />}
-              className="rounded-full shadow-sm sm:px-5"
+              leftIcon={<Plus className="w-3.5 h-3.5" />}
+              className="rounded-full shadow-2xs"
             >
               <span className="hidden sm:inline">Add Member</span>
-              <span className="sm:hidden text-sm">Add</span>
+              <span className="sm:hidden">Add</span>
             </Button>
           )}
         </div>

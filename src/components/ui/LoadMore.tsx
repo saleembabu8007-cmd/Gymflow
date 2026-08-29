@@ -28,7 +28,6 @@ export const LoadMore: React.FC<LoadMoreProps> = ({
       ) : (
         <Button
           variant="secondary"
-          size="md"
           onClick={onLoadMore}
           rightIcon={<ChevronDown className="w-4 h-4" />}
           className="w-full sm:w-auto min-w-[200px]"

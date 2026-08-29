@@ -1,7 +1,8 @@
 import React, { useState } from 'react';
-import { AlertCircle, CheckCircle2, Eye, EyeOff } from 'lucide-react';
+import { AlertCircle, CheckCircle2, Eye, EyeOff, Lock, Mail, User } from 'lucide-react';
 import { SignUpDTO } from '../../services/interfaces';
-import { Button, Input, StepProgress } from '../../components/ui';
+import { Button } from '../../components/ui/Button';
+import { Input } from '../../components/ui/Input';
 import { AuthLayout } from '../../layouts/AuthLayout';
 
 interface RegisterPageProps {
@@ -13,7 +14,6 @@ interface RegisterPageProps {
 export const RegisterPage: React.FC<RegisterPageProps> = ({
   onSignUpSubmit,
   onNavigateToLogin,
-  onNavigateToHome,
 }) => {
   const [fullName, setFullName] = useState('');
   const [email, setEmail] = useState('');
@@ -42,7 +42,7 @@ export const RegisterPage: React.FC<RegisterPageProps> = ({
     }
 
     if (password !== confirmPassword) {
-      setError('Passwords do not match. Please re-enter your password.');
+      setError('Passwords do not match. Please verify your password.');
       return;
     }
 
@@ -56,10 +56,10 @@ export const RegisterPage: React.FC<RegisterPageProps> = ({
     } catch (err: any) {
       const msg = err?.message || '';
       if (msg.includes('SUCCESS_EMAIL_CONFIRMATION_REQUIRED')) {
-        setInfoMessage('Account created! Please check your email to confirm your registration, then click Sign In below.');
+        setInfoMessage('Account created! Please check your email to confirm registration, then click Sign In.');
         setError(null);
       } else {
-        setError(msg || 'Sign up failed. Please try again.');
+        setError(msg || 'Sign up failed. Please check details and try again.');
         setInfoMessage(null);
       }
     } finally {
@@ -69,120 +69,126 @@ export const RegisterPage: React.FC<RegisterPageProps> = ({
 
   return (
     <AuthLayout
-      title="Create Your Owner Account"
-      subtitle={
-        <StepProgress
-          currentStep={1}
-          totalSteps={2}
-          labels={['Account Registration', 'Workspace Setup']}
-          className="mt-2 mb-2"
-        />
-      }
+      title="Create your account"
+      subtitle="Start tracking gym dues and automated reminders"
     >
       {infoMessage && (
-        <div className="mb-6 p-3.5 bg-[var(--color-success-50)] border border-[var(--color-success-200)] text-[var(--color-success-800)] text-[length:var(--text-caption-size)] font-semibold rounded-[var(--radius-lg)] flex items-center gap-2.5">
+        <div className="mb-4 p-3 bg-[var(--color-success-50)] border border-[var(--color-success-200)] text-[var(--color-success-800)] text-xs font-semibold rounded-[var(--radius-md)] flex items-center gap-2">
           <CheckCircle2 className="w-4 h-4 shrink-0 text-[var(--color-success-600)]" />
           <span>{infoMessage}</span>
         </div>
       )}
 
       {error && (
-        <div className="mb-6 p-3.5 bg-[var(--color-danger-50)] border border-[var(--color-danger-200)] text-[var(--color-danger-700)] text-[length:var(--text-caption-size)] font-semibold rounded-[var(--radius-lg)] flex items-center gap-2.5">
+        <div className="mb-4 p-3 bg-[var(--color-danger-50)] border border-[var(--color-danger-200)] text-[var(--color-danger-700)] text-xs font-semibold rounded-[var(--radius-md)] flex items-center gap-2">
           <AlertCircle className="w-4 h-4 shrink-0 text-[var(--color-danger-600)]" />
           <span>{error}</span>
         </div>
       )}
 
-      <form onSubmit={handleSubmit} className="space-y-4">
-        <div>
-          <Input
-            label="Full Name"
-            placeholder="e.g. Vikram Sharma"
-            value={fullName}
-            onChange={(e) => setFullName(e.target.value)}
-            required
-          />
-        </div>
+      <form onSubmit={handleSubmit} className="space-y-4 select-none font-sans" noValidate>
+        <Input
+          label="Full Name"
+          required
+          autoComplete="name"
+          placeholder="e.g. Rahul Sharma"
+          value={fullName}
+          onChange={(e) => {
+            setFullName(e.target.value);
+            if (error) setError(null);
+          }}
+          leftIcon={<User className="w-4 h-4" />}
+          autoFocus
+        />
 
-        <div>
-          <Input
-            type="email"
-            label="Email Address"
-            placeholder="owner@yourgym.com"
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
-            required
-          />
-        </div>
+        <Input
+          label="Email Address"
+          type="email"
+          required
+          autoComplete="email"
+          placeholder="name@example.com"
+          value={email}
+          onChange={(e) => {
+            setEmail(e.target.value);
+            if (error) setError(null);
+          }}
+          leftIcon={<Mail className="w-4 h-4" />}
+        />
 
-        <div>
-          <Input
-            type={showPassword ? 'text' : 'password'}
-            label="Password"
-            placeholder="••••••••"
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
-            required
-            helperText="Must be at least 6 characters"
-            rightIcon={
-              <button
-                type="button"
-                onClick={() => setShowPassword(!showPassword)}
-                className="text-neutral-400 hover:text-neutral-700 focus:outline-none cursor-pointer"
-                tabIndex={-1}
-                aria-label={showPassword ? 'Hide password' : 'Show password'}
-              >
-                {showPassword ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
-              </button>
-            }
-          />
-        </div>
+        <Input
+          label="Password"
+          type={showPassword ? 'text' : 'password'}
+          required
+          autoComplete="new-password"
+          placeholder="Min. 6 characters"
+          value={password}
+          onChange={(e) => {
+            setPassword(e.target.value);
+            if (error) setError(null);
+          }}
+          leftIcon={<Lock className="w-4 h-4" />}
+          rightIcon={
+            <button
+              type="button"
+              onClick={() => setShowPassword(!showPassword)}
+              className="text-neutral-400 hover:text-neutral-700 cursor-pointer"
+              tabIndex={-1}
+              aria-label={showPassword ? 'Hide password' : 'Show password'}
+            >
+              {showPassword ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
+            </button>
+          }
+        />
 
-        <div>
-          <Input
-            type={showConfirmPassword ? 'text' : 'password'}
-            label="Confirm Password"
-            placeholder="••••••••"
-            value={confirmPassword}
-            onChange={(e) => setConfirmPassword(e.target.value)}
-            required
-            rightIcon={
-              <button
-                type="button"
-                onClick={() => setShowConfirmPassword(!showConfirmPassword)}
-                className="text-neutral-400 hover:text-neutral-700 focus:outline-none cursor-pointer"
-                tabIndex={-1}
-                aria-label={showConfirmPassword ? 'Hide password' : 'Show password'}
-              >
-                {showConfirmPassword ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
-              </button>
-            }
-          />
-        </div>
+        <Input
+          label="Confirm Password"
+          type={showConfirmPassword ? 'text' : 'password'}
+          required
+          autoComplete="new-password"
+          placeholder="Re-enter password"
+          value={confirmPassword}
+          onChange={(e) => {
+            setConfirmPassword(e.target.value);
+            if (error) setError(null);
+          }}
+          leftIcon={<Lock className="w-4 h-4" />}
+          rightIcon={
+            <button
+              type="button"
+              onClick={() => setShowConfirmPassword(!showConfirmPassword)}
+              className="text-neutral-400 hover:text-neutral-700 cursor-pointer"
+              tabIndex={-1}
+              aria-label={showConfirmPassword ? 'Hide password' : 'Show password'}
+            >
+              {showConfirmPassword ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
+            </button>
+          }
+        />
 
         <div className="pt-2">
           <Button
             type="submit"
             variant="primary"
-            size="lg"
             fullWidth
             isLoading={loading}
+            disabled={loading}
+            size="md"
           >
-            Continue to Gym Setup
+            Create Account
           </Button>
         </div>
-      </form>
 
-      <div className="mt-6 pt-5 border-t border-neutral-200 text-center">
-        <span className="text-[length:var(--text-caption-size)] text-neutral-600">Already have a gym account? </span>
-        <button
-          type="button"
-          onClick={onNavigateToLogin}
-          className="text-[length:var(--text-caption-size)] font-bold text-neutral-900 hover:text-[var(--color-brand-600)] transition-colors cursor-pointer"
-        >
-          Sign In
-        </button>
-      </div>
+        <div className="pt-3 border-t border-neutral-100 text-center text-xs text-neutral-500">
+          <span>Already have an account? </span>
+          <button
+            type="button"
+            onClick={onNavigateToLogin}
+            className="font-bold text-neutral-900 hover:underline cursor-pointer"
+          >
+            Sign in
+          </button>
+        </div>
+      </form>
     </AuthLayout>
   );
 };

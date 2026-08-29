@@ -71,7 +71,6 @@ export const LogoutConfirmationModal: React.FC<LogoutConfirmationModalProps> = (
           <Button
             type="button"
             variant="tertiary"
-            size="sm"
             onClick={onClose}
             disabled={isLoggingOut}
           >
@@ -80,7 +79,6 @@ export const LogoutConfirmationModal: React.FC<LogoutConfirmationModalProps> = (
 
           <Button
             type="button"
-            size="sm"
             onClick={handleConfirm}
             isLoading={isLoggingOut}
             disabled={isLoggingOut}

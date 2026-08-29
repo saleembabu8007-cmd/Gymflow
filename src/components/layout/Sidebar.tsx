@@ -7,7 +7,6 @@ import {
   Settings,
   Dumbbell,
   LogOut,
-  Building2,
   ShieldCheck,
 } from 'lucide-react';
 import { cn } from '../../utils/classNames';
@@ -36,7 +35,7 @@ export const Sidebar: React.FC<SidebarProps> = ({
   currentPath,
   onNavigate,
   onNavigateAdmin,
-  gymName = 'Iron Fitness',
+  gymName = 'Gym Workspace',
   user,
   onLogout,
   pendingCount = 0,
@@ -55,23 +54,30 @@ export const Sidebar: React.FC<SidebarProps> = ({
     { id: '/app/settings', label: 'Settings', icon: Settings },
   ];
 
+  const isCurrentActive = (itemId: string) => {
+    if (itemId === '/app/today') {
+      return currentPath === '/app/today' || currentPath === '/app' || currentPath === '/';
+    }
+    return currentPath.startsWith(itemId);
+  };
+
   return (
     <aside
       aria-label="Main Navigation"
-      className="hidden md:flex flex-col w-64 border-r border-neutral-200/80 bg-white h-screen sticky top-0 shrink-0 select-none z-30"
+      className="hidden md:flex flex-col w-60 border-r border-neutral-200/80 bg-white h-screen sticky top-0 shrink-0 select-none z-30 font-sans"
     >
-      {/* 1. Brand Header */}
-      <div className="h-16 flex items-center justify-between px-5 border-b border-neutral-100">
-        <div className="flex items-center gap-3 min-w-0">
-          <div className="w-8 h-8 rounded-xl bg-neutral-900 text-white flex items-center justify-center shadow-2xs shrink-0">
+      {/* 1. Brand & Tenant Workspace Header */}
+      <div className="h-[60px] flex items-center justify-between px-4 border-b border-neutral-100">
+        <div className="flex items-center gap-2.5 min-w-0">
+          <div className="w-8 h-8 rounded-lg bg-neutral-900 text-white flex items-center justify-center shadow-2xs shrink-0">
             <Dumbbell className="w-4 h-4" />
           </div>
           <div className="flex flex-col min-w-0">
-            <span className="font-extrabold text-neutral-950 text-base leading-tight tracking-tight">
+            <span className="font-bold text-neutral-950 text-sm leading-tight tracking-tight font-display truncate">
               GymFlow
             </span>
-            <span className="text-[10px] text-neutral-400 font-medium truncate">
-              Gym Workspace
+            <span className="text-[11px] text-neutral-400 font-medium truncate">
+              {gymName}
             </span>
           </div>
         </div>
@@ -80,45 +86,44 @@ export const Sidebar: React.FC<SidebarProps> = ({
           <button
             type="button"
             onClick={onNavigateAdmin}
-            className="p-1.5 rounded-lg bg-rose-50 border border-rose-200 text-rose-600 hover:bg-rose-100 transition-colors cursor-pointer text-xs font-bold"
+            className="p-1.5 rounded-md bg-[var(--color-danger-50)] text-[var(--color-danger-600)] hover:bg-[var(--color-danger-100)] transition-colors cursor-pointer text-xs font-bold"
             title="Switch to Platform Admin Control Panel"
+            aria-label="Platform Admin Console"
           >
             <ShieldCheck className="w-4 h-4" />
           </button>
         )}
       </div>
 
-      {/* 2. Primary Navigation */}
-      <nav className="flex-1 px-4 py-6 space-y-2 overflow-y-auto">
-        <div className="px-2 pb-3 text-[11px] font-bold uppercase tracking-widest text-neutral-400">
-          Gym Workspace
+      {/* 2. Primary Navigation Links */}
+      <nav className="flex-1 px-3 py-4 space-y-1 overflow-y-auto">
+        <div className="px-2 pb-2 text-[10px] font-bold uppercase tracking-widest text-neutral-400">
+          Navigation
         </div>
 
         {navItems.map((item) => {
           const Icon = item.icon;
-          const isActive =
-            currentPath === item.id ||
-            (item.id === '/app/today' && (currentPath === '/app' || currentPath === '/'));
+          const isActive = isCurrentActive(item.id);
 
           return (
             <button
               key={item.id}
               type="button"
-              id={`sidebar-nav-${item.id.replace('/', '') || 'today'}`}
+              id={`sidebar-nav-${item.label.toLowerCase()}`}
               onClick={() => onNavigate(item.id)}
               aria-current={isActive ? 'page' : undefined}
               className={cn(
-                'w-full flex items-center justify-between px-3 py-3 rounded-[var(--radius-lg)] text-[15px] font-medium transition-all group cursor-pointer text-left',
+                'w-full flex items-center justify-between px-3 h-10 rounded-[var(--radius-md)] text-sm font-medium transition-all duration-[var(--duration-fast)] cursor-pointer group select-none',
                 isActive
-                  ? 'bg-[var(--color-brand-50)] text-[var(--color-brand-600)] font-bold'
-                  : 'text-neutral-600 hover:bg-neutral-50 hover:text-neutral-900'
+                  ? 'bg-neutral-100 text-neutral-950 font-semibold shadow-2xs'
+                  : 'text-neutral-600 hover:text-neutral-900 hover:bg-neutral-50'
               )}
             >
-              <div className="flex items-center gap-3.5 min-w-0">
+              <div className="flex items-center gap-2.5 min-w-0">
                 <Icon
                   className={cn(
-                    'w-[22px] h-[22px] shrink-0 transition-colors stroke-[2]',
-                    isActive ? 'text-[var(--color-brand-500)] fill-[var(--color-brand-100)]' : 'text-neutral-400 group-hover:text-neutral-600 fill-transparent'
+                    'w-4 h-4 shrink-0 transition-colors',
+                    isActive ? 'text-neutral-950 stroke-[2.2]' : 'text-neutral-400 group-hover:text-neutral-600 stroke-[1.75]'
                   )}
                 />
                 <span className="truncate">{item.label}</span>
@@ -127,12 +132,10 @@ export const Sidebar: React.FC<SidebarProps> = ({
               {item.badge !== undefined && (
                 <span
                   className={cn(
-                    'px-2 py-0.5 text-xs font-bold rounded-full ml-2 shrink-0',
-                    isActive
-                      ? 'bg-rose-500 text-white' // Override badge to stand out on brand bg
-                      : item.badgeVariant === 'danger'
-                      ? 'bg-rose-100 text-rose-700'
-                      : 'bg-slate-200 text-slate-700'
+                    'inline-flex items-center justify-center px-1.5 py-0.5 rounded-full text-[10px] font-bold font-mono',
+                    item.badgeVariant === 'danger'
+                      ? 'bg-[var(--color-danger-500)] text-white'
+                      : 'bg-neutral-200 text-neutral-800'
                   )}
                 >
                   {item.badge}
@@ -143,46 +146,17 @@ export const Sidebar: React.FC<SidebarProps> = ({
         })}
       </nav>
 
-      {/* 3. Tenant Info & User Footer */}
-      <div className="p-4 border-t border-slate-200/80 space-y-3 bg-slate-50/50">
-        {onNavigateAdmin && (
-          <button
-            type="button"
-            id="sidebar-admin-console-btn"
-            onClick={onNavigateAdmin}
-            className="w-full flex items-center justify-between px-3 py-2.5 rounded-xl bg-slate-900 text-white text-xs font-semibold hover:bg-slate-800 transition-colors shadow-sm cursor-pointer"
-          >
-            <div className="flex items-center gap-2">
-              <ShieldCheck className="w-[18px] h-[18px] text-rose-400" />
-              <span>Platform Admin Console</span>
-            </div>
-          </button>
-        )}
-
-        <div className="flex items-center gap-3 p-3 rounded-2xl bg-white border border-slate-200 shadow-sm transition-all hover:border-slate-300">
-          <div className="w-8 h-8 rounded-full bg-slate-100 flex items-center justify-center shrink-0">
-            <Building2 className="w-4 h-4 text-slate-600" />
-          </div>
-          <div className="flex flex-col min-w-0 flex-1">
-            <span className="text-sm font-bold truncate text-slate-900 leading-tight">
-              {gymName}
-            </span>
-            <span className="text-[11px] text-slate-600 font-medium flex items-center gap-1.5 leading-tight mt-0.5">
-              <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 shrink-0" />
-              Active Tenant
-            </span>
-          </div>
-        </div>
-
-        <div className="flex items-center justify-between p-3 rounded-2xl bg-white border border-slate-200 shadow-sm transition-all hover:border-slate-300">
-          <div className="flex items-center gap-3 min-w-0 flex-1">
-            <Avatar name={user?.name || 'Account'} size="md" />
+      {/* 3. Bottom User Account Profile Widget */}
+      <div className="p-3 border-t border-neutral-100 bg-neutral-50/50">
+        <div className="flex items-center justify-between gap-2 p-1.5 rounded-[var(--radius-md)]">
+          <div className="flex items-center gap-2.5 min-w-0">
+            <Avatar name={user?.name || gymName} size="sm" />
             <div className="flex flex-col min-w-0">
-              <span className="text-[13px] font-bold text-slate-900 truncate leading-tight">
-                {user?.name || 'Account'}
+              <span className="text-xs font-semibold text-neutral-900 truncate">
+                {user?.name || 'Owner'}
               </span>
-              <span className="text-[11px] text-slate-600 truncate leading-tight mt-0.5">
-                {user?.email || 'Owner'}
+              <span className="text-[10px] text-neutral-500 truncate">
+                {user?.email || gymName}
               </span>
             </div>
           </div>
@@ -190,13 +164,12 @@ export const Sidebar: React.FC<SidebarProps> = ({
           {onLogout && (
             <button
               type="button"
-              id="sidebar-logout-btn"
               onClick={onLogout}
-              className="w-8 h-8 flex items-center justify-center rounded-full text-slate-400 hover:text-rose-600 hover:bg-rose-50 transition-colors shrink-0 cursor-pointer"
-              title="Sign out"
-              aria-label="Logout"
+              className="p-1.5 rounded-md text-neutral-400 hover:text-neutral-900 hover:bg-neutral-200/60 transition-colors cursor-pointer shrink-0"
+              title="Sign Out"
+              aria-label="Sign Out"
             >
-              <LogOut className="w-4 h-4 stroke-[2.5]" />
+              <LogOut className="w-3.5 h-3.5" />
             </button>
           )}
         </div>

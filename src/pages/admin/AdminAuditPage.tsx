@@ -4,16 +4,15 @@ import { useServices } from '../../services/provider';
 import { AuditLogEntry } from '../../services/interfaces';
 import { formatDate } from '../../utils/dateUtils';
 import { LoadingState } from '../../components/ui/LoadingState';
-import { FilterChips } from '../../components/ui/FilterChips';
-import { Card, CardContent } from '../../components/ui/Card';
-import { Badge } from '../../components/ui/Badge';
+import { SearchInput } from '../../components/ui/SearchInput';
+import { EmptyState } from '../../components/ui/EmptyState';
+import { cn } from '../../utils/classNames';
 
 export const AdminAuditPage: React.FC = () => {
   const { audit } = useServices();
   const [logs, setLogs] = useState<AuditLogEntry[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
   const [search, setSearch] = useState<string>('');
-  const [filter, setFilter] = useState<string>('ALL');
 
   useEffect(() => {
     let isMounted = true;
@@ -48,78 +47,94 @@ export const AdminAuditPage: React.FC = () => {
     );
   });
 
+  const getActionColor = (action: string) => {
+    const act = action.toUpperCase();
+    if (act.includes('CREATE') || act.includes('INSERT') || act.includes('ADD')) {
+      return 'bg-[var(--color-success-50)] text-[var(--color-success-700)] border-[var(--color-success-200)]';
+    }
+    if (act.includes('DELETE') || act.includes('SUSPEND') || act.includes('REMOVE')) {
+      return 'bg-[var(--color-danger-50)] text-[var(--color-danger-700)] border-[var(--color-danger-200)]';
+    }
+    if (act.includes('UPDATE') || act.includes('EDIT') || act.includes('CHANGE')) {
+      return 'bg-amber-50 text-amber-700 border-amber-200';
+    }
+    return 'bg-neutral-100 text-neutral-700 border-neutral-200';
+  };
+
   return (
-    <div className="space-y-4 font-sans max-w-7xl">
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-2">
+    <div className="space-y-5 select-none font-sans max-w-7xl mx-auto">
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
         <div>
-          <h1 className="text-xl font-bold text-neutral-900 tracking-tight">Platform Audit Log</h1>
-          <p className="text-[length:var(--text-caption-size)] text-neutral-500 mt-0.5">
-            Immutable record of all platform administrative actions and security events
+          <h1 className="text-xl sm:text-2xl font-bold text-neutral-950 tracking-tight font-display">
+            Platform Audit Log
+          </h1>
+          <p className="text-xs text-neutral-500 mt-0.5">
+            Immutable ledger of administrative operations and security events
           </p>
         </div>
 
-        <div className="flex items-center gap-3">
-          <FilterChips
-            options={[
-              { id: 'ALL', label: 'All Events' },
-              { id: 'SECURITY', label: 'Security' },
-              { id: 'BILLING', label: 'Billing' },
-              { id: 'ACCESS', label: 'Access' }
-            ]}
-            activeId={filter}
-            onChange={(val) => setFilter(val as any)}
+        <div className="w-full sm:w-64">
+          <SearchInput
+            value={search}
+            onSearchChange={setSearch}
+            placeholder="Search action or entity..."
           />
         </div>
       </div>
 
-      <div className="pt-2">
-        {loading ? (
-          <div className="p-8">
-            <LoadingState message="Loading platform audit logs..." />
-          </div>
-        ) : filteredLogs.length === 0 ? (
-          <div className="p-12 text-center text-zinc-500 text-xs">
-            No audit log entries recorded yet.
-          </div>
-        ) : (
-          <Card>
-            <CardContent className="p-0 overflow-x-auto">
-              <table className="w-full text-left text-[length:var(--text-body-size)] text-neutral-700">
-                <thead className="text-[length:var(--text-caption-size)] text-neutral-500 font-semibold border-b border-neutral-200 bg-neutral-50/50">
-                  <tr>
-                    <th className="px-5 py-3.5">Action Event</th>
-                    <th className="px-5 py-3.5">Entity Type</th>
-                    <th className="px-5 py-3.5">Entity ID</th>
-                    <th className="px-5 py-3.5">Gym Tenant ID</th>
-                    <th className="px-5 py-3.5 text-right">Timestamp</th>
-                  </tr>
-                </thead>
-                <tbody className="divide-y divide-neutral-100">
-                  {filteredLogs.map((log) => (
-                    <tr key={log.id} className="hover:bg-neutral-50 transition-colors font-mono">
-                      <td className="px-5 py-4 font-bold text-neutral-900">
-                        <Badge variant="danger">{log.action}</Badge>
-                      </td>
-                      <td className="px-5 py-4 font-semibold text-neutral-800 font-sans">
-                        {log.entityType}
-                      </td>
-                      <td className="px-5 py-4 text-neutral-500">
-                        {log.entityId || 'N/A'}
-                      </td>
-                      <td className="px-5 py-4 text-neutral-500">
-                        {log.gymId || 'System'}
-                      </td>
-                      <td className="px-5 py-4 text-neutral-500 text-[length:var(--text-caption-size)] text-right">
-                        {formatDate(log.createdAt, { format: 'medium' })}
-                      </td>
-                    </tr>
-                  ))}
-                </tbody>
-              </table>
-            </CardContent>
-          </Card>
-        )}
-      </div>
+      {loading ? (
+        <div className="bg-white border border-neutral-200/80 rounded-[var(--radius-lg)] p-12">
+          <LoadingState message="Loading platform audit entries..." />
+        </div>
+      ) : filteredLogs.length === 0 ? (
+        <div className="bg-white border border-neutral-200/80 rounded-[var(--radius-lg)] shadow-2xs">
+          <EmptyState
+            icon={<ShieldCheck className="w-8 h-8 stroke-[1.5]" />}
+            title="No audit logs found"
+            description={search ? `No log matches "${search}".` : 'No audit entries recorded yet.'}
+            actionLabel={search ? 'Clear Search' : undefined}
+            onAction={search ? () => setSearch('') : undefined}
+            className="py-12"
+          />
+        </div>
+      ) : (
+        <div className="bg-white border border-neutral-200/80 rounded-[var(--radius-lg)] shadow-2xs divide-y divide-neutral-100 overflow-hidden">
+          {filteredLogs.map((log) => (
+            <div
+              key={log.id}
+              className="p-3.5 sm:p-4 flex flex-col sm:flex-row sm:items-center justify-between gap-2.5 hover:bg-neutral-50/80 transition-colors"
+            >
+              {/* Event Details */}
+              <div className="flex items-start sm:items-center gap-3 min-w-0 flex-1">
+                <span
+                  className={cn(
+                    'px-2 py-0.5 rounded text-[10px] font-mono font-bold uppercase tracking-wider border shrink-0',
+                    getActionColor(log.action)
+                  )}
+                >
+                  {log.action}
+                </span>
+
+                <div className="min-w-0 flex-1">
+                  <span className="font-bold text-xs sm:text-sm text-neutral-900 truncate block">
+                    {log.entityType} <span className="font-mono text-neutral-400 font-normal">#{log.entityId?.slice(0, 8)}</span>
+                  </span>
+                  <span className="text-[11px] text-neutral-500 font-mono block truncate mt-0.5">
+                    Tenant: {log.gymId ? `gym_${log.gymId.slice(0, 8)}` : 'global_platform'}
+                  </span>
+                </div>
+              </div>
+
+              {/* Timestamp */}
+              <div className="shrink-0 self-end sm:self-center">
+                <span className="text-[11px] font-mono text-neutral-500">
+                  {formatDate(log.createdAt)}
+                </span>
+              </div>
+            </div>
+          ))}
+        </div>
+      )}
     </div>
   );
 };

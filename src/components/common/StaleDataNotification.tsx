@@ -30,7 +30,6 @@ export const StaleDataNotification: React.FC<StaleDataNotificationProps> = ({
       <Button
         type="button"
         variant="tertiary"
-        size="sm"
         onClick={onRetry}
         isLoading={isRefreshing}
         disabled={isRefreshing}

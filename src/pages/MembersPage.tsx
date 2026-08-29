@@ -1,23 +1,26 @@
 import React, { useState, useMemo, useEffect } from 'react';
-import { motion, AnimatePresence } from 'motion/react';
-import { Avatar } from '../components/ui/Avatar';
-import { Button } from '../components/ui/Button';
-import { ErrorState } from '../components/ui/ErrorState';
-import { Skeleton, MemberRowSkeleton } from '../components/ui/Skeleton';
-import { EmptyState } from '../components/ui/EmptyState';
-import { ListSection, LoadMore } from '../components/ui';
-import { StaleDataNotification } from '../components/common/StaleDataNotification';
 import { Member } from '../types';
 import { useMembers } from '../hooks/useMembers';
 import { useDelayedLoading } from '../hooks/useDelayedLoading';
 import { useGymSettings } from '../hooks/useGymSettings';
-import { formatCurrency } from '../utils/currencyUtils';
-import { formatDate, getDifferenceInDays } from '../utils/dateUtils';
 import { MemberRow } from '../components/ui/MemberRow';
 import { SearchInput } from '../components/ui/SearchInput';
 import { FilterChips, FilterChipOption } from '../components/ui/FilterChips';
-import { Search, X, Users, ChevronLeft, ChevronRight, LayoutList, AlignJustify, Plus, CheckCircle2, Clock, AlertCircle } from 'lucide-react';
-import { IconButton } from '../components/ui/IconButton';
+import { SectionHeader } from '../components/ui/SectionHeader';
+import { EmptyState } from '../components/ui/EmptyState';
+import { ErrorState } from '../components/ui/ErrorState';
+import { MemberRowSkeleton } from '../components/ui/Skeleton';
+import { LoadMore } from '../components/ui/LoadMore';
+import { StaleDataNotification } from '../components/common/StaleDataNotification';
+import { 
+  Users, 
+  Search, 
+  Plus, 
+  CheckCircle2, 
+  Clock, 
+  AlertCircle,
+  RotateCw 
+} from 'lucide-react';
 import { cn } from '../utils/classNames';
 
 interface MembersPageProps {
@@ -36,16 +39,26 @@ export const MembersPage: React.FC<MembersPageProps> = ({
   onAddMember,
   onSelectMember,
 }) => {
-  const { members, loading, isRefreshing, isStale, error, setFilter, fetchMembers, counts } = useMembers();
-  const showLoading = useDelayedLoading(loading, 400);
+  const { 
+    members, 
+    loading, 
+    isRefreshing, 
+    isStale, 
+    error, 
+    setFilter, 
+    fetchMembers, 
+    counts 
+  } = useMembers();
+  const showLoading = useDelayedLoading(loading, 300);
   const { currencySymbol } = useGymSettings();
 
   const [activeFilter, setActiveFilter] = useState<FilterStatus>('ALL');
   const [searchInput, setSearchInput] = useState<string>('');
   const [currentPage, setCurrentPage] = useState<number>(1);
   const [recentPaymentId, setRecentPaymentId] = useState<string | null>(null);
-  const [viewMode, setViewMode] = useState<'comfortable' | 'compact'>('comfortable');
+  const [isLoadingMore, setIsLoadingMore] = useState(false);
 
+  // Listen for local quick payment completions to flash success row state
   useEffect(() => {
     const handlePaymentSuccess = (e: any) => {
       const memberId = e.detail?.memberId;
@@ -58,11 +71,10 @@ export const MembersPage: React.FC<MembersPageProps> = ({
     return () => window.removeEventListener('gymflow_payment_success', handlePaymentSuccess);
   }, []);
 
-  const handleSearchChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const value = e.target.value;
-    setSearchInput(value);
+  const handleSearchChange = (val: string) => {
+    setSearchInput(val);
     setCurrentPage(1);
-    setFilter((prev) => ({ ...prev, search: value }));
+    setFilter((prev) => ({ ...prev, search: val }));
   };
 
   const handleClearSearch = () => {
@@ -74,41 +86,40 @@ export const MembersPage: React.FC<MembersPageProps> = ({
   const handleFilterChange = (status: FilterStatus) => {
     setActiveFilter(status);
     setCurrentPage(1);
-    setFilter((prev) => ({ ...prev, status: status }));
+    setFilter((prev) => ({ ...prev, status }));
   };
 
   const filterTabs: FilterChipOption<FilterStatus>[] = [
     { id: 'ALL', label: 'All', count: counts.ALL },
-    { id: 'ACTIVE', label: 'Active', badgeVariant: 'success', count: counts.ACTIVE, icon: <CheckCircle2 className="w-4 h-4" /> },
-    { id: 'PENDING', label: 'Pending', count: counts.PENDING },
-    { id: 'DUE_SOON', label: 'Due Soon', badgeVariant: 'warning', count: counts.DUE_SOON, icon: <Clock className="w-4 h-4" /> },
-    { id: 'EXPIRED', label: 'Expired', badgeVariant: 'danger', count: counts.EXPIRED, icon: <AlertCircle className="w-4 h-4" /> },
+    { id: 'ACTIVE', label: 'Active', badgeVariant: 'success', count: counts.ACTIVE },
+    { id: 'PENDING', label: 'Overdue / Due', badgeVariant: 'danger', count: counts.PENDING },
+    { id: 'DUE_SOON', label: 'Due Soon', badgeVariant: 'warning', count: counts.DUE_SOON },
+    { id: 'EXPIRED', label: 'Expired', badgeVariant: 'neutral', count: counts.EXPIRED },
   ];
 
   const totalMembersCount = members.length;
   const paginatedMembers = members.slice(0, currentPage * PAGE_SIZE);
   const hasMore = currentPage * PAGE_SIZE < totalMembersCount;
 
-  const [isLoadingMore, setIsLoadingMore] = useState(false);
   const handleLoadMore = () => {
     setIsLoadingMore(true);
     setTimeout(() => {
-      setCurrentPage(p => p + 1);
+      setCurrentPage((p) => p + 1);
       setIsLoadingMore(false);
-    }, 400);
+    }, 300);
   };
 
+  const isFiltering = searchInput.trim().length > 0 || activeFilter !== 'ALL';
+  const hasNoMembersEver = !loading && members.length === 0 && !isFiltering;
+  const hasNoSearchResults = !loading && members.length === 0 && isFiltering;
 
-  const isSearching = searchInput.trim().length > 0 || activeFilter !== 'ALL';
-  const hasNoMembersEver = !loading && members.length === 0 && !isSearching;
-  const hasNoSearchResults = !loading && members.length === 0 && isSearching;
-
+  // Full error state
   if (error && members.length === 0) {
     return (
-      <div className="max-w-2xl mx-auto py-10">
+      <div className="max-w-xl mx-auto py-12">
         <ErrorState
           title="Couldn't load members list"
-          message="We couldn't retrieve the members directory. Please check your connection and try again."
+          message="We were unable to retrieve your gym members directory. Please check your connection and try again."
           onRetry={fetchMembers}
           retryLabel="Try again"
         />
@@ -117,98 +128,87 @@ export const MembersPage: React.FC<MembersPageProps> = ({
   }
 
   return (
-    <div className="space-y-6 sm:space-y-8 max-w-5xl mx-auto pb-12">
-      <StaleDataNotification isStale={isStale} onRetry={() => fetchMembers(true)} isRefreshing={isRefreshing} />
+    <div className="space-y-5 select-none font-sans max-w-7xl mx-auto">
+      <StaleDataNotification 
+        isStale={isStale} 
+        onRetry={() => fetchMembers(true)} 
+        isRefreshing={isRefreshing} 
+      />
 
-      <div className="flex items-center gap-3 overflow-x-auto pb-2 pt-2 scrollbar-none w-full">
-        <div className="w-[260px] shrink-0">
-          <SearchInput
-            value={searchInput}
-            onSearchChange={(val) => {
-              setSearchInput(val);
-              setCurrentPage(1);
-              setFilter((prev) => ({ ...prev, search: val }));
-            }}
-            placeholder="Search name or phone..."
-          />
+      {/* Top Section: Search Bar + Filter Tabs */}
+      <div className="space-y-3">
+        <div className="flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-3">
+          {/* Search Field */}
+          <div className="w-full sm:max-w-xs">
+            <SearchInput
+              value={searchInput}
+              onSearchChange={handleSearchChange}
+              placeholder="Search name or phone..."
+            />
+          </div>
+
+          {/* Refresh Button */}
+          <div className="flex items-center justify-between sm:justify-end gap-2">
+            <span className="text-xs text-neutral-500 font-medium">
+              {totalMembersCount} {totalMembersCount === 1 ? 'member' : 'members'} found
+            </span>
+            <button
+              type="button"
+              onClick={() => fetchMembers(false)}
+              aria-label="Refresh member directory"
+              className="w-8 h-8 rounded-full flex items-center justify-center text-neutral-500 hover:text-neutral-950 hover:bg-neutral-100 transition-colors border border-neutral-200/80 cursor-pointer shadow-2xs"
+              title="Refresh"
+            >
+              <RotateCw className={cn("w-3.5 h-3.5", isRefreshing && "animate-spin")} />
+            </button>
+          </div>
         </div>
-        
-        <div className="w-px h-6 bg-neutral-200 shrink-0 mx-1" />
 
-        <FilterChips<FilterStatus>
-          options={filterTabs}
-          activeId={activeFilter}
-          onChange={handleFilterChange}
-          className="pb-0"
-        />
-
-        <div className="hidden sm:flex items-center gap-1 p-1 bg-neutral-50 rounded-[var(--radius-xl)] border border-neutral-200 shrink-0 ml-auto h-[40px]">
-          <IconButton
-            icon={<AlignJustify className="w-4 h-4" />}
-            aria-label="Comfortable view"
-            variant="default"
-            size="sm"
-            onClick={() => setViewMode('comfortable')}
-            className={cn("rounded-[var(--radius-lg)] hover:bg-white hover:shadow-sm h-full w-8", viewMode === 'comfortable' && "bg-white shadow-sm text-[var(--color-brand-600)]")}
-          />
-          <IconButton
-            icon={<LayoutList className="w-4 h-4" />}
-            aria-label="Compact view"
-            variant="default"
-            size="sm"
-            onClick={() => setViewMode('compact')}
-            className={cn("rounded-[var(--radius-lg)] hover:bg-white hover:shadow-sm h-full w-8", viewMode === 'compact' && "bg-white shadow-sm text-[var(--color-brand-600)]")}
+        {/* Filter Chip Strip */}
+        <div className="overflow-x-auto no-scrollbar -mx-4 px-4 sm:mx-0 sm:px-0">
+          <FilterChips<FilterStatus>
+            options={filterTabs}
+            activeId={activeFilter}
+            onChange={handleFilterChange}
           />
         </div>
       </div>
 
+      {/* Main List Body */}
       {showLoading && members.length === 0 ? (
-        <div className={cn("flex flex-col", viewMode === 'compact' ? "gap-1" : "gap-2")}>
-          {[1, 2, 3, 4].map(i => (
-            <MemberRowSkeleton key={i} className={cn(viewMode === 'compact' && "py-2.5 sm:py-3")} />
+        <div className="bg-white border border-neutral-200/80 rounded-[var(--radius-lg)] shadow-2xs divide-y divide-neutral-100 overflow-hidden">
+          {[1, 2, 3, 4, 5, 6].map((i) => (
+            <MemberRowSkeleton key={i} />
           ))}
         </div>
       ) : hasNoMembersEver ? (
-        <motion.div 
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          transition={{ duration: 0.15 }}
-          className="pt-8"
-        >
-          <EmptyState
-            icon={<Users />}
-            title="Add your first member"
-            description="Start tracking memberships, collecting payments, and sending WhatsApp reminders from one place."
-            actionLabel="Add Member"
-            onAction={onAddMember}
-          />
-        </motion.div>
+        /* Empty State: Zero Members */
+        <EmptyState
+          icon={<Users className="w-8 h-8 stroke-[1.5]" />}
+          title="Add your first member"
+          description="Start tracking member renewals, collecting fees, and sending WhatsApp reminders from one clean place."
+          actionLabel="Add Member"
+          onAction={onAddMember}
+          className="py-16 bg-white border border-neutral-200/80 shadow-2xs"
+        />
       ) : hasNoSearchResults ? (
-        <motion.div 
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          transition={{ duration: 0.15 }}
-          className="pt-8"
-        >
-          <EmptyState
-            icon={<Search />}
-            title="No members found"
-            description={searchInput ? `We couldn't find anyone matching "${searchInput}".` : 'No members found with the current filter.'}
-            actionLabel={searchInput ? "Clear Search" : activeFilter !== 'ALL' ? "View All Members" : undefined}
-            onAction={searchInput ? handleClearSearch : activeFilter !== 'ALL' ? () => handleFilterChange('ALL') : undefined}
-          />
-        </motion.div>
+        /* Empty State: Search or Filter Yielded No Results */
+        <EmptyState
+          icon={<Search className="w-8 h-8 stroke-[1.5]" />}
+          title="No members found"
+          description={
+            searchInput
+              ? `No members found matching "${searchInput}".`
+              : `No members currently match the "${activeFilter.toLowerCase()}" filter.`
+          }
+          actionLabel={searchInput ? 'Clear Search' : 'View All Members'}
+          onAction={searchInput ? handleClearSearch : () => handleFilterChange('ALL')}
+          className="py-16 bg-white border border-neutral-200/80 shadow-2xs"
+        />
       ) : (
-        <motion.div
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          transition={{ duration: 0.15 }}
-        >
-          <ListSection
-            title={activeFilter === 'ALL' ? 'All Members' : `${activeFilter} Members`}
-            count={totalMembersCount}
-            badgeVariant={activeFilter === 'EXPIRED' ? 'danger' : activeFilter === 'DUE_SOON' ? 'warning' : 'neutral'}
-          >
+        /* Populated Member Directory */
+        <div className="space-y-4">
+          <div className="bg-white border border-neutral-200/80 rounded-[var(--radius-lg)] shadow-2xs divide-y divide-neutral-100 overflow-hidden">
             {paginatedMembers.map((member) => (
               <MemberRow
                 key={member.id}
@@ -220,28 +220,30 @@ export const MembersPage: React.FC<MembersPageProps> = ({
                 highlighted={recentPaymentId === member.id}
               />
             ))}
+          </div>
 
-            {hasMore && (
+          {/* Load More Pagination */}
+          {hasMore && (
+            <div className="pt-2 flex justify-center">
               <LoadMore
                 onLoadMore={handleLoadMore}
                 isLoading={isLoadingMore}
                 hasMore={hasMore}
-                className="mt-6"
               />
-            )}
-          </ListSection>
-        </motion.div>
+            </div>
+          )}
+        </div>
       )}
 
-      {/* Mobile Sticky FAB */}
-      <div className="fixed bottom-24 right-4 sm:hidden z-30">
+      {/* Mobile Sticky Quick Add FAB */}
+      <div className="fixed bottom-20 right-4 sm:hidden z-30">
         <button
           type="button"
           onClick={onAddMember}
-          className="flex items-center justify-center w-14 h-14 bg-[var(--color-brand-600)] text-white rounded-[var(--radius-full)] shadow-[0_8px_30px_rgba(0,0,0,0.12)] active:scale-95 transition-transform"
           aria-label="Add Member"
+          className="flex items-center justify-center w-12 h-12 bg-[var(--color-brand-500)] text-neutral-950 rounded-full shadow-lg active:scale-95 transition-transform cursor-pointer font-bold"
         >
-          <Plus className="w-6 h-6 stroke-[2.5]" />
+          <Plus className="w-5 h-5 stroke-[2.5]" />
         </button>
       </div>
     </div>

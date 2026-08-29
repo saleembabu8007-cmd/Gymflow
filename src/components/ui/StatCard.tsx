@@ -1,6 +1,7 @@
 import React from 'react';
 import { Card, CardContent } from './Card';
 import { ProgressRing } from './ProgressRing';
+import { TwoTierNumber } from './TwoTierNumber';
 import { ArrowRight, TrendingUp, TrendingDown } from 'lucide-react';
 import { cn } from '../../utils/classNames';
 
@@ -76,7 +77,6 @@ export const StatCard: React.FC<StatCardProps> = ({
               <ProgressRing
                 value={progress.value}
                 max={progress.max}
-                size="lg"
                 variant={progress.variant || 'brand'}
                 label={progress.label}
                 textColor={textColors[variant]}
@@ -84,9 +84,11 @@ export const StatCard: React.FC<StatCardProps> = ({
             </div>
           ) : (
             <div className="flex items-end gap-3 flex-wrap">
-              <span className={cn("tabular-nums text-5xl font-bold tracking-tight font-display leading-none", textColors[variant])}>
-                {value}
-              </span>
+              <TwoTierNumber
+                value={value}
+                size="2xl"
+                valueClassName={textColors[variant]}
+              />
               {trend && (
                 <span className={cn(
                   "flex items-center gap-0.5 text-[length:var(--text-caption-size)] font-bold mb-1.5 px-2 py-0.5 rounded-[var(--radius-sm)]",

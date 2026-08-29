@@ -1,11 +1,15 @@
 import React from 'react';
+import { Loader2 } from 'lucide-react';
 import { cn } from '../../utils/classNames';
+
+export type IconButtonVariant = 'default' | 'ghost' | 'primary' | 'destructive' | 'outline';
+export type IconButtonSize = 'sm' | 'md' | 'lg';
 
 export interface IconButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
   icon: React.ReactNode;
   'aria-label': string;
-  variant?: 'default' | 'destructive';
-  size?: 'sm' | 'md' | 'lg';
+  variant?: IconButtonVariant;
+  size?: IconButtonSize;
   isLoading?: boolean;
 }
 
@@ -25,15 +29,23 @@ export const IconButton = React.forwardRef<HTMLButtonElement, IconButtonProps>(
     },
     ref
   ) => {
-    const sizeClasses = {
-      sm: 'w-10 h-10 text-sm',
-      md: 'w-11 h-11 text-base',
-      lg: 'w-12 h-12 text-lg',
+    const sizeClasses: Record<IconButtonSize, string> = {
+      sm: 'w-8 h-8 text-xs',
+      md: 'w-10 h-10 text-sm',
+      lg: 'w-11 h-11 text-base',
     };
 
-    const variantClasses = {
-      default: 'bg-slate-100 text-slate-700 hover:bg-orange-100 hover:text-orange-700 active:bg-orange-200 active:text-orange-800',
-      destructive: 'bg-slate-100 text-slate-700 hover:bg-rose-100 hover:text-rose-700 active:bg-rose-200 active:text-rose-800',
+    const variantClasses: Record<IconButtonVariant, string> = {
+      default:
+        'bg-neutral-100 text-neutral-700 hover:bg-neutral-200 hover:text-neutral-900 active:bg-neutral-300 focus-visible:ring-neutral-900',
+      ghost:
+        'bg-transparent text-neutral-500 hover:bg-neutral-100 hover:text-neutral-900 active:bg-neutral-200 focus-visible:ring-neutral-900',
+      outline:
+        'bg-transparent border border-neutral-200 text-neutral-700 hover:bg-neutral-50 hover:text-neutral-900 active:bg-neutral-100 focus-visible:ring-neutral-900',
+      primary:
+        'bg-[var(--color-brand-500)] text-neutral-950 hover:bg-[var(--color-brand-400)] active:bg-[var(--color-brand-600)] focus-visible:ring-[var(--color-brand-500)]',
+      destructive:
+        'bg-neutral-100 text-neutral-700 hover:bg-[var(--color-danger-50)] hover:text-[var(--color-danger-600)] active:bg-[var(--color-danger-100)] focus-visible:ring-[var(--color-danger-500)]',
     };
 
     return (
@@ -44,7 +56,9 @@ export const IconButton = React.forwardRef<HTMLButtonElement, IconButtonProps>(
         title={title || ariaLabel}
         disabled={disabled || isLoading}
         className={cn(
-          'inline-flex items-center justify-center rounded-full font-medium transition-all duration-150 shrink-0 cursor-pointer select-none focus-visible:outline-2 focus-visible:outline-orange-500 focus-visible:outline-offset-2 min-w-[44px] min-h-[44px]',
+          'relative inline-flex items-center justify-center rounded-full font-medium transition-all duration-[var(--duration-fast)] shrink-0 select-none focus:outline-none focus-visible:ring-2 focus-visible:ring-offset-2',
+          // Accessible touch target pseudo-element
+          'before:absolute before:-inset-1.5 before:content-[\'\'] before:pointer-events-auto sm:before:hidden',
           sizeClasses[size],
           variantClasses[variant],
           (disabled || isLoading) && 'opacity-50 cursor-not-allowed pointer-events-none',
@@ -53,7 +67,7 @@ export const IconButton = React.forwardRef<HTMLButtonElement, IconButtonProps>(
         {...props}
       >
         {isLoading ? (
-          <span className="w-5 h-5 border-2 border-current border-t-transparent rounded-full animate-spin shrink-0" />
+          <Loader2 className="w-4 h-4 animate-spin text-current" />
         ) : (
           icon
         )}
