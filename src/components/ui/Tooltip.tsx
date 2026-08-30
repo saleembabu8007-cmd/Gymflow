@@ -25,7 +25,7 @@ export const Tooltip: React.FC<TooltipProps> = ({
 
   return (
     <div
-      className="relative inline-flex"
+      className="relative inline-flex font-sans"
       onMouseEnter={() => setIsVisible(true)}
       onMouseLeave={() => setIsVisible(false)}
       onFocus={() => setIsVisible(true)}
@@ -36,7 +36,7 @@ export const Tooltip: React.FC<TooltipProps> = ({
         <div
           role="tooltip"
           className={cn(
-            'absolute z-50 px-2 py-1 bg-zinc-950 text-white text-[11px] font-semibold rounded-lg whitespace-nowrap pointer-events-none transition-opacity duration-150 animate-in fade-in-50',
+            'absolute z-50 px-2.5 py-1 bg-neutral-950 text-white text-xs font-medium rounded-[var(--radius-sm)] shadow-md whitespace-nowrap pointer-events-none transition-opacity duration-[var(--duration-fast)]',
             positionClasses[position],
             className
           )}

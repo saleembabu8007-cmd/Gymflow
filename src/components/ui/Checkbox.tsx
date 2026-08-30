@@ -15,8 +15,8 @@ export const Checkbox = React.forwardRef<HTMLInputElement, CheckboxProps>(
       <label
         htmlFor={inputId}
         className={cn(
-          'inline-flex items-start gap-2.5 select-none cursor-pointer group',
-          disabled && 'cursor-not-allowed opacity-60'
+          'inline-flex items-start gap-2.5 select-none cursor-pointer group font-sans',
+          disabled && 'cursor-not-allowed opacity-50'
         )}
       >
         <div className="relative flex items-center justify-center pt-0.5">
@@ -32,10 +32,10 @@ export const Checkbox = React.forwardRef<HTMLInputElement, CheckboxProps>(
           />
           <div
             className={cn(
-              'w-4 h-4 rounded-sm border border-zinc-300 bg-white transition-all flex items-center justify-center duration-150',
-              'peer-checked:bg-zinc-950 peer-checked:border-zinc-950 peer-checked:text-white',
-              'peer-focus-visible:ring-2 peer-focus-visible:ring-zinc-950 peer-focus-visible:ring-offset-2',
-              'group-hover:border-zinc-400',
+              'w-4 h-4 rounded-[var(--radius-xs)] border border-neutral-300 bg-white transition-all flex items-center justify-center duration-[var(--duration-fast)] shadow-2xs',
+              'peer-checked:bg-neutral-950 peer-checked:border-neutral-950 peer-checked:text-white',
+              'peer-focus-visible:ring-2 peer-focus-visible:ring-neutral-950 peer-focus-visible:ring-offset-2',
+              'group-hover:border-neutral-400',
               className
             )}
           >
@@ -45,8 +45,8 @@ export const Checkbox = React.forwardRef<HTMLInputElement, CheckboxProps>(
 
         {(label || description) && (
           <div className="flex flex-col">
-            {label && <span className="text-xs font-semibold text-neutral-900">{label}</span>}
-            {description && <span className="text-[11px] text-neutral-500">{description}</span>}
+            {label && <span className="text-xs font-semibold text-neutral-900 leading-tight">{label}</span>}
+            {description && <span className="text-[11px] text-neutral-500 mt-0.5">{description}</span>}
           </div>
         )}
       </label>

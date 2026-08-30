@@ -40,7 +40,7 @@ export const PaymentRow: React.FC<PaymentRowProps> = ({
   return (
     <div
       className={cn(
-        'group flex items-center justify-between gap-3 p-3.5 sm:p-4 hover:bg-neutral-50/80 transition-colors border-b border-neutral-100 last:border-0 select-none',
+        'group flex items-center justify-between gap-3 p-3.5 sm:p-4 hover:bg-neutral-50/80 transition-colors select-none font-sans',
         className
       )}
     >
@@ -52,9 +52,9 @@ export const PaymentRow: React.FC<PaymentRowProps> = ({
             {memberName}
           </div>
           <div className="flex items-center gap-2 mt-0.5 text-xs text-neutral-500">
-            <span>{paymentDate}</span>
+            <span className="font-mono text-[11px]">{paymentDate}</span>
             <span>·</span>
-            <span className="inline-flex items-center gap-1 font-mono uppercase text-[11px]">
+            <span className="inline-flex items-center gap-1 font-mono uppercase text-[10px] font-bold px-1.5 py-0.2 bg-neutral-100 rounded text-neutral-700">
               {getMethodIcon()}
               {paymentMethod}
             </span>

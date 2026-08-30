@@ -1,5 +1,5 @@
-/* GymFlow Master Design Foundation: Layout System (Phase 03) */
-/* DO NOT APPLY DIRECTLY TO COMPONENTS YET - PURE TOKEN DEFINITION */
+/* GymFlow Master Design Foundation: Layout & Geometry System */
+/* Single authoritative token definition aligned with tokens.ts and index.css */
 
 @theme {
   /* 1. Spacing Scale */
@@ -7,41 +7,47 @@
   --spacing-2: 8px;
   --spacing-3: 12px;
   --spacing-4: 16px;
+  --spacing-5: 20px;
   --spacing-6: 24px;
   --spacing-8: 32px;
+  --spacing-10: 40px;
   --spacing-12: 48px;
   --spacing-16: 64px;
 
-  /* 2. Radius by Role */
-  --radius-sm: 6px;  /* Small controls */
-  --radius-md: 8px;  /* Standard controls */
-  --radius-lg: 12px; /* Cards / Containers */
-  --radius-xl: 16px; /* Modals / Sheets */
+  /* 2. Restrained Micro-Geometry Radius System */
+  --radius-xs: 3px;
+  --radius-sm: 4px;
+  --radius-md: 6px;
+  --radius-lg: 10px;
+  --radius-xl: 14px;
+  --radius-full: 9999px;
 
-  /* 3. Elevation (Shadows for interactive states ONLY) */
+  /* 3. Restrained Elevation (Zero drop shadows at rest) */
   --shadow-none: none;
-  --shadow-sm: 0 4px 20px rgba(12, 10, 9, 0.05); /* Hover/Lift */
-  --shadow-md: 0 10px 30px rgba(12, 10, 9, 0.08); /* Popover */
-  --shadow-lg: 0 20px 40px rgba(12, 10, 9, 0.12); /* Modal/Overlay */
+  --shadow-2xs: 0 1px 2px rgba(12, 10, 9, 0.04);
+  --shadow-xs: 0 1px 3px rgba(12, 10, 9, 0.06);
+  --shadow-sm: 0 4px 12px rgba(12, 10, 9, 0.05);
+  --shadow-md: 0 10px 24px rgba(12, 10, 9, 0.08);
+  --shadow-lg: 0 20px 40px rgba(12, 10, 9, 0.12);
 }
 
 @layer utilities {
   /* Density Utilities */
   .density-compact {
-    --density-min-height: 44px;
+    --density-min-height: 40px;
     --density-pad-y: var(--spacing-2);
     --density-pad-x: var(--spacing-3);
     --density-gap: var(--spacing-2);
   }
 
   .density-comfortable {
-    --density-min-height: 56px;
-    --density-pad-y: var(--spacing-4);
-    --density-pad-x: 20px;
-    --density-gap: var(--spacing-4);
+    --density-min-height: 48px;
+    --density-pad-y: var(--spacing-3);
+    --density-pad-x: var(--spacing-4);
+    --density-gap: var(--spacing-3);
   }
 
-  /* Elevation Utilities (Border vs Shadow rule enforcement) */
+  /* Resting surface rule enforcement: subtle border + zero shadow */
   .resting-container {
     border: 1px solid var(--color-neutral-200);
     box-shadow: none;

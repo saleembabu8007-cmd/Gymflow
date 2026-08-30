@@ -14,8 +14,8 @@ export const Radio = React.forwardRef<HTMLInputElement, RadioProps>(
       <label
         htmlFor={inputId}
         className={cn(
-          'inline-flex items-start gap-2.5 select-none cursor-pointer group',
-          disabled && 'cursor-not-allowed opacity-60'
+          'inline-flex items-start gap-2.5 select-none cursor-pointer group font-sans',
+          disabled && 'cursor-not-allowed opacity-50'
         )}
       >
         <div className="relative flex items-center justify-center pt-0.5">
@@ -31,21 +31,21 @@ export const Radio = React.forwardRef<HTMLInputElement, RadioProps>(
           />
           <div
             className={cn(
-              'w-4 h-4 rounded-full border border-zinc-300 bg-white transition-all flex items-center justify-center duration-150',
-              'peer-checked:border-zinc-950',
-              'peer-focus-visible:ring-2 peer-focus-visible:ring-zinc-950 peer-focus-visible:ring-offset-2',
-              'group-hover:border-zinc-400',
+              'w-4 h-4 rounded-full border border-neutral-300 bg-white transition-all flex items-center justify-center duration-[var(--duration-fast)] shadow-2xs',
+              'peer-checked:border-neutral-950',
+              'peer-focus-visible:ring-2 peer-focus-visible:ring-neutral-950 peer-focus-visible:ring-offset-2',
+              'group-hover:border-neutral-400',
               className
             )}
           >
-            {checked && <div className="w-2 h-2 rounded-full bg-zinc-950" />}
+            {checked && <div className="w-2 h-2 rounded-full bg-neutral-950" />}
           </div>
         </div>
 
         {(label || description) && (
           <div className="flex flex-col">
-            {label && <span className="text-xs font-semibold text-neutral-900">{label}</span>}
-            {description && <span className="text-[11px] text-neutral-500">{description}</span>}
+            {label && <span className="text-xs font-semibold text-neutral-900 leading-tight">{label}</span>}
+            {description && <span className="text-[11px] text-neutral-500 mt-0.5">{description}</span>}
           </div>
         )}
       </label>

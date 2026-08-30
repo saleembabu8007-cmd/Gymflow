@@ -295,10 +295,10 @@ export const TodayPage: React.FC<TodayPageProps> = ({
                       <CheckCircle2 className="w-5 h-5 stroke-[2]" />
                     </div>
                     <h3 className="text-sm font-bold text-neutral-900 font-display">
-                      All caught up
+                      You're all caught up
                     </h3>
-                    <p className="text-xs text-neutral-500 mt-1 max-w-xs mx-auto leading-relaxed">
-                      Every active member is currently paid up. No immediate payment action required.
+                    <p className="text-xs text-neutral-500 mt-1 max-w-sm mx-auto leading-relaxed">
+                      Every active member is currently paid up. No immediate payment action or follow-up is required today.
                     </p>
                   </div>
                 ) : (

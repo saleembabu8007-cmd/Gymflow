@@ -128,7 +128,7 @@ export const MembersPage: React.FC<MembersPageProps> = ({
   }
 
   return (
-    <div className="space-y-5 select-none font-sans max-w-7xl mx-auto">
+    <div className="space-y-6 select-none font-sans max-w-7xl mx-auto">
       <StaleDataNotification 
         isStale={isStale} 
         onRetry={() => fetchMembers(true)} 

@@ -1,11 +1,10 @@
 import React from 'react';
 import { Member } from '../../types';
 import { Avatar } from './Avatar';
-import { Badge } from './Badge';
 import { TwoTierNumber } from './TwoTierNumber';
 import { formatCurrency } from '../../utils/currencyUtils';
 import { getDifferenceInDays } from '../../utils/dateUtils';
-import { MessageSquare, MoreHorizontal, CheckCircle2 } from 'lucide-react';
+import { MessageSquare, CheckCircle2 } from 'lucide-react';
 import { cn } from '../../utils/classNames';
 
 export interface ReminderRowProps {
@@ -32,7 +31,7 @@ export const ReminderRow: React.FC<ReminderRowProps> = ({
   return (
     <div
       className={cn(
-        'group flex items-center justify-between gap-3 p-3.5 sm:p-4 hover:bg-neutral-50/80 transition-colors border-b border-neutral-100 last:border-0 select-none',
+        'group flex items-center justify-between gap-3 p-3.5 sm:p-4 hover:bg-neutral-50/80 transition-colors select-none font-sans',
         className
       )}
     >
@@ -47,11 +46,11 @@ export const ReminderRow: React.FC<ReminderRowProps> = ({
             <span className="font-mono text-[11px]">{member.phone}</span>
             <span>·</span>
             {isOverdue ? (
-              <span className="text-[var(--color-danger-600)] font-medium">
+              <span className="text-[var(--color-danger-600)] font-medium font-mono text-[11px]">
                 {days}d overdue
               </span>
             ) : (
-              <span className="text-[var(--color-warning-600)] font-medium">
+              <span className="text-[var(--color-warning-700)] font-medium font-mono text-[11px]">
                 Due in {diffDays}d
               </span>
             )}
