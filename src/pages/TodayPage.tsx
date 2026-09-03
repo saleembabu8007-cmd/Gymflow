@@ -302,7 +302,7 @@ export const TodayPage: React.FC<TodayPageProps> = ({
                     </p>
                   </div>
                 ) : (
-                  <div className="bg-white border border-neutral-200/80 rounded-[var(--radius-lg)] shadow-2xs divide-y divide-neutral-100 overflow-hidden">
+                  <div className="bg-white border border-neutral-200/80 rounded-[var(--radius-lg)] shadow-2xs divide-y divide-neutral-100">
                     {urgentQueue.slice(0, 4).map((member) => (
                       <MemberRow
                         key={member.id}
@@ -334,7 +334,7 @@ export const TodayPage: React.FC<TodayPageProps> = ({
                     </p>
                   </div>
                 ) : (
-                  <div className="bg-white border border-neutral-200/80 rounded-[var(--radius-lg)] shadow-2xs divide-y divide-neutral-100 overflow-hidden">
+                  <div className="bg-white border border-neutral-200/80 rounded-[var(--radius-lg)] shadow-2xs divide-y divide-neutral-100">
                     {upcomingList.slice(0, 4).map((member) => (
                       <MemberRow
                         key={member.id}

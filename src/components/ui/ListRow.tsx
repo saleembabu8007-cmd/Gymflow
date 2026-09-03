@@ -33,7 +33,7 @@ export const ListRow: React.FC<ListRowProps> = ({
     <div
       onClick={onClick}
       className={cn(
-        'group relative flex flex-col sm:flex-row sm:items-center justify-between p-3 sm:p-4 min-h-[64px] transition-colors bg-white',
+        'group relative flex flex-col sm:flex-row sm:items-center justify-between p-3 sm:p-4 min-h-[64px] transition-colors bg-white first:rounded-t-[calc(var(--radius-lg)-1px)] last:rounded-b-[calc(var(--radius-lg)-1px)]',
         onClick && 'cursor-pointer hover:bg-neutral-50/80',
         highlighted && 'bg-[var(--color-success-50)]',
         isOverdue && !highlighted && 'border-l-4 border-l-[var(--color-danger-500)] bg-[var(--color-danger-50)]/40',

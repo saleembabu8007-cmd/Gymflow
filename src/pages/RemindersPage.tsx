@@ -172,7 +172,7 @@ export const RemindersPage: React.FC<RemindersPageProps> = ({
             className="py-12 bg-white border border-neutral-200/80 shadow-2xs"
           />
         ) : (
-          <div className="bg-white border border-neutral-200/80 rounded-[var(--radius-lg)] shadow-2xs divide-y divide-neutral-100 overflow-hidden">
+          <div className="bg-white border border-neutral-200/80 rounded-[var(--radius-lg)] shadow-2xs divide-y divide-neutral-100">
             {needsReminderList.map((member) => (
               <MemberRow
                 key={member.id}

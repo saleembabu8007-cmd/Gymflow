@@ -96,7 +96,7 @@ export const MemberRow: React.FC<MemberRowProps> = ({
   );
 
   const actionsNode = (
-    <div className="relative flex items-center gap-1.5">
+    <div className={cn("relative flex items-center gap-1.5", showActionsMenu && "z-30")}>
       {isPending ? (
         <>
           {/* Exactly ONE primary pill-shaped action button with >=44px touch target */}
@@ -170,12 +170,12 @@ export const MemberRow: React.FC<MemberRowProps> = ({
               setShowActionsMenu(false);
             }}
           />
-          <div className="absolute right-0 top-10 w-48 bg-white border border-neutral-200 rounded-[var(--radius-xl)] shadow-lg z-50 overflow-hidden flex flex-col p-1 animate-in fade-in zoom-in-95 duration-100">
+          <div className="absolute right-0 top-full mt-1.5 w-48 bg-white border border-neutral-200/90 rounded-[var(--radius-md)] shadow-lg z-50 flex flex-col p-1 animate-in fade-in zoom-in-95 duration-100 select-none">
             {/* If primary action is 'pay', secondary action is Remind */}
             {primaryAction === 'pay' && (
               <button
                 type="button"
-                className="flex items-center gap-2.5 px-3 min-h-[40px] text-xs font-medium text-neutral-700 hover:bg-neutral-50 rounded-[var(--radius-lg)] text-left cursor-pointer transition-colors"
+                className="flex items-center gap-2.5 px-3 py-2 text-xs font-medium text-neutral-700 hover:bg-neutral-100 hover:text-neutral-900 rounded-[var(--radius-sm)] text-left cursor-pointer transition-colors"
                 onClick={(e) => {
                   e.stopPropagation();
                   setShowActionsMenu(false);
@@ -191,7 +191,7 @@ export const MemberRow: React.FC<MemberRowProps> = ({
             {primaryAction === 'remind' && (
               <button
                 type="button"
-                className="flex items-center gap-2.5 px-3 min-h-[40px] text-xs font-bold text-[var(--color-success-700)] hover:bg-[var(--color-success-50)] rounded-[var(--radius-lg)] text-left cursor-pointer transition-colors"
+                className="flex items-center gap-2.5 px-3 py-2 text-xs font-bold text-[var(--color-success-700)] hover:bg-[var(--color-success-50)] rounded-[var(--radius-sm)] text-left cursor-pointer transition-colors"
                 onClick={(e) => {
                   e.stopPropagation();
                   setShowActionsMenu(false);
@@ -207,7 +207,7 @@ export const MemberRow: React.FC<MemberRowProps> = ({
             {/* View Member Profile */}
             <button
               type="button"
-              className="flex items-center gap-2.5 px-3 min-h-[40px] text-xs font-medium text-neutral-700 hover:bg-neutral-50 rounded-[var(--radius-lg)] text-left cursor-pointer transition-colors"
+              className="flex items-center gap-2.5 px-3 py-2 text-xs font-medium text-neutral-700 hover:bg-neutral-100 hover:text-neutral-900 rounded-[var(--radius-sm)] text-left cursor-pointer transition-colors"
               onClick={(e) => {
                 e.stopPropagation();
                 setShowActionsMenu(false);

@@ -358,7 +358,7 @@ export const PaymentsPage: React.FC<PaymentsPageProps> = ({
               className="py-16 bg-white border border-neutral-200/80 shadow-2xs"
             />
           ) : (
-            <div className="bg-white border border-neutral-200/80 rounded-[var(--radius-lg)] shadow-2xs divide-y divide-neutral-100 overflow-hidden">
+            <div className="bg-white border border-neutral-200/80 rounded-[var(--radius-lg)] shadow-2xs divide-y divide-neutral-100">
               {filteredPending.map((member) => (
                 <MemberRow
                   key={member.id}
@@ -400,7 +400,7 @@ export const PaymentsPage: React.FC<PaymentsPageProps> = ({
               className="py-16 bg-white border border-neutral-200/80 shadow-2xs"
             />
           ) : (
-            <div className="bg-white border border-neutral-200/80 rounded-[var(--radius-lg)] shadow-2xs divide-y divide-neutral-100 overflow-hidden">
+            <div className="bg-white border border-neutral-200/80 rounded-[var(--radius-lg)] shadow-2xs divide-y divide-neutral-100">
               {filteredUpcoming.map((member) => (
                 <MemberRow
                   key={member.id}

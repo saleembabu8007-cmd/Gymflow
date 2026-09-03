@@ -208,7 +208,7 @@ export const MembersPage: React.FC<MembersPageProps> = ({
       ) : (
         /* Populated Member Directory */
         <div className="space-y-4">
-          <div className="bg-white border border-neutral-200/80 rounded-[var(--radius-lg)] shadow-2xs divide-y divide-neutral-100 overflow-hidden">
+          <div className="bg-white border border-neutral-200/80 rounded-[var(--radius-lg)] shadow-2xs divide-y divide-neutral-100">
             {paginatedMembers.map((member) => (
               <MemberRow
                 key={member.id}
