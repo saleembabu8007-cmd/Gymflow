@@ -1,5 +1,5 @@
 /**
- * GymFlow V2.0 — Iconography System Tokens
+ * GymFlow V3.0 — Master Iconography System Tokens
  * Standardized Lucide React icon size scales, stroke weights, and semantic icon mappings
  */
 
