@@ -52,3 +52,8 @@ export * from './InlineStatStrip';
 export * from './SettingsRow';
 export * from './IconTile';
 export * from './TwoTierNumber';
+export * from './StatusDot';
+export * from './Link';
+export * from './CurrencyInput';
+export * from './PhoneInput';
+export * from './DateInput';
