@@ -139,21 +139,38 @@
   --color-info-900: #1E3A8A;
   --color-info-950: #172554;
 
-  /* Semantic Surface and Foreground Mappings */
-  --color-bg-app: #FAFAF9;
+  /* Canonical GymFlow V3 Semantic Color Tokens */
+  --color-background: #FAFAF9;
   --color-surface: #FFFFFF;
-  --color-surface-subtle: #F5F5F4;
-  --color-surface-elevated: #FFFFFF;
+  --color-surface-muted: #F5F5F4;
+  --color-surface-subtle: #FAFAF9;
+  --color-border: #E7E5E4;
+  --color-border-strong: #D6D3D1;
+  --color-text-primary: #0C0A09;
+  --color-text-secondary: #78716C;
+  --color-text-tertiary: #A8A29E;
+  --color-text-disabled: #D6D3D1;
+  --color-brand: #B2E624;
+  --color-brand-hover: #8DBD14;
+  --color-brand-active: #6B900C;
+  --color-brand-subtle: #FAFDED;
+  --color-success: #10B981;
+  --color-success-subtle: #ECFDF5;
+  --color-warning: #F59E0B;
+  --color-warning-subtle: #FFFBEB;
+  --color-danger: #EF4444;
+  --color-danger-subtle: #FEF2F2;
+  --color-info: #3B82F6;
+  --color-focus: #0C0A09;
 
+  /* Backward Compatible Semantic Surface and Foreground Mappings */
+  --color-bg-app: #FAFAF9;
+  --color-surface-elevated: #FFFFFF;
   --color-foreground: #1C1917;
   --color-foreground-muted: #78716C;
   --color-foreground-subtle: #A8A29E;
   --color-foreground-disabled: #D6D3D1;
-
   --color-border-subtle: #F5F5F4;
-  --color-border: #E7E5E4;
-  --color-border-strong: #D6D3D1;
-
   --color-primary: #B2E624;
   --color-primary-hover: #8DBD14;
   --color-primary-active: #6B900C;
@@ -169,6 +186,25 @@
   --radius-lg: 10px;
   --radius-xl: 14px;
   --radius-full: 9999px;
+
+  /* Semantic Radius Aliases */
+  --radius-small: 4px;
+  --radius-medium: 6px;
+  --radius-large: 10px;
+  --radius-surface: 10px;
+  --radius-dialog: 12px;
+  --radius-pill: 9999px;
+
+  /* ========================================================================= */
+  /* 3b. SIZES & DIMENSIONS SYSTEM                                             */
+  /* ========================================================================= */
+  --size-sidebar: 240px;
+  --size-bottom-nav: 64px;
+  --size-touch-target: 44px;
+  --size-control-dense: 32px;
+  --size-control-sm: 36px;
+  --size-control-md: 40px;
+  --size-control-lg: 48px;
 
   /* ========================================================================= */
   /* 4. RESTRAINED SHADOW SYSTEM (Zero drop shadows at rest)                   */

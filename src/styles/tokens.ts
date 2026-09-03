@@ -169,11 +169,53 @@ export const borderRadius = {
   full: '9999px',
 };
 
+// =========================================================================
+// GYMFLOW V3 CANONICAL SEMANTIC DESIGN TOKENS
+// =========================================================================
+
+export const semanticColors = {
+  background: '#FAFAF9',
+  surface: '#FFFFFF',
+  surfaceMuted: '#F5F5F4',
+  surfaceSubtle: '#FAFAF9',
+  border: '#E7E5E4',
+  borderStrong: '#D6D3D1',
+  textPrimary: '#0C0A09',
+  textSecondary: '#78716C',
+  textTertiary: '#A8A29E',
+  textDisabled: '#D6D3D1',
+  brand: '#B2E624',
+  brandHover: '#8DBD14',
+  brandActive: '#6B900C',
+  brandSubtle: '#FAFDED',
+  success: '#10B981',
+  successSubtle: '#ECFDF5',
+  warning: '#F59E0B',
+  warningSubtle: '#FFFBEB',
+  danger: '#EF4444',
+  dangerSubtle: '#FEF2F2',
+  info: '#3B82F6',
+  focus: '#0C0A09',
+};
+
 export const typography = {
   fontFamily: {
     sans: "'Inter', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif",
     display: "'Plus Jakarta Sans', system-ui, -apple-system, sans-serif",
     mono: "'JetBrains Mono', ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace",
+  },
+  scale: {
+    display: { fontSize: '28px', lineHeight: '1.15', fontWeight: '800', letterSpacing: '-0.03em' },
+    pageTitle: { fontSize: '22px', lineHeight: '1.25', fontWeight: '700', letterSpacing: '-0.02em' },
+    sectionTitle: { fontSize: '17px', lineHeight: '1.35', fontWeight: '600', letterSpacing: '-0.01em' },
+    cardTitle: { fontSize: '15px', lineHeight: '1.40', fontWeight: '600', letterSpacing: '0em' },
+    bodyLarge: { fontSize: '16px', lineHeight: '1.50', fontWeight: '500', letterSpacing: '0em' },
+    body: { fontSize: '15px', lineHeight: '1.50', fontWeight: '400', letterSpacing: '0em' },
+    bodySmall: { fontSize: '14px', lineHeight: '1.50', fontWeight: '400', letterSpacing: '0em' },
+    label: { fontSize: '13px', lineHeight: '1.40', fontWeight: '600', letterSpacing: '0.01em' },
+    caption: { fontSize: '12px', lineHeight: '1.40', fontWeight: '500', letterSpacing: '0.01em' },
+    metadata: { fontSize: '11px', lineHeight: '1.20', fontWeight: '700', letterSpacing: '0.05em' },
+    numericEmphasis: { fontSize: '24px', lineHeight: '1.20', fontWeight: '700', letterSpacing: '-0.01em' },
   },
   fontSize: {
     micro: '11px',
@@ -188,6 +230,61 @@ export const typography = {
   },
 };
 
+export const sizes = {
+  controlHeights: {
+    dense: '32px',
+    sm: '36px',
+    md: '40px',
+    lg: '48px',
+  },
+  iconSizes: {
+    xs: '12px',
+    sm: '14px',
+    base: '16px',
+    md: '20px',
+    lg: '24px',
+    xl: '32px',
+  },
+  avatarSizes: {
+    xs: '24px',
+    sm: '32px',
+    md: '40px',
+    lg: '48px',
+    xl: '56px',
+  },
+  contentWidths: {
+    compact: '448px',
+    step: '576px',
+    focus: '1024px',
+    ledger: '1280px',
+  },
+  sidebarWidth: '240px',
+  mobileBottomNavHeight: '64px',
+  dialogWidths: {
+    sm: '400px',
+    md: '512px',
+    lg: '640px',
+    xl: '768px',
+  },
+  touchTarget: '44px',
+};
+
+export const radius = {
+  small: '4px',
+  medium: '6px',
+  large: '10px',
+  surface: '10px',
+  dialog: '12px',
+  pill: '9999px',
+};
+
+export const elevation = {
+  none: 'none',
+  surface: '0 1px 2px rgba(12, 10, 9, 0.04)',
+  hover: '0 1px 3px rgba(12, 10, 9, 0.06)',
+  dialog: '0 10px 24px rgba(12, 10, 9, 0.08)',
+};
+
 export const shadows = {
   none: 'none',
   '2xs': '0 1px 2px rgba(12, 10, 9, 0.04)',
@@ -200,8 +297,13 @@ export const shadows = {
 export const motion = {
   micro: '100ms cubic-bezier(0.16, 1, 0.3, 1)',
   fast: '100ms cubic-bezier(0.16, 1, 0.3, 1)',
-  normal: '150ms cubic-bezier(0.16, 1, 0.3, 1)',
+  normal: '180ms cubic-bezier(0.16, 1, 0.3, 1)',
   slow: '250ms cubic-bezier(0.16, 1, 0.3, 1)',
+  easing: {
+    standard: 'cubic-bezier(0.16, 1, 0.3, 1)',
+    decelerate: 'cubic-bezier(0, 0, 0.2, 1)',
+    accelerate: 'cubic-bezier(0.4, 0, 1, 1)',
+  },
 };
 
 export const breakpoints = {
@@ -226,16 +328,20 @@ export const zIndex = {
 };
 
 export const TOKENS = {
+  semanticColors,
   colors,
   spacing,
+  sizes,
+  radius,
+  borderRadius,
+  elevation,
+  shadows,
+  typography,
+  motion,
   containerWidths,
   responsivePadding,
   controlHeights,
   densityTiers,
-  borderRadius,
-  typography,
-  shadows,
-  motion,
   breakpoints,
   zIndex,
 } as const;
