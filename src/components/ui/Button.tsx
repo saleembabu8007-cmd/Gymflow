@@ -8,6 +8,7 @@ export type ButtonVariant =
   | 'tertiary' 
   | 'ghost' 
   | 'destructive' 
+  | 'danger'
   | 'outline'
   | 'icon'
   | 'inline-action';
@@ -60,6 +61,8 @@ export const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
       ghost:
         'bg-transparent text-neutral-600 hover:text-neutral-900 hover:bg-neutral-100 active:bg-neutral-200 focus-visible:ring-neutral-900',
       destructive:
+        'bg-[var(--color-danger-500)] text-white hover:bg-[var(--color-danger-600)] active:bg-[var(--color-danger-700)] shadow-2xs focus-visible:ring-[var(--color-danger-500)] font-semibold',
+      danger:
         'bg-[var(--color-danger-500)] text-white hover:bg-[var(--color-danger-600)] active:bg-[var(--color-danger-700)] shadow-2xs focus-visible:ring-[var(--color-danger-500)] font-semibold',
       icon:
         'w-10 h-10 min-w-[40px] p-0 rounded-full bg-transparent text-neutral-600 hover:bg-neutral-100 active:bg-neutral-200 focus-visible:ring-neutral-900',

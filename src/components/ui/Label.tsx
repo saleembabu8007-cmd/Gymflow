@@ -27,3 +27,5 @@ export const Label: React.FC<LabelProps> = ({
     </label>
   );
 };
+
+export const FormLabel = Label;

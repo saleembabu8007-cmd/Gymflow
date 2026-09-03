@@ -29,3 +29,6 @@ export const ErrorText: React.FC<ErrorTextProps> = ({ children, className, ...pr
     </p>
   );
 };
+
+export const FormHint = HelperText;
+export const FormError = ErrorText;

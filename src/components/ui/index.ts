@@ -57,3 +57,7 @@ export * from './Link';
 export * from './CurrencyInput';
 export * from './PhoneInput';
 export * from './DateInput';
+export * from './Icon';
+export * from './CloseButton';
+export * from './Chevron';
+export * from './MenuTrigger';
